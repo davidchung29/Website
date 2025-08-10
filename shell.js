@@ -15,6 +15,10 @@ type 'help' to explore available commands.
   updateCommandButtons(); // Show command buttons after welcome message
 }
 
+function isMobile(maxWidth = 1200) {
+  return window.matchMedia && window.matchMedia(`(max-width: ${maxWidth}px)`).matches;
+}
+
 function updateCommandButtons() {
   const windowContent = document.querySelector('#shell-container .window-content');
   const existingButtons = windowContent.querySelector('.command-buttons');
@@ -47,10 +51,18 @@ function updateCommandButtons() {
     button.onclick = () => {
       const input = document.getElementById('shell-input');
       input.value = cmd.name;
-      input.focus();
-      appendCommand(`→ ${cmd.name}`);
-      handleCommand(cmd.name);
-      input.value = '';
+      // On desktop, focus to allow quick typing again; on mobile, blur to keep keyboard hidden
+      if (isMobile(768)) {
+        appendCommand(`→ ${cmd.name}`);
+        handleCommand(cmd.name);
+        input.value = '';
+        input.blur();
+      } else {
+        input.focus();
+        appendCommand(`→ ${cmd.name}`);
+        handleCommand(cmd.name);
+        input.value = '';
+      }
     };
     buttonsContainer.appendChild(button);
   });
@@ -73,6 +85,10 @@ function setupShellInput() {
       }
       input.value = '';
       input.placeholder = '';
+      // Hide mobile keyboard after submitting (phone-sized screens)
+      if (isMobile(768)) {
+        input.blur();
+      }
     }
   });
 
@@ -335,7 +351,7 @@ function showProjectWindow(projectId) {
   const project = projects[projectId];
   if (project) {
     // Check if we're on mobile (width <= 1200px)
-    const isMobile = window.innerWidth <= 1200;
+    const isMobile = isMobile(1200);
     
     if (isMobile) {
       // Show as modal popup on mobile
@@ -648,7 +664,7 @@ window.showContactModal = showContactModal;
 // Handle window resize for responsive behavior
 window.addEventListener('resize', function() {
   // If we're on desktop and a project modal is open, close it
-  if (window.innerWidth > 1200) {
+  if (!isMobile()) {
     const modalOverlay = document.getElementById('modal-overlay');
     if (modalOverlay.classList.contains('active')) {
       // Check if it's a project/contact modal (not info modal)
@@ -821,7 +837,7 @@ function showContactWindow(contactId) {
   const contact = contacts[contactId];
   if (!contact) return;
 
-  const isMobile = window.innerWidth <= 1200;
+  const isOnMobileLayout = isMobile();
 
   // simple external-link icon svg
   const externalIcon = `
@@ -870,7 +886,7 @@ function showContactWindow(contactId) {
     `;
   }
 
-  if (isMobile) {
+  if (isOnMobileLayout) {
     showContactModal(contact.title, content);
     if (contact.type === 'badge') {
       setTimeout(() => renderLinkedInBadge('linkedin-badge-mount'), 0);
