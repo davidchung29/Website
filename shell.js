@@ -36,6 +36,13 @@ function hideSoftKeyboard(inputEl) {
     setTimeout(() => {
       temp.blur();
       document.body.removeChild(temp);
+      // Recenter the shell after the viewport resizes back
+      const shell = document.getElementById('shell-container');
+      // Scroll viewport back to the top (helps on iOS Safari)
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+      if (shell && typeof shell.scrollIntoView === 'function') {
+        shell.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'smooth' });
+      }
     }, 0);
   } catch (_) {}
 }
