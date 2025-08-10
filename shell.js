@@ -111,14 +111,19 @@ function appendOutput(content) {
 
       case 'about':
       appendOutput(`
-<strong>who i am</strong>
+<div class="about-section">
+  <img class="about-avatar" src="assets/profile.jpg" alt="photo of David Chung" onerror="this.style.display='none'" />
+  <div class="about-text">
+    <strong>who i am</strong>
 
-i am a student + full stack engineer who enjoys building creative, scalable systems.
-in my free time, i play bass in a few bands, lift, and spend time with friends and family.
+    i am a student + full stack engineer who enjoys building creative, scalable systems.
+    in my free time, i play bass in a few bands, lift, and spend time with friends and family.
 
-i believe in creating software that is not only functional but also 
-intuitive,maintainable, and resilient.
-`);
+    i believe in creating software that is not only functional but also 
+    intuitive,maintainable, and resilient.
+  </div>
+</div>
+      `);
         break;
 
       case 'projects':
