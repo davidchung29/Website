@@ -1,0 +1,81 @@
+@media (max-width: 768px) {
+  #shell-container {
+    width: 95vw;
+    height: 85vh;
+    border-radius: 16px;
+  }
+  
+  #shell-header {
+    padding: 16px 24px;
+  }
+  
+  #shell-output, #shell-input-area {
+    padding: 24px;
+  }
+  
+  .project-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .modal {
+    width: 95vw;
+    max-height: 85vh;
+  }
+
+  .modal-header, .modal-content {
+    padding: 20px;
+  }
+
+  .project-links {
+    flex-direction: column;
+  }
+
+  .project-link {
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  #shell-container {
+    width: 98vw;
+    height: 90vh;
+    border-radius: 12px;
+  }
+  
+  #shell-header {
+    padding: 12px 16px;
+  }
+  
+  #shell-title {
+    font-size: 14px;
+  }
+  
+  #shell-output, #shell-input-area {
+    padding: 16px;
+  }
+  
+  #shell-input {
+    font-size: 14px;
+  }
+  
+  .ascii-art {
+    font-size: 11px;
+  }
+  
+  .project-item {
+    padding: 12px;
+  }
+  
+  .modal {
+    width: 98vw;
+    border-radius: 12px;
+  }
+  
+  .modal-header, .modal-content {
+    padding: 16px;
+  }
+  
+  .modal-title {
+    font-size: 16px;
+  }
+} 
