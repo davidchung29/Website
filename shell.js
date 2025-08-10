@@ -171,17 +171,17 @@ i'm interested in discussing innovative project opportunities.
 <div class="contact-links">
   <div class="contact-item email-contact">
     <span class="contact-link" onclick="copyToClipboard('dichung [at] andrew [dot] cmu [dot] edu')">
-      → email: dichung [at] andrew [dot] cmu [dot] edu
+      → email: dichung [at] andrew [dot] cmu [dot] edu (click to copy)
     </span>
   </div>
   <div class="contact-item linkedin-contact">
-    <span class="contact-link" onclick="showContactWindow('linkedin')">
-      → linkedin: open profile window
+    <span class="contact-link" onclick="window.open('https://www.linkedin.com/in/david-chung-00b04a199/', '_blank', 'noopener')">
+      → linkedin: open in new tab
     </span>
   </div>
   <div class="contact-item github-contact">
-    <span class="contact-link" onclick="showContactWindow('github')">
-      → github: open profile window
+    <span class="contact-link" onclick="window.open('https://github.com/davidchung29', '_blank', 'noopener')">
+      → github: open in new tab
     </span>
   </div>
 </div>

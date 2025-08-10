@@ -84,7 +84,7 @@ function animateTiles() {
     });
     
     currentWave++;
-    setTimeout(flipNextWave, 70); // Delay between waves
+    setTimeout(flipNextWave, 1); // Delay between waves
   }
   
   // Start the animation
