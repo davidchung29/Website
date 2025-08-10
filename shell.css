@@ -12,6 +12,7 @@
   flex-direction: column;
 }
 
+/* Reserve space so floating buttons never cover output text */
 #shell-output {
   flex: 1;
   padding: 20px;
@@ -22,6 +23,7 @@
   color: var(--text-primary);
   letter-spacing: 0.3px;
   scroll-behavior: smooth;
+  padding-bottom: 20px; /* Space for floating buttons + breathing room */
 }
 
 #shell-output::-webkit-scrollbar {
@@ -41,13 +43,85 @@
   background: var(--text-secondary);
 }
 
+/* Command buttons styling */
+.command-buttons {
+  position: static; /* sits in normal flow between output and input */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  background: transparent; /* clear background */
+}
+
+.command-buttons::-webkit-scrollbar {
+  height: 4px;
+}
+
+.command-buttons::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.command-buttons::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 2px;
+}
+
+.command-buttons::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+.command-button {
+  background: var(--secondary-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-family: var(--terminal-font);
+  font-size: 12px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.command-button:hover {
+  background: var(--accent-color);
+  color: var(--secondary-bg);
+  border-color: var(--accent-color);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.command-button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+/* Adjust input area to accommodate buttons */
 #shell-input-area {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  border-top: 1px solid var(--border-color);
+  background: var(--primary-bg);
+  align-items: stretch; /* ensure children take full width */
+}
+
+/* Input container for prompt and input field */
+.shell-input-container {
   display: flex;
   align-items: center;
   padding: 16px 20px;
-  border-top: 1px solid var(--border-color);
-  background: var(--primary-bg);
   gap: 12px;
+  justify-content: flex-start; /* keep input area left-aligned */
+  width: 100%; /* span full width */
 }
 
 #shell-prompt {
@@ -57,10 +131,12 @@
   font-family: var(--terminal-font);
   font-size: 14px;
   letter-spacing: 0.3px;
+  flex-shrink: 0; /* Prevent prompt from shrinking */
 }
 
 #shell-input {
   flex: 1;
+  width: 100%; /* ensure full width inside flex */
   border: none;
   outline: none;
   background: transparent;
@@ -69,11 +145,15 @@
   color: var(--text-primary);
   letter-spacing: 0.3px;
   padding: 8px 0;
+  min-width: 0; /* Allow input to shrink properly */
+  text-align: left; /* ensure caret/text is left-aligned */
+  text-indent: 0; /* prevent centered by indentation */
 }
 
 #shell-input::placeholder {
   color: var(--text-secondary);
   opacity: 0.6;
+  text-align: left; /* explicitly left-align placeholder */
 }
 
 /* ASCII Art styling */
@@ -162,4 +242,268 @@
   font-size: 13px;
   color: var(--text-secondary);
   line-height: 1.4;
+}
+
+/* Contact links styling */
+.contact-links {
+  margin-top: 16px;
+}
+
+.contact-item {
+  margin-bottom: 8px;
+}
+
+.contact-link {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  position: relative;
+}
+
+.contact-link:hover {
+  background: rgba(0, 0, 0, 0.05);
+  transform: translateX(4px);
+}
+
+.contact-link.linkedin-contact {
+  position: relative;
+}
+
+/* Profile Preview Styling */
+.profile-preview {
+  position: absolute;
+  background: var(--secondary-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: var(--shadow-medium);
+  width: 300px;
+  padding: 16px;
+  z-index: 1000;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+  font-family: var(--ui-font);
+}
+
+.profile-preview.active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.preview-header {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.preview-avatar {
+  width: 48px;
+  height: 48px;
+  background: var(--accent-color);
+  color: var(--secondary-bg);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.preview-info {
+  flex: 1;
+}
+
+.preview-name {
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.preview-title {
+  font-size: 14px;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.preview-company {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.preview-body {
+  margin-bottom: 12px;
+}
+
+.preview-location,
+.preview-connections {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.preview-summary {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin-top: 8px;
+}
+
+.preview-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.preview-btn {
+  padding: 6px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: var(--secondary-bg);
+  color: var(--text-primary);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--ui-font);
+}
+
+.preview-btn.primary {
+  background: var(--accent-color);
+  color: var(--secondary-bg);
+  border-color: var(--accent-color);
+}
+
+.preview-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.preview-btn.primary:hover {
+  background: var(--text-primary);
+  border-color: var(--text-primary);
+} 
+
+/* Embedded webview styles for contact window */
+.webview-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
+.webview-btn {
+  background: var(--accent-color);
+  color: var(--secondary-bg);
+  border: 1px solid var(--accent-color);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.webview-btn:hover {
+  filter: brightness(0.9);
+}
+
+.webview-container {
+  width: 100%;
+  height: 55vh;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--secondary-bg);
+}
+
+.webview-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.webview-note {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+} 
+
+/* Webview fallback styling */
+.webview-fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 55vh;
+  border: 1px dashed var(--border-color);
+  border-radius: 8px;
+  background: var(--secondary-bg);
+  text-align: center;
+  padding: 16px;
+}
+
+.webview-fallback-icon {
+  font-size: 28px;
+}
+
+.webview-fallback-title {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.webview-fallback-desc {
+  color: var(--text-secondary);
+  font-size: 13px;
+  max-width: 520px;
+} 
+
+/* Toolbar icon-only button */
+.webview-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
+.webview-btn.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: var(--secondary-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
+
+.webview-btn.icon:hover {
+  background: var(--primary-bg);
+}
+
+/* LinkedIn badge container */
+.badge-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 320px;
+  border-radius: 8px;
+  background: var(--secondary-bg);
+  position: relative;
+}
+
+/* Hide the extra blue anchor that LinkedIn inserts above the card */
+.badge-container > a.badge-base__link { 
+  display: none !important; 
+} 
+
+/* Ensure LinkedIn's fallback blue link is hidden inside the badge */
+.badge-container .badge-base__link,
+.badge-container .LI-simple-link {
+  display: none !important;
 } 

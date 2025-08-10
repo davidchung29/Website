@@ -12,6 +12,52 @@ type 'help' to explore available commands.
 </div>`;
   
   output.scrollTop = output.scrollHeight;
+  updateCommandButtons(); // Show command buttons after welcome message
+}
+
+function updateCommandButtons() {
+  const windowContent = document.querySelector('#shell-container .window-content');
+  const existingButtons = windowContent.querySelector('.command-buttons');
+  
+  // Remove existing buttons if they exist
+  if (existingButtons) {
+    existingButtons.remove();
+  }
+  
+  // Create command buttons container
+  const buttonsContainer = document.createElement('div');
+  buttonsContainer.className = 'command-buttons';
+  
+  // Define available commands
+  const commands = [
+    { name: 'help', description: 'Show all commands' },
+    { name: 'about', description: 'Learn about me' },
+    { name: 'projects', description: 'View portfolio' },
+    { name: 'skills', description: 'My tech skills' },
+    { name: 'contact', description: 'Contact info' },
+    { name: 'clear', description: 'Clear terminal' }
+  ];
+  
+  // Create buttons for each command
+  commands.forEach(cmd => {
+    const button = document.createElement('button');
+    button.className = 'command-button';
+    button.textContent = cmd.name;
+    button.title = cmd.description;
+    button.onclick = () => {
+      const input = document.getElementById('shell-input');
+      input.value = cmd.name;
+      input.focus();
+      appendCommand(`→ ${cmd.name}`);
+      handleCommand(cmd.name);
+      input.value = '';
+    };
+    buttonsContainer.appendChild(button);
+  });
+  
+  // Insert buttons between output and input
+  const output = document.getElementById('shell-output');
+  output.insertAdjacentElement('afterend', buttonsContainer);
 }
 
 function setupShellInput() {
@@ -30,7 +76,8 @@ function setupShellInput() {
     }
   });
 
-
+  // Initialize command buttons
+  updateCommandButtons();
 }
 
 function appendCommand(text) {
@@ -117,19 +164,33 @@ intuitive,maintainable, and resilient.
 
     case 'contact':
       appendOutput(`
-<strong>contact me/strong>
+<strong>contact me</strong>
 
 i'm interested in discussing innovative project opportunities.
 
-→ email: dichung [at] andrew [dot] cmu [dot] edu
-→ linkedin: https://www.linkedin.com/in/david-chung-00b04a199/
-→ GitHub: https://github.com/davidchung29
-
-`);
-        break;
+<div class="contact-links">
+  <div class="contact-item email-contact">
+    <span class="contact-link" onclick="copyToClipboard('dichung [at] andrew [dot] cmu [dot] edu')">
+      → email: dichung [at] andrew [dot] cmu [dot] edu
+    </span>
+  </div>
+  <div class="contact-item linkedin-contact">
+    <span class="contact-link" onclick="showContactWindow('linkedin')">
+      → linkedin: open profile window
+    </span>
+  </div>
+  <div class="contact-item github-contact">
+    <span class="contact-link" onclick="showContactWindow('github')">
+      → github: open profile window
+    </span>
+  </div>
+</div>
+      `);
+      break;
 
       case 'clear':
       document.getElementById('shell-output').innerHTML = '';
+      updateCommandButtons(); // Refresh command buttons after clearing
         break;
 
       case '':
@@ -268,20 +329,24 @@ function showProjectWindow(projectId) {
 
   const project = projects[projectId];
   if (project) {
-    // Update project window content
-    document.getElementById('project-title').textContent = project.title;
-    document.getElementById('project-content').innerHTML = project.content;
+    // Check if we're on mobile (width <= 1200px)
+    const isMobile = window.innerWidth <= 1200;
     
-    // Activate project window
-    const projectWindow = document.getElementById('project-window');
-    const mainContainer = document.getElementById('main-container');
-    
-    projectWindow.classList.add('active');
-    mainContainer.classList.add('project-active');
-    
-    // Smooth scroll to project window on mobile
-    if (window.innerWidth <= 1200) {
-      projectWindow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    if (isMobile) {
+      // Show as modal popup on mobile
+      showProjectModal(projectId);
+    } else {
+      // Use existing side-by-side layout for desktop
+      // Update project window content
+      document.getElementById('project-title').textContent = project.title;
+      document.getElementById('project-content').innerHTML = project.content;
+      
+      // Activate project window
+      const projectWindow = document.getElementById('project-window');
+      const mainContainer = document.getElementById('main-container');
+      
+      projectWindow.classList.add('active');
+      mainContainer.classList.add('project-active');
     }
   }
 }
@@ -567,4 +632,300 @@ window.closeModal = closeModal;
 window.minimizeTerminal = minimizeTerminal;
 window.maximizeTerminal = maximizeTerminal;
 window.closeTerminal = closeTerminal;
+window.showProfilePreview = showProfilePreview;
+window.hideProfilePreview = hideProfilePreview;
+window.handleTouchStart = handleTouchStart;
+window.handleTouchEnd = handleTouchEnd;
+window.copyToClipboard = copyToClipboard;
+window.showContactWindow = showContactWindow;
+window.showContactModal = showContactModal;
+
+// Handle window resize for responsive behavior
+window.addEventListener('resize', function() {
+  // If we're on desktop and a project modal is open, close it
+  if (window.innerWidth > 1200) {
+    const modalOverlay = document.getElementById('modal-overlay');
+    if (modalOverlay.classList.contains('active')) {
+      // Check if it's a project/contact modal (not info modal)
+      const modalTitle = document.getElementById('modal-title').textContent;
+      if (modalTitle.includes('myEyes') || modalTitle.includes('Matrix') || 
+          modalTitle.includes('Mockly') || modalTitle.includes('gomokuAI') ||
+          modalTitle.includes('LinkedIn') || modalTitle.includes('GitHub')) {
+        closeModal();
+      }
+    }
+  }
+});
+
+// Profile Preview Functions
+function showProfilePreview(event) {
+  const platform = event.target.dataset.platform;
+  
+  if (platform === 'linkedin') {
+    // Create or get existing preview
+    let preview = document.getElementById('profile-preview');
+    if (!preview) {
+      preview = createProfilePreview();
+      document.body.appendChild(preview);
+    }
+    
+    // Position the preview relative to the hovered element
+    const rect = event.target.getBoundingClientRect();
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+    
+    preview.style.left = `${rect.left + scrollLeft}px`;
+    preview.style.top = `${rect.bottom + scrollTop + 8}px`;
+    
+    // Show the preview
+    preview.classList.add('active');
+    
+    // Add click handlers for preview buttons
+    const viewBtn = preview.querySelector('.preview-btn.primary');
+    const connectBtn = preview.querySelector('.preview-btn.secondary');
+    
+    viewBtn.onclick = () => {
+      window.open('https://www.linkedin.com/in/david-chung-00b04a199/', '_blank');
+      hideProfilePreview();
+    };
+    
+    connectBtn.onclick = () => {
+      window.open('https://www.linkedin.com/in/david-chung-00b04a199/', '_blank');
+      hideProfilePreview();
+    };
+  }
+}
+
+function hideProfilePreview() {
+  const preview = document.getElementById('profile-preview');
+  if (preview) {
+    preview.classList.remove('active');
+  }
+}
+
+function createProfilePreview() {
+  const preview = document.createElement('div');
+  preview.id = 'profile-preview';
+  preview.className = 'profile-preview';
+  preview.innerHTML = `
+    <div class="preview-header">
+      <div class="preview-avatar">DC</div>
+      <div class="preview-info">
+        <div class="preview-name">David Chung</div>
+        <div class="preview-title">Software Engineer</div>
+        <div class="preview-company">Carnegie Mellon University</div>
+      </div>
+    </div>
+    <div class="preview-body">
+      <div class="preview-location">📍 Pittsburgh, PA</div>
+      <div class="preview-connections">🔗 500+ connections</div>
+      <div class="preview-summary">Full-stack engineer passionate about scalable systems and thoughtful design.</div>
+    </div>
+    <div class="preview-actions">
+      <button class="preview-btn primary">View Profile</button>
+      <button class="preview-btn secondary">Connect</button>
+    </div>
+  `;
+  return preview;
+}
+
+// Handle mobile (touch devices)
+function handleTouchStart(event) {
+  const platform = event.target.dataset.platform;
+  if (platform === 'linkedin') {
+    showProfilePreview(event);
+  }
+}
+
+function handleTouchEnd() {
+  setTimeout(hideProfilePreview, 2000); // Hide after 2 seconds on mobile
+}
+
+// Clipboard functionality
+function copyToClipboard(text) {
+  // Create a temporary input element
+  const tempInput = document.createElement('input');
+  tempInput.value = text;
+  document.body.appendChild(tempInput);
+  tempInput.select();
+  tempInput.setSelectionRange(0, 99999); // For mobile devices
+  
+  try {
+    document.execCommand('copy');
+    showCopyFeedback();
+  } catch (err) {
+    console.error('Failed to copy: ', err);
+  }
+  
+  document.body.removeChild(tempInput);
+}
+
+function showCopyFeedback() {
+  // Create feedback element
+  const feedback = document.createElement('div');
+  feedback.className = 'copy-feedback';
+  feedback.textContent = 'Copied to clipboard!';
+  feedback.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--accent-color);
+    color: var(--secondary-bg);
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    z-index: 10000;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+  `;
+  
+  document.body.appendChild(feedback);
+  
+  // Animate in
+  setTimeout(() => {
+    feedback.style.opacity = '1';
+    feedback.style.transform = 'translateY(0)';
+  }, 10);
+  
+  // Animate out and remove
+  setTimeout(() => {
+    feedback.style.opacity = '0';
+    feedback.style.transform = 'translateY(-10px)';
+    setTimeout(() => {
+      document.body.removeChild(feedback);
+    }, 300);
+  }, 2000);
+}
+
+// Contact Webview Window
+function showContactWindow(contactId) {
+  const contacts = {
+    linkedin: {
+      title: 'LinkedIn — davidchung',
+      url: 'https://www.linkedin.com/in/david-chung-00b04a199/',
+      type: 'badge' // render official LinkedIn badge
+    },
+    github: {
+      title: 'GitHub — davidchung29',
+      url: 'https://github.com/davidchung29',
+      type: 'fallback' // cannot embed profile page
+    }
+  };
+
+  const contact = contacts[contactId];
+  if (!contact) return;
+
+  const isMobile = window.innerWidth <= 1200;
+
+  // simple external-link icon svg
+  const externalIcon = `
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M14 3h7v7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M21 14v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>`;
+
+  let content;
+  if (contact.type === 'badge') {
+    content = `
+      <div class="project-window-content">
+        <div class="webview-toolbar">
+          <button class="webview-btn icon" aria-label="Open in new tab" title="Open in new tab" onclick="window.open('${contact.url}', '_blank')">${externalIcon}</button>
+        </div>
+        <div class="badge-container">
+          <div id="linkedin-badge-mount"></div>
+        </div>
+      </div>
+    `;
+  } else if (contact.type === 'iframe') {
+    content = `
+      <div class="project-window-content">
+        <div class="webview-toolbar">
+          <button class="webview-btn icon" aria-label="Open in new tab" title="Open in new tab" onclick="window.open('${contact.url}', '_blank')">${externalIcon}</button>
+        </div>
+        <div class="webview-container">
+          <iframe class="webview-frame" src="${contact.url}" title="${contact.title}" loading="lazy"></iframe>
+        </div>
+        <div class="webview-note">Some sites block embedding in windows. If this view doesn't load, use the button above.</div>
+      </div>
+    `;
+  } else {
+    content = `
+      <div class="project-window-content">
+        <div class="webview-toolbar">
+          <button class="webview-btn icon" aria-label="Open in new tab" title="Open in new tab" onclick="window.open('${contact.url}', '_blank')">${externalIcon}</button>
+        </div>
+        <div class="webview-fallback">
+          <div class="webview-fallback-icon">🌐</div>
+          <div class="webview-fallback-title">${contact.title}</div>
+          <div class="webview-fallback-desc">This site can't be displayed inside the window due to security policies. Use the button above to open it in a new tab.</div>
+        </div>
+      </div>
+    `;
+  }
+
+  if (isMobile) {
+    showContactModal(contact.title, content);
+    if (contact.type === 'badge') {
+      setTimeout(() => renderLinkedInBadge('linkedin-badge-mount'), 0);
+    }
+  } else {
+    const projectWindow = document.getElementById('project-window');
+    const mainContainer = document.getElementById('main-container');
+    document.getElementById('project-title').textContent = contact.title;
+    document.getElementById('project-content').innerHTML = content;
+    projectWindow.classList.add('active');
+    mainContainer.classList.add('project-active');
+    if (contact.type === 'badge') {
+      setTimeout(() => renderLinkedInBadge('linkedin-badge-mount'), 0);
+    }
+  }
+}
+
+function loadLinkedInBadgeScript(onLoaded) {
+  const existing = document.getElementById('linkedin-badge-script');
+  if (existing) {
+    if (typeof window.LIRenderAll === 'function') {
+      onLoaded && onLoaded();
+    } else {
+      existing.addEventListener('load', () => onLoaded && onLoaded(), { once: true });
+    }
+    return;
+  }
+  const script = document.createElement('script');
+  script.id = 'linkedin-badge-script';
+  script.src = 'https://platform.linkedin.com/badges/js/profile.js';
+  script.async = true;
+  script.defer = true;
+  script.type = 'text/javascript';
+  script.addEventListener('load', () => onLoaded && onLoaded(), { once: true });
+  document.head.appendChild(script);
+}
+
+function renderLinkedInBadge(mountId) {
+  const mount = document.getElementById(mountId);
+  if (!mount) return;
+
+  // Clear previous content
+  mount.innerHTML = '';
+
+  const vanity = 'david-chung-00b04a199';
+  const badge = document.createElement('div');
+  badge.className = 'badge-base LI-profile-badge';
+  badge.setAttribute('data-locale', 'en_US');
+  badge.setAttribute('data-size', 'medium');
+  badge.setAttribute('data-theme', 'light');
+  badge.setAttribute('data-type', 'VERTICAL');
+  badge.setAttribute('data-vanity', vanity);
+  badge.setAttribute('data-version', 'v1');
+  badge.innerHTML = `<a class="badge-base__link LI-simple-link" href="https://www.linkedin.com/in/${vanity}?trk=profile-badge">LinkedIn</a>`;
+  mount.appendChild(badge);
+
+  loadLinkedInBadgeScript(() => {
+    if (typeof window.LIRenderAll === 'function') {
+      try { window.LIRenderAll(); } catch (_) {}
+    }
+  });
+}
   

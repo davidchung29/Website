@@ -20,7 +20,7 @@
     <div id="shell-container" class="window">
       <div class="window-header">
         <div class="window-title-area">
-          <div class="window-title">davidchung.app</div>
+          <div class="window-title">davidchung.io</div>
           <div class="info-icon" onclick="showInfoModal('about-terminal')" title="About this terminal">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
@@ -39,8 +39,10 @@
       <div class="window-content">
         <div id="shell-output"></div>
         <div id="shell-input-area">
-          <span id="shell-prompt">→</span>
-          <input id="shell-input" type="text" placeholder="type 'help' to get started" autocomplete="off" />
+          <div class="shell-input-container">
+            <span id="shell-prompt">→</span>
+            <input id="shell-input" type="text" placeholder="type 'help' to get started" autocomplete="off" />
+          </div>
         </div>
       </div>
     </div>
