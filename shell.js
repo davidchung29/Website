@@ -15,8 +15,29 @@ type 'help' to explore available commands.
   updateCommandButtons(); // Show command buttons after welcome message
 }
 
+// Helper: detect mobile/tablet/desktop layouts by width
 function isMobile(maxWidth = 1200) {
   return window.matchMedia && window.matchMedia(`(max-width: ${maxWidth}px)`).matches;
+}
+
+function hideSoftKeyboard(inputEl) {
+  if (!inputEl) return;
+  try {
+    inputEl.blur();
+    // iOS workaround: shift focus to a temporary hidden input then blur
+    const temp = document.createElement('input');
+    temp.style.position = 'fixed';
+    temp.style.opacity = '0';
+    temp.style.pointerEvents = 'none';
+    temp.style.height = '0';
+    temp.style.bottom = '-100px';
+    document.body.appendChild(temp);
+    temp.focus();
+    setTimeout(() => {
+      temp.blur();
+      document.body.removeChild(temp);
+    }, 0);
+  } catch (_) {}
 }
 
 function updateCommandButtons() {
@@ -56,7 +77,7 @@ function updateCommandButtons() {
         appendCommand(`→ ${cmd.name}`);
         handleCommand(cmd.name);
         input.value = '';
-        input.blur();
+        hideSoftKeyboard(input);
       } else {
         input.focus();
         appendCommand(`→ ${cmd.name}`);
@@ -78,6 +99,8 @@ function setupShellInput() {
 
   input.addEventListener('keydown', function(e) {
       if (e.key === 'Enter') {
+        e.preventDefault();
+        e.stopPropagation();
         const command = input.value.trim();
       if (command) {
         appendCommand(`→ ${command}`);
@@ -87,7 +110,7 @@ function setupShellInput() {
       input.placeholder = '';
       // Hide mobile keyboard after submitting (phone-sized screens)
       if (isMobile(768)) {
-        input.blur();
+        setTimeout(() => hideSoftKeyboard(input), 0);
       }
     }
   });
@@ -350,22 +373,14 @@ function showProjectWindow(projectId) {
 
   const project = projects[projectId];
   if (project) {
-    // Check if we're on mobile (width <= 1200px)
-    const isMobile = isMobile(1200);
-    
-    if (isMobile) {
-      // Show as modal popup on mobile
+    const mobileLayout = isMobile();
+    if (mobileLayout) {
       showProjectModal(projectId);
     } else {
-      // Use existing side-by-side layout for desktop
-      // Update project window content
       document.getElementById('project-title').textContent = project.title;
       document.getElementById('project-content').innerHTML = project.content;
-      
-      // Activate project window
       const projectWindow = document.getElementById('project-window');
       const mainContainer = document.getElementById('main-container');
-      
       projectWindow.classList.add('active');
       mainContainer.classList.add('project-active');
     }
