@@ -20,6 +20,14 @@ function isMobile(maxWidth = 1200) {
   return window.matchMedia && window.matchMedia(`(max-width: ${maxWidth}px)`).matches;
 }
 
+function recenterShellHeaderTop() {
+  if (!isMobile(768)) return;
+  const header = document.querySelector('#shell-container .window-header');
+  if (!header) return;
+  const y = header.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop) - 8;
+  window.scrollTo({ top: Math.max(0, y), left: 0, behavior: 'smooth' });
+}
+
 function hideSoftKeyboard(inputEl) {
   if (!inputEl) return;
   try {
@@ -36,13 +44,8 @@ function hideSoftKeyboard(inputEl) {
     setTimeout(() => {
       temp.blur();
       document.body.removeChild(temp);
-      // Recenter the shell after the viewport resizes back
-      const shell = document.getElementById('shell-container');
-      // Scroll viewport back to the top (helps on iOS Safari)
-      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-      if (shell && typeof shell.scrollIntoView === 'function') {
-        shell.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'smooth' });
-      }
+      // Recenter: place the shell header at the top of the screen
+      recenterShellHeaderTop();
     }, 0);
   } catch (_) {}
 }
