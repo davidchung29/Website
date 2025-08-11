@@ -101,6 +101,21 @@ function initPortfolio() {
     
     showWelcomeMessage();
     setupShellInput();
+    
+    // Initialize theme system after portfolio is loaded
+    if (typeof initThemeSystem === 'function') {
+      initThemeSystem();
+    }
+    
+    // Ensure toggle is clickable
+    const toggle = document.getElementById('theme-toggle');
+    if (toggle) {
+      console.log('Toggle element found:', toggle);
+      toggle.style.pointerEvents = 'auto';
+      toggle.style.cursor = 'pointer';
+    } else {
+      console.error('Toggle element not found!');
+    }
   }, 300);
 }
 

@@ -170,7 +170,7 @@ function appendOutput(content) {
     in my free time, i play bass in a few bands, lift, and spend time with friends and family.
 
     i believe in creating software that is not only functional but also 
-    intuitive,maintainable, and resilient.
+    intuitive, maintainable, and resilient.
   </div>
 </div>
       `);
@@ -246,6 +246,28 @@ i'm interested in discussing innovative project opportunities.
       case 'clear':
       document.getElementById('shell-output').innerHTML = '';
       updateCommandButtons(); // Refresh command buttons after clearing
+        break;
+
+      case 'theme':
+      case 'dark':
+      case 'light':
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        
+        if (cmd === 'theme') {
+          toggleThemeSimple();
+          const newTheme = document.documentElement.getAttribute('data-theme');
+          appendOutput(`Theme switched to ${newTheme} mode.`);
+        } else if (cmd === 'dark') {
+          if (currentTheme !== 'dark') {
+            toggleThemeSimple();
+          }
+          appendOutput(`Dark mode activated.`);
+        } else if (cmd === 'light') {
+          if (currentTheme !== 'light') {
+            toggleThemeSimple();
+          }
+          appendOutput(`Light mode activated.`);
+        }
         break;
 
       case '':
@@ -974,5 +996,146 @@ function renderLinkedInBadge(mountId) {
       try { window.LIRenderAll(); } catch (_) {}
     }
   });
+}
+
+// Theme Management System
+class ThemeManager {
+  constructor() {
+    this.currentTheme = 'light';
+    this.toggle = null;
+    this.init();
+  }
+
+  init() {
+    // Get saved theme or default to light
+    this.currentTheme = localStorage.getItem('portfolio-theme') || 'light';
+    
+    // Apply initial theme
+    this.applyTheme(this.currentTheme);
+    
+    // Setup toggle
+    this.setupToggle();
+  }
+
+  setupToggle() {
+    this.toggle = document.getElementById('theme-toggle');
+    if (!this.toggle) {
+      console.warn('Theme toggle element not found');
+      return;
+    }
+
+    console.log('Setting up theme toggle element:', this.toggle);
+
+    this.toggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log('Toggle clicked');
+      this.toggleTheme();
+    });
+
+    // Add keyboard support
+    this.toggle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.toggleTheme();
+      }
+    });
+
+    // Make it focusable
+    this.toggle.setAttribute('tabindex', '0');
+    this.toggle.setAttribute('role', 'switch');
+    this.toggle.setAttribute('aria-checked', this.currentTheme === 'dark');
+  }
+
+  toggleTheme() {
+    this.currentTheme = this.currentTheme === 'light' ? 'dark' : 'light';
+    this.applyTheme(this.currentTheme);
+    this.saveTheme();
+    
+    // Update accessibility
+    if (this.toggle) {
+      this.toggle.setAttribute('aria-checked', this.currentTheme === 'dark');
+    }
+  }
+
+  applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    
+    // Update toggle title
+    if (this.toggle) {
+      this.toggle.title = theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode';
+    }
+  }
+
+  saveTheme() {
+    localStorage.setItem('portfolio-theme', this.currentTheme);
+  }
+
+  getTheme() {
+    return this.currentTheme;
+  }
+}
+
+// Initialize theme manager
+let themeManager;
+
+// Initialize theme system
+function initThemeSystem() {
+  if (!themeManager) {
+    themeManager = new ThemeManager();
+    window.themeManager = themeManager;
+    console.log('Theme system initialized:', themeManager);
+  }
+}
+
+// Simple theme toggle function that works immediately
+function toggleThemeSimple() {
+  console.log('Simple toggle clicked!');
+  
+  const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+  const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+  
+  console.log('Switching from', currentTheme, 'to', newTheme);
+  
+  // Apply theme
+  document.documentElement.setAttribute('data-theme', newTheme);
+  
+  // Update toggle title
+  const toggle = document.getElementById('theme-toggle');
+  if (toggle) {
+    toggle.title = newTheme === 'light' ? 'Switch to dark mode' : 'Switch to light mode';
+  }
+  
+  // Save to localStorage
+  localStorage.setItem('portfolio-theme', newTheme);
+  
+  console.log('Theme switched to:', newTheme);
+}
+
+// Initialize saved theme on page load
+function initSavedTheme() {
+  const savedTheme = localStorage.getItem('portfolio-theme') || 'light';
+  console.log('Loading saved theme:', savedTheme);
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  
+  const toggle = document.getElementById('theme-toggle');
+  if (toggle) {
+    toggle.title = savedTheme === 'light' ? 'Switch to dark mode' : 'Switch to light mode';
+  }
+}
+
+// Make toggle function globally accessible
+window.toggleThemeSimple = toggleThemeSimple;
+
+// Initialize saved theme immediately
+initSavedTheme();
+
+// Try to initialize theme system multiple ways to ensure it works
+document.addEventListener('DOMContentLoaded', initThemeSystem);
+window.addEventListener('load', initThemeSystem);
+
+// Also initialize immediately if possible
+if (document.readyState !== 'loading') {
+  initThemeSystem();
 }
   

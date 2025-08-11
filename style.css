@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&display=swap');
 
 :root {
+  /* Light Mode Colors */
   --primary-bg: #fafafa;
   --secondary-bg: #ffffff;
   --text-primary: #1a1a1a;
@@ -11,6 +12,21 @@
   --shadow-medium: 0 8px 40px rgba(0,0,0,0.12);
   --terminal-font: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
   --ui-font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  
+  /* Theme transition */
+  --theme-transition: all 0.3s ease;
+}
+
+[data-theme="dark"] {
+  /* Dark Mode Colors */
+  --primary-bg: #1a1a1a;
+  --secondary-bg: #2d2d2d;
+  --text-primary: #e8e8e8;
+  --text-secondary: #a0a0a0;
+  --accent-color: #00ff41;
+  --border-color: #404040;
+  --shadow-light: 0 2px 20px rgba(0,0,0,0.3);
+  --shadow-medium: 0 8px 40px rgba(0,0,0,0.5);
 }
 
 * {
@@ -28,6 +44,11 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: var(--theme-transition);
+}
+
+[data-theme="dark"] body {
+  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
 }
 
 /* Main Container Layout */
@@ -48,7 +69,7 @@ body {
   border-radius: 12px;
   box-shadow: var(--shadow-medium);
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: var(--theme-transition), transform 0.3s ease, opacity 0.3s ease;
   flex-shrink: 0;
 }
 
@@ -463,6 +484,93 @@ body {
 }
 
 /* Responsive adjustments */
+/* Apple-style Theme Toggle */
+.theme-toggle {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 10000;
+  cursor: pointer;
+  user-select: none;
+  transition: var(--theme-transition);
+}
+
+.toggle-track {
+  position: relative;
+  width: 60px;
+  height: 32px;
+  background: var(--border-color);
+  border-radius: 16px;
+  transition: var(--theme-transition);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-color);
+}
+
+.toggle-track:hover {
+  box-shadow: var(--shadow-light), inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 26px;
+  height: 26px;
+  background: var(--secondary-bg);
+  border-radius: 50%;
+  transition: var(--theme-transition);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border-color);
+}
+
+.toggle-icons {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.toggle-icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  transition: var(--theme-transition);
+}
+
+.toggle-icon.sun {
+  left: 8px;
+  opacity: 1;
+}
+
+.toggle-icon.moon {
+  right: 8px;
+  opacity: 0.3;
+}
+
+/* Dark mode toggle state */
+[data-theme="dark"] .toggle-track {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+[data-theme="dark"] .toggle-thumb {
+  transform: translateX(28px);
+  background: var(--primary-bg);
+  border-color: var(--accent-color);
+}
+
+[data-theme="dark"] .toggle-icon.sun {
+  opacity: 0.3;
+}
+
+[data-theme="dark"] .toggle-icon.moon {
+  opacity: 1;
+}
+
+/* Responsive adjustments */
 @media (max-width: 1200px) {
   #main-container {
     flex-direction: column;
@@ -480,5 +588,78 @@ body {
   
   #main-container.project-active #shell-container {
     transform: none;
+  }
+}
+
+/* Mobile toggle adjustments */
+@media (max-width: 768px) {
+  .theme-toggle {
+    bottom: 20px;
+    right: 20px;
+  }
+  
+  .toggle-track {
+    width: 54px;
+    height: 28px;
+    border-radius: 14px;
+  }
+  
+  .toggle-thumb {
+    width: 22px;
+    height: 22px;
+    top: 2px;
+    left: 2px;
+  }
+  
+  [data-theme="dark"] .toggle-thumb {
+    transform: translateX(24px);
+  }
+  
+  .toggle-icon {
+    font-size: 12px;
+  }
+  
+  .toggle-icon.sun {
+    left: 6px;
+  }
+  
+  .toggle-icon.moon {
+    right: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .theme-toggle {
+    bottom: 16px;
+    right: 16px;
+  }
+  
+  .toggle-track {
+    width: 50px;
+    height: 26px;
+    border-radius: 13px;
+  }
+  
+  .toggle-thumb {
+    width: 20px;
+    height: 20px;
+    top: 2px;
+    left: 2px;
+  }
+  
+  [data-theme="dark"] .toggle-thumb {
+    transform: translateX(22px);
+  }
+  
+  .toggle-icon {
+    font-size: 11px;
+  }
+  
+  .toggle-icon.sun {
+    left: 5px;
+  }
+  
+  .toggle-icon.moon {
+    right: 5px;
   }
 }

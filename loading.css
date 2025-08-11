@@ -10,7 +10,7 @@
   justify-content: center;
   z-index: 1000;
   font-family: var(--terminal-font);
-  transition: opacity 0.3s ease;
+  transition: var(--theme-transition), opacity 0.3s ease;
   overflow: hidden;
 }
 
