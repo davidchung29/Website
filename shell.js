@@ -5,9 +5,10 @@ function showWelcomeMessage() {
   
   // Add the welcome content directly as HTML
   output.innerHTML = `<div class="command-output">
+hey, its david!
 welcome to my interactive portfolio.
 i'm a sophomore at carnegie mellon university 
-who likes about building scalable systems with thoughtful design.
+who likes building scalable systems with thoughtful design.
 type 'help' to explore available commands.
 </div>`;
   
