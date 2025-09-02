@@ -289,6 +289,15 @@ function showProjectWindow(projectId) {
           <h3>overview</h3>
           <p>myEyes is an ios app using live video footage and lidar data to help the blind navigate the world.</p>
           
+          <div class="system-diagram">
+            <h4>System Architecture</h4>
+            <div class="diagram-container" id="diagram-myeyes"></div>
+            <div class="diagram-controls" id="diagram-controls-myeyes">
+              <button class="diagram-btn active" data-type="architecture" onclick="switchDiagram('myeyes', 'architecture')">Architecture</button>
+              <button class="diagram-btn" data-type="processing" onclick="switchDiagram('myeyes', 'processing')">Processing Flow</button>
+            </div>
+          </div>
+          
           <h3>key features</h3>
           <p>
           • real-time object detection + collision prediciton<br>
@@ -347,8 +356,42 @@ function showProjectWindow(projectId) {
       title: 'Mockly - leetcode for behavioral interviews',
       content: `
         <div class="project-window-content">
+          <div class="mockly-preview" onclick="window.open('https://mockly.pro/', '_blank')">
+            <div class="mockly-preview-header">
+              <div class="mockly-preview-title">Live Preview</div>
+              <div class="mockly-preview-url">mockly.pro</div>
+            </div>
+            <div class="mockly-preview-content" id="mockly-preview-content-desktop">
+              <iframe 
+                class="mockly-preview-iframe" 
+                src="https://mockly.pro/" 
+                title="Mockly Live Preview"
+                loading="lazy"
+                sandbox="allow-scripts allow-same-origin"
+                onload="handleMocklyIframeLoad('desktop')"
+                onerror="handleMocklyIframeError('desktop')">
+              </iframe>
+              <div class="mockly-preview-overlay">
+                <div class="mockly-preview-overlay-content">
+                  <div class="mockly-preview-overlay-title">Click to Visit Full Site</div>
+                  <div class="mockly-preview-overlay-subtitle">mockly.pro</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
           <h3>overview</h3>
           <p>Mockly is a web app using cv and fine-tuned llm to evaluate behavioral interviews</p>
+          
+          <div class="system-diagram">
+            <h4>System Architecture</h4>
+            <div class="diagram-container" id="diagram-mockly"></div>
+            <div class="diagram-controls" id="diagram-controls-mockly">
+              <button class="diagram-btn active" data-type="architecture" onclick="switchDiagram('mockly', 'architecture')">Architecture</button>
+              <button class="diagram-btn" data-type="dataflow" onclick="switchDiagram('mockly', 'dataflow')">Session Flow</button>
+              <button class="diagram-btn" data-type="deployment" onclick="switchDiagram('mockly', 'deployment')">Deployment</button>
+            </div>
+          </div>
           
           <h3>key features</h3>
           <p>• inbrowser eye tracking, hand tracking, pitch analysis + fine-tuned llm to evaluate behavioral interviews<br>
@@ -383,6 +426,15 @@ function showProjectWindow(projectId) {
           <h3>overview</h3>
           <p>gomokuAI is a gomoku ai bot i built in high school while taking CMU CS 15-112 over the summer</p>
           
+          <div class="system-diagram">
+            <h4>System Architecture</h4>
+            <div class="diagram-container" id="diagram-gomokuai"></div>
+            <div class="diagram-controls" id="diagram-controls-gomokuai">
+              <button class="diagram-btn active" data-type="architecture" onclick="switchDiagram('gomokuai', 'architecture')">Architecture</button>
+              <button class="diagram-btn" data-type="algorithm" onclick="switchDiagram('gomokuai', 'algorithm')">AI Algorithm</button>
+            </div>
+          </div>
+          
           <h3>key features</h3>
           <p>
           • supports ai vs. player, player vs. player
@@ -409,6 +461,27 @@ function showProjectWindow(projectId) {
     const mobileLayout = isMobile();
     if (mobileLayout) {
       showProjectModal(projectId);
+      // Render initial diagram for mobile modal
+      setTimeout(() => {
+        console.log(`Attempting to render diagram for project (mobile): ${projectId}`);
+        const diagrams = getProjectDiagrams(projectId);
+        console.log(`Available diagrams for ${projectId}:`, Object.keys(diagrams));
+        const firstDiagramType = Object.keys(diagrams)[0];
+        if (firstDiagramType) {
+          console.log(`Rendering first diagram: ${firstDiagramType}`);
+          renderDiagram(`diagram-${projectId}`, diagrams[firstDiagramType].definition, `${projectId}-${firstDiagramType}-init`);
+        } else {
+          console.log(`No diagrams found for project: ${projectId}`);
+        }
+        
+        // Check iframe loading for Mockly project
+        if (projectId === 'mockly') {
+          checkMocklyIframeLoad();
+        }
+        
+        // Add click handlers to diagrams
+        addDiagramClickHandlers();
+      }, 500);
     } else {
       document.getElementById('project-title').textContent = project.title;
       document.getElementById('project-content').innerHTML = project.content;
@@ -416,6 +489,28 @@ function showProjectWindow(projectId) {
       const mainContainer = document.getElementById('main-container');
       projectWindow.classList.add('active');
       mainContainer.classList.add('project-active');
+      
+      // Render initial diagram for desktop window
+      setTimeout(() => {
+        console.log(`Attempting to render diagram for project: ${projectId}`);
+        const diagrams = getProjectDiagrams(projectId);
+        console.log(`Available diagrams for ${projectId}:`, Object.keys(diagrams));
+        const firstDiagramType = Object.keys(diagrams)[0];
+        if (firstDiagramType) {
+          console.log(`Rendering first diagram: ${firstDiagramType}`);
+          renderDiagram(`diagram-${projectId}`, diagrams[firstDiagramType].definition, `${projectId}-${firstDiagramType}-init`);
+        } else {
+          console.log(`No diagrams found for project: ${projectId}`);
+        }
+        
+        // Check iframe loading for Mockly project
+        if (projectId === 'mockly') {
+          checkMocklyIframeLoad();
+        }
+        
+        // Add click handlers to diagrams
+        addDiagramClickHandlers();
+      }, 500); // Increased delay to ensure DOM is ready
     }
   }
 }
@@ -443,6 +538,15 @@ function showProjectModal(projectId) {
         <div class="project-modal-content">
           <h3>overview</h3>
           <p>myEyes is an ios app using live video footage and lidar data to help the blind navigate the world.</p>
+          
+          <div class="system-diagram">
+            <h4>System Architecture</h4>
+            <div class="diagram-container" id="diagram-myeyes"></div>
+            <div class="diagram-controls" id="diagram-controls-myeyes">
+              <button class="diagram-btn active" data-type="architecture" onclick="switchDiagram('myeyes', 'architecture')">Architecture</button>
+              <button class="diagram-btn" data-type="processing" onclick="switchDiagram('myeyes', 'processing')">Processing Flow</button>
+            </div>
+          </div>
           
           <h3>key features</h3>
           <p>
@@ -475,6 +579,15 @@ function showProjectModal(projectId) {
           <h3>overview</h3>
           <p>Matrix is a low-latency scalable OpenSearch data warehouse indexing 20 million+ documents across 3 global regions with nlp queries</p>
           
+          <div class="system-diagram">
+            <h4>System Architecture</h4>
+            <div class="diagram-container" id="diagram-matrix"></div>
+            <div class="diagram-controls" id="diagram-controls-matrix">
+              <button class="diagram-btn active" data-type="architecture" onclick="switchDiagram('matrix', 'architecture')">Architecture</button>
+              <button class="diagram-btn" data-type="deployment" onclick="switchDiagram('matrix', 'deployment')">Deployment</button>
+            </div>
+          </div>
+          
           <h3>key features</h3>
           <p>
           • zero-ETL ingestion pipeline enabling real-time data flow<br>
@@ -502,8 +615,42 @@ function showProjectModal(projectId) {
       title: 'Mockly - leetcode for behavioral interviews',
       content: `
         <div class="project-modal-content">
+          <div class="mockly-preview" onclick="window.open('https://mockly.pro/', '_blank')">
+            <div class="mockly-preview-header">
+              <div class="mockly-preview-title">Live Preview</div>
+              <div class="mockly-preview-url">mockly.pro</div>
+            </div>
+            <div class="mockly-preview-content" id="mockly-preview-content-modal">
+              <iframe 
+                class="mockly-preview-iframe" 
+                src="https://mockly.pro/" 
+                title="Mockly Live Preview"
+                loading="lazy"
+                sandbox="allow-scripts allow-same-origin"
+                onload="handleMocklyIframeLoad('modal')"
+                onerror="handleMocklyIframeError('modal')">
+              </iframe>
+              <div class="mockly-preview-overlay">
+                <div class="mockly-preview-overlay-content">
+                  <div class="mockly-preview-overlay-title">Click to Visit Full Site</div>
+                  <div class="mockly-preview-overlay-subtitle">mockly.pro</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
           <h3>overview</h3>
           <p>Mockly is a web app using cv and fine-tuned llm to evaluate behavioral interviews</p>
+          
+          <div class="system-diagram">
+            <h4>System Architecture</h4>
+            <div class="diagram-container" id="diagram-mockly"></div>
+            <div class="diagram-controls" id="diagram-controls-mockly">
+              <button class="diagram-btn active" data-type="architecture" onclick="switchDiagram('mockly', 'architecture')">Architecture</button>
+              <button class="diagram-btn" data-type="dataflow" onclick="switchDiagram('mockly', 'dataflow')">Session Flow</button>
+              <button class="diagram-btn" data-type="deployment" onclick="switchDiagram('mockly', 'deployment')">Deployment</button>
+            </div>
+          </div>
           
           <h3>key features</h3>
           <p>• inbrowser eye tracking, hand tracking, pitch analysis + fine-tuned llm to evaluate behavioral interviews<br>
@@ -537,6 +684,15 @@ function showProjectModal(projectId) {
        <div class="project-modal-content">
           <h3>overview</h3>
           <p>gomokuAI is a gomoku ai bot i built in high school while taking CMU CS 15-112 over the summer</p>
+          
+          <div class="system-diagram">
+            <h4>System Architecture</h4>
+            <div class="diagram-container" id="diagram-gomokuai"></div>
+            <div class="diagram-controls" id="diagram-controls-gomokuai">
+              <button class="diagram-btn active" data-type="architecture" onclick="switchDiagram('gomokuai', 'architecture')">Architecture</button>
+              <button class="diagram-btn" data-type="algorithm" onclick="switchDiagram('gomokuai', 'algorithm')">AI Algorithm</button>
+            </div>
+          </div>
           
           <h3>key features</h3>
           <p>
@@ -1130,6 +1286,58 @@ window.toggleThemeSimple = toggleThemeSimple;
 // Initialize saved theme immediately
 initSavedTheme();
 
+// Initialize Mermaid when it's available
+function initializeMermaid() {
+  if (typeof mermaid !== 'undefined') {
+    console.log('Initializing Mermaid...');
+    mermaid.initialize({
+      startOnLoad: false, // We'll render manually
+      theme: 'default',
+      flowchart: {
+        useMaxWidth: false, // Allow diagrams to be their natural size
+        htmlLabels: true
+      },
+      sequence: {
+        diagramMarginX: 50,
+        diagramMarginY: 10,
+        actorMargin: 50,
+        width: 150,
+        height: 65,
+        boxMargin: 10,
+        boxTextMargin: 5,
+        noteMargin: 10,
+        messageMargin: 35,
+        mirrorActors: true,
+        bottomMarginAdj: 1,
+        useMaxWidth: false // Allow full size in modal
+      }
+    });
+    console.log('Mermaid initialized successfully');
+    return true;
+  } else {
+    console.log('Mermaid not yet available, retrying...');
+    return false;
+  }
+}
+
+// Try to initialize Mermaid multiple times
+let mermaidInitAttempts = 0;
+function tryInitializeMermaid() {
+  if (initializeMermaid()) {
+    return;
+  }
+  
+  mermaidInitAttempts++;
+  if (mermaidInitAttempts < 10) {
+    setTimeout(tryInitializeMermaid, 500);
+  } else {
+    console.error('Failed to initialize Mermaid after multiple attempts');
+  }
+}
+
+// Start trying to initialize Mermaid
+tryInitializeMermaid();
+
 // Try to initialize theme system multiple ways to ensure it works
 document.addEventListener('DOMContentLoaded', initThemeSystem);
 window.addEventListener('load', initThemeSystem);
@@ -1138,4 +1346,689 @@ window.addEventListener('load', initThemeSystem);
 if (document.readyState !== 'loading') {
   initThemeSystem();
 }
+
+// Diagram rendering functions
+function renderDiagram(containerId, diagramDefinition, diagramId) {
+  const container = document.getElementById(containerId);
+  if (!container) {
+    console.error(`Container ${containerId} not found`);
+    return;
+  }
+  
+  if (typeof mermaid === 'undefined') {
+    console.error('Mermaid is not available');
+    container.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-secondary);">Loading diagram...</div>';
+    // Try again after a delay
+    setTimeout(() => renderDiagram(containerId, diagramDefinition, diagramId), 1000);
+    return;
+  }
+  
+  try {
+    console.log(`Rendering diagram ${diagramId} in container ${containerId}`);
+    
+    // Clear container first
+    container.innerHTML = '';
+    
+    // Create a div for the diagram
+    const diagramDiv = document.createElement('div');
+    diagramDiv.className = 'mermaid';
+    diagramDiv.textContent = diagramDefinition.trim();
+    container.appendChild(diagramDiv);
+    
+    // Render the diagram
+    mermaid.init(undefined, diagramDiv);
+    
+    console.log(`Successfully rendered diagram ${diagramId}`);
+  } catch (error) {
+    console.error('Error rendering diagram:', error);
+    container.innerHTML = `
+      <div style="padding: 20px; text-align: center; color: var(--text-secondary);">
+        <p>Diagram could not be rendered</p>
+        <small>Check console for details</small>
+      </div>
+    `;
+  }
+}
+
+function switchDiagram(projectId, diagramType) {
+  const diagrams = getProjectDiagrams(projectId);
+  const diagram = diagrams[diagramType];
+  if (!diagram) return;
+  
+  const containerId = `diagram-${projectId}`;
+  const diagramId = `${projectId}-${diagramType}-${Date.now()}`;
+  
+  // Update active button
+  const buttons = document.querySelectorAll(`#diagram-controls-${projectId} .diagram-btn`);
+  buttons.forEach(btn => btn.classList.remove('active'));
+  document.querySelector(`#diagram-controls-${projectId} .diagram-btn[data-type="${diagramType}"]`)?.classList.add('active');
+  
+  // Render diagram
+  renderDiagram(containerId, diagram.definition, diagramId);
+}
+
+function getProjectDiagrams(projectId) {
+  const diagrams = {
+    mockly: {
+      architecture: {
+        name: 'System Architecture',
+        definition: `
+          graph TB
+            subgraph "Frontend (Railway)"
+              UI[React 18.2.0 UI]
+              CV[Computer Vision<br/>TensorFlow.js + MediaPipe]
+              Audio[Web Speech API<br/>Pitch Analysis]
+              Stream[WebRTC Media<br/>Processing]
+            end
+            
+            subgraph "Backend (Railway)"
+              API[FastAPI Server]
+              Auth[OAuth2 + JWT<br/>Google/LinkedIn]
+              Scoring[STAR Method<br/>Analysis Engine]
+            end
+            
+            subgraph "External Services"
+              LLM[OpenRouter API<br/>Mistral AI Models]
+              Analytics[PostHog<br/>User Analytics]
+            end
+            
+            subgraph "Database"
+              DB[(PostgreSQL<br/>User Data & Progress)]
+            end
+            
+            UI --> API
+            CV --> Scoring
+            Audio --> Scoring
+            Stream --> CV
+            Stream --> Audio
+            API --> Auth
+            API --> DB
+            Scoring --> LLM
+            Scoring --> DB
+            UI --> Analytics
+            
+            style UI fill:#e1f5fe
+            style API fill:#f3e5f5
+            style LLM fill:#fff3e0
+            style DB fill:#e8f5e8
+            style Analytics fill:#f1f8e9
+        `
+      },
+      dataflow: {
+        name: 'Interview Session Flow',
+        definition: `
+          sequenceDiagram
+            participant User
+            participant Frontend as React Frontend
+            participant CV as Computer Vision
+            participant Backend as FastAPI Backend
+            participant AI as OpenRouter/Mistral
+            participant DB as PostgreSQL
+            participant Analytics as PostHog
+            
+            User->>Frontend: Start Interview Session
+            Frontend->>CV: Initialize Media Streams
+            CV->>Frontend: Camera/Mic Permissions
+            Frontend->>Analytics: Track Session Start
+            
+            loop During Interview
+                CV->>CV: Eye Tracking (TensorFlow.js)
+                CV->>CV: Hand Gestures (MediaPipe)
+                CV->>CV: Voice Analysis (Web Speech)
+                CV->>Frontend: Real-time Metrics
+            end
+            
+            User->>Frontend: Complete Response
+            Frontend->>Backend: Submit Session Data
+            Backend->>AI: STAR Method Analysis
+            AI->>Backend: Evaluation Results
+            Backend->>DB: Save Progress & Scores
+            Backend->>Frontend: Comprehensive Report
+            Frontend->>Analytics: Track Session Complete
+            Frontend->>User: Display Feedback
+        `
+      },
+      deployment: {
+        name: 'Deployment Architecture',
+        definition: `
+          graph TB
+            subgraph "Railway Platform"
+              subgraph "Frontend Service"
+                React[React App<br/>Static Build]
+                CDN[Railway CDN<br/>Global Distribution]
+              end
+              
+              subgraph "Backend Service"
+                FastAPI[FastAPI Server<br/>Python 3.11+]
+                Workers[Uvicorn Workers<br/>Async Processing]
+              end
+            end
+            
+            subgraph "External Services"
+              PG[(PostgreSQL<br/>Managed Database)]
+              OpenRouter[OpenRouter API<br/>Mistral AI Access]
+              PostHog[PostHog Analytics<br/>Event Tracking]
+              OAuth[OAuth Providers<br/>Google + LinkedIn]
+            end
+            
+            subgraph "Client"
+              Browser[Web Browser<br/>Chrome/Safari/Firefox]
+              Mobile[Mobile Browser<br/>iOS/Android]
+            end
+            
+            Browser --> CDN
+            Mobile --> CDN
+            CDN --> React
+            React --> FastAPI
+            FastAPI --> Workers
+            Workers --> PG
+            Workers --> OpenRouter
+            React --> PostHog
+            React --> OAuth
+            
+            style React fill:#61dafb
+            style FastAPI fill:#009688
+            style PG fill:#336791
+            style OpenRouter fill:#ff6b35
+            style PostHog fill:#1d4ed8
+        `
+      }
+    },
+    matrix: {
+      architecture: {
+        name: 'System Architecture',
+        definition: `
+          graph TB
+            subgraph "Data Sources"
+              S1[Source System 1]
+              S2[Source System 2]
+              S3[Source System N]
+            end
+            
+            subgraph "Ingestion Layer"
+              Pipeline[Zero-ETL Pipeline<br/>AWS Lambda]
+              Transform[Data Transform<br/>Real-time Processing]
+            end
+            
+            subgraph "Storage & Search"
+              OS[OpenSearch Cluster<br/>Multi-Region]
+              Index[Index Management<br/>20M+ Documents]
+            end
+            
+            subgraph "Security Layer"
+              Cognito[AWS Cognito<br/>User Pool]
+              ALB[Application Load Balancer<br/>OIDC Federation]
+              Nginx[Nginx Proxy<br/>SSL/TLS]
+            end
+            
+            subgraph "Application Layer"
+              Dashboard[OpenSearch Dashboard<br/>NLP Queries]
+              API[REST API<br/>Data Access]
+              Export[S3 Export<br/>Data Downloads]
+            end
+            
+            S1 --> Pipeline
+            S2 --> Pipeline
+            S3 --> Pipeline
+            Pipeline --> Transform
+            Transform --> OS
+            OS --> Index
+            
+            Cognito --> ALB
+            ALB --> Nginx
+            Nginx --> Dashboard
+            Nginx --> API
+            
+            Dashboard --> OS
+            API --> OS
+            API --> Export
+            
+            style Pipeline fill:#fff3e0
+            style OS fill:#e8f5e8
+            style Cognito fill:#f3e5f5
+            style Dashboard fill:#e1f5fe
+        `
+      },
+      deployment: {
+        name: 'Deployment Architecture',
+        definition: `
+          graph TB
+            subgraph "Region 1 - US East"
+              OSE1[OpenSearch Cluster]
+              ALBE1[Application Load Balancer]
+              NginxE1[Nginx Proxy]
+            end
+            
+            subgraph "Region 2 - EU West"
+              OSW1[OpenSearch Cluster]
+              ALBW1[Application Load Balancer]
+              NginxW1[Nginx Proxy]
+            end
+            
+            subgraph "Region 3 - Asia Pacific"
+              OSA1[OpenSearch Cluster]
+              ALBA1[Application Load Balancer]
+              NginxA1[Nginx Proxy]
+            end
+            
+            subgraph "Global Services"
+              Route53[Route 53<br/>DNS & Failover]
+              Cognito[AWS Cognito<br/>Global User Pool]
+              S3[S3 Cross-Region<br/>Replication]
+            end
+            
+            Route53 --> ALBE1
+            Route53 --> ALBW1
+            Route53 --> ALBA1
+            
+            ALBE1 --> NginxE1
+            ALBW1 --> NginxW1
+            ALBA1 --> NginxA1
+            
+            NginxE1 --> OSE1
+            NginxW1 --> OSW1
+            NginxA1 --> OSA1
+            
+            Cognito --> ALBE1
+            Cognito --> ALBW1
+            Cognito --> ALBA1
+            
+            OSE1 -.-> OSW1
+            OSW1 -.-> OSA1
+            OSA1 -.-> OSE1
+            
+            style Route53 fill:#fff3e0
+            style Cognito fill:#f3e5f5
+            style S3 fill:#e8f5e8
+        `
+      }
+    },
+    myeyes: {
+      architecture: {
+        name: 'System Architecture',
+        definition: `
+          graph TB
+            subgraph "iOS App Layer"
+              UI[SwiftUI Interface]
+              Camera[Camera Manager<br/>AVFoundation]
+              Lidar[LiDAR Scanner<br/>ARKit]
+              Audio[Audio Feedback<br/>AVAudioEngine]
+            end
+            
+            subgraph "Computer Vision Pipeline"
+              Frame[Frame Processing<br/>Real-time]
+              YOLO[YOLOv8<br/>Object Detection]
+              OpenCV[OpenCV<br/>Image Processing]
+              Depth[Depth Analysis<br/>LiDAR + CV]
+            end
+            
+            subgraph "Safety & Alert System"
+              Collision[Collision Detection<br/>Predictive Algorithm]
+              Priority[Priority Queue<br/>Threat Assessment]
+              Haptic[Haptic Feedback<br/>UIFeedbackGenerator]
+              Speech[Speech Synthesis<br/>AVSpeechSynthesizer]
+            end
+            
+            subgraph "Performance Layer"
+              Threading[Multi-threading<br/>GCD & Operations]
+              Memory[Memory Management<br/>ARC Optimization]
+              Battery[Battery Optimization<br/>Background Processing]
+            end
+            
+            Camera --> Frame
+            Lidar --> Frame
+            Frame --> YOLO
+            Frame --> OpenCV
+            YOLO --> Depth
+            OpenCV --> Depth
+            
+            Depth --> Collision
+            Collision --> Priority
+            Priority --> Haptic
+            Priority --> Speech
+            Priority --> Audio
+            
+            UI --> Threading
+            Frame --> Threading
+            Collision --> Threading
+            
+            Threading --> Memory
+            Threading --> Battery
+            
+            style Camera fill:#e3f2fd
+            style YOLO fill:#fff8e1
+            style Collision fill:#ffebee
+            style Threading fill:#f3e5f5
+        `
+      },
+      processing: {
+        name: 'Real-time Processing',
+        definition: `
+          sequenceDiagram
+            participant Camera
+            participant LiDAR
+            participant CV as Computer Vision
+            participant AI as AI Processing
+            participant Alert as Alert System
+            participant User
+            
+            loop Every Frame (30 FPS)
+                Camera->>CV: Video Frame
+                LiDAR->>CV: Depth Data
+                CV->>CV: Object Detection
+                CV->>AI: Detected Objects + Depth
+                AI->>AI: Collision Prediction
+                AI->>Alert: Threat Assessment
+                
+                alt High Priority Threat
+                    Alert->>User: Immediate Haptic + Audio
+                else Medium Priority
+                    Alert->>User: Audio Warning
+                else Low Priority
+                    Alert->>User: Subtle Notification
+                end
+            end
+        `
+      }
+    },
+    gomokuai: {
+      architecture: {
+        name: 'Game Architecture',
+        definition: `
+          graph TB
+            subgraph "Game Interface"
+              UI[CMU Graphics UI<br/>Game Board Display]
+              Input[Mouse Input<br/>Click Handler]
+              Render[Board Renderer<br/>Visual Updates]
+            end
+            
+            subgraph "Game Logic"
+              Board[Board State<br/>15x15 Grid]
+              Rules[Game Rules<br/>Win Condition Check]
+              Turn[Turn Manager<br/>Player/AI Switch]
+            end
+            
+            subgraph "AI Engine"
+              Eval[Board Evaluator<br/>Position Scoring]
+              Search[Graph Search<br/>Alpha-Beta Pruning]
+              Memo[Memoization<br/>Position Cache]
+            end
+            
+            subgraph "Game Modes"
+              PvP[Player vs Player]
+              PvAI[Player vs AI]
+              Flip[Flip Mode<br/>Column Reversal]
+            end
+            
+            Input --> Turn
+            Turn --> Board
+            Board --> Rules
+            Rules --> UI
+            UI --> Render
+            
+            Turn --> Eval
+            Eval --> Search
+            Search --> Memo
+            Memo --> Board
+            
+            Turn --> PvP
+            Turn --> PvAI
+            Turn --> Flip
+            
+            style UI fill:#e3f2fd
+            style Search fill:#fff8e1
+            style Rules fill:#e8f5e8
+            style Flip fill:#f3e5f5
+        `
+      },
+      algorithm: {
+        name: 'AI Algorithm',
+        definition: `
+          graph TD
+            Start[AI Turn Start]
+            
+            subgraph "Position Evaluation"
+              Scan[Scan All Empty Positions]
+              Score[Calculate Position Score]
+              Pattern[Pattern Recognition<br/>Threats & Opportunities]
+            end
+            
+            subgraph "Search Algorithm"
+              Minimax[Minimax with<br/>Alpha-Beta Pruning]
+              Depth[Search Depth: 4-6<br/>Based on Game State]
+              Cache[Check Memoization<br/>Cache]
+            end
+            
+            subgraph "Decision Making"
+              Best[Select Best Move]
+              Validate[Validate Move<br/>Legal & Optimal]
+                Place[Place Stone]
+            end
+            
+            Start --> Scan
+            Scan --> Score
+            Score --> Pattern
+            Pattern --> Cache
+            
+            Cache --> Minimax
+            Minimax --> Depth
+            Depth --> Best
+            Best --> Validate
+            Validate --> Place
+            
+            Cache -.-> Best
+            
+            style Start fill:#e3f2fd
+            style Minimax fill:#fff8e1
+            style Best fill:#e8f5e8
+            style Place fill:#f3e5f5
+        `
+      }
+    }
+  };
+  
+  return diagrams[projectId] || {};
+}
+
+// Make diagram functions globally accessible
+window.renderDiagram = renderDiagram;
+window.switchDiagram = switchDiagram;
+window.getProjectDiagrams = getProjectDiagrams;
+window.showDiagramModal = showDiagramModal;
+window.switchModalDiagram = switchModalDiagram;
+window.closeDiagramModal = closeDiagramModal;
+window.addDiagramClickHandlers = addDiagramClickHandlers;
+
+// Mockly iframe handling functions
+function handleMocklyIframeLoad(type) {
+  console.log(`Mockly iframe loaded successfully (${type})`);
+  // Iframe loaded successfully, no action needed
+}
+
+function handleMocklyIframeError(type) {
+  console.log(`Mockly iframe failed to load (${type}), showing fallback`);
+  showMocklyFallback(type);
+}
+
+function showMocklyFallback(type) {
+  const containerId = type === 'desktop' ? 'mockly-preview-content-desktop' : 'mockly-preview-content-modal';
+  const container = document.getElementById(containerId);
+  
+  if (container) {
+    container.innerHTML = `
+      <div class="mockly-preview-fallback">
+        <div class="mockly-preview-logo">Mockly</div>
+        <div class="mockly-preview-tagline">LeetCode for Behavioral Interviews</div>
+        <div class="mockly-preview-subtitle">Practice with AI-powered feedback</div>
+        <div class="mockly-preview-cta">Click to Visit Site →</div>
+      </div>
+    `;
+  }
+}
+
+// Check if iframe fails to load after a timeout
+function checkMocklyIframeLoad() {
+  setTimeout(() => {
+    const desktopIframe = document.querySelector('#mockly-preview-content-desktop iframe');
+    const modalIframe = document.querySelector('#mockly-preview-content-modal iframe');
+    
+    if (desktopIframe) {
+      try {
+        // Try to access iframe content to check if it loaded
+        if (!desktopIframe.contentDocument && !desktopIframe.contentWindow) {
+          handleMocklyIframeError('desktop');
+        }
+      } catch (e) {
+        // Cross-origin restrictions mean it might be loading correctly
+        console.log('Mockly iframe may be loading (cross-origin restrictions)');
+      }
+    }
+    
+    if (modalIframe) {
+      try {
+        if (!modalIframe.contentDocument && !modalIframe.contentWindow) {
+          handleMocklyIframeError('modal');
+        }
+      } catch (e) {
+        console.log('Mockly iframe may be loading (cross-origin restrictions)');
+      }
+    }
+  }, 5000); // Check after 5 seconds
+}
+
+// Make functions globally accessible
+window.handleMocklyIframeLoad = handleMocklyIframeLoad;
+window.handleMocklyIframeError = handleMocklyIframeError;
+window.showMocklyFallback = showMocklyFallback;
+
+// Diagram Modal Functions
+function showDiagramModal(projectId, diagramType) {
+  const diagrams = getProjectDiagrams(projectId);
+  const diagram = diagrams[diagramType];
+  
+  if (!diagram) {
+    console.error(`Diagram not found: ${projectId} - ${diagramType}`);
+    return;
+  }
+  
+  // Set modal title
+  const modalTitle = document.getElementById('diagram-modal-title');
+  modalTitle.textContent = `${projectId.charAt(0).toUpperCase() + projectId.slice(1)} - ${diagram.name}`;
+  
+  // Clear and render diagram in modal
+  const modalDiagram = document.getElementById('diagram-modal-diagram');
+  modalDiagram.innerHTML = '';
+  
+  // Render diagram with unique ID for modal
+  const modalDiagramId = `modal-diagram-${projectId}-${diagramType}-${Date.now()}`;
+  renderDiagram('diagram-modal-diagram', diagram.definition, modalDiagramId);
+  
+  // Create controls for switching diagrams
+  const modalControls = document.getElementById('diagram-modal-controls');
+  modalControls.innerHTML = '';
+  
+  Object.keys(diagrams).forEach(type => {
+    const button = document.createElement('button');
+    button.className = `diagram-btn ${type === diagramType ? 'active' : ''}`;
+    button.textContent = diagrams[type].name;
+    button.onclick = () => switchModalDiagram(projectId, type);
+    modalControls.appendChild(button);
+  });
+  
+  // Show modal
+  const modal = document.getElementById('diagram-modal');
+  modal.classList.add('active');
+  
+  // Prevent body scrolling
+  document.body.style.overflow = 'hidden';
+}
+
+function switchModalDiagram(projectId, diagramType) {
+  const diagrams = getProjectDiagrams(projectId);
+  const diagram = diagrams[diagramType];
+  
+  if (!diagram) return;
+  
+  // Update title
+  const modalTitle = document.getElementById('diagram-modal-title');
+  modalTitle.textContent = `${projectId.charAt(0).toUpperCase() + projectId.slice(1)} - ${diagram.name}`;
+  
+  // Re-render diagram
+  const modalDiagramId = `modal-diagram-${projectId}-${diagramType}-${Date.now()}`;
+  renderDiagram('diagram-modal-diagram', diagram.definition, modalDiagramId);
+  
+  // Update active button
+  const buttons = document.querySelectorAll('#diagram-modal-controls .diagram-btn');
+  buttons.forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+function closeDiagramModal(event) {
+  if (event && event.target !== document.getElementById('diagram-modal')) return;
+  
+  const modal = document.getElementById('diagram-modal');
+  modal.classList.remove('active');
+  
+  // Restore body scrolling
+  document.body.style.overflow = '';
+}
+
+// Add click handlers to diagram containers
+function addDiagramClickHandlers() {
+  // Add click handlers after diagrams are rendered
+  setTimeout(() => {
+    const containers = document.querySelectorAll('.diagram-container');
+    containers.forEach(container => {
+      // Remove existing click handlers
+      container.onclick = null;
+      
+      // Add new click handler
+      container.onclick = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Extract project ID from container ID
+        const containerId = container.id;
+        const projectId = containerId.replace('diagram-', '');
+        
+        // Get current active diagram type
+        const controlsId = `diagram-controls-${projectId}`;
+        const activeButton = document.querySelector(`#${controlsId} .diagram-btn.active`);
+        const diagramType = activeButton ? activeButton.dataset.type : 'architecture';
+        
+        showDiagramModal(projectId, diagramType);
+      };
+    });
+  }, 100);
+}
+
+// Debug function to test diagram rendering
+window.testDiagram = function() {
+  console.log('Testing diagram rendering...');
+  console.log('Mermaid available:', typeof mermaid !== 'undefined');
+  
+  if (typeof mermaid !== 'undefined') {
+    const testContainer = document.createElement('div');
+    testContainer.id = 'test-diagram';
+    testContainer.style.cssText = 'position: fixed; top: 10px; left: 10px; width: 300px; height: 200px; background: white; border: 1px solid black; z-index: 10000;';
+    document.body.appendChild(testContainer);
+    
+    const simpleDefinition = `
+      graph TD
+        A[Start] --> B[End]
+        style A fill:#f9f
+        style B fill:#bbf
+    `;
+    
+    renderDiagram('test-diagram', simpleDefinition, 'test-diagram-id');
+    
+    setTimeout(() => {
+      if (confirm('Remove test diagram?')) {
+        document.body.removeChild(testContainer);
+      }
+    }, 3000);
+  } else {
+    alert('Mermaid is not available');
+  }
+};
   

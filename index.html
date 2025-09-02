@@ -78,6 +78,24 @@
     </div>
   </div>
 
+  <!-- Diagram Modal -->
+  <div id="diagram-modal" class="diagram-modal" onclick="closeDiagramModal(event)">
+    <div class="diagram-modal-content" onclick="event.stopPropagation()">
+      <div class="diagram-modal-header">
+        <div class="diagram-modal-title" id="diagram-modal-title">System Diagram</div>
+        <button class="diagram-modal-close" onclick="closeDiagramModal()">×</button>
+      </div>
+      <div class="diagram-modal-body">
+        <div class="diagram-modal-diagram" id="diagram-modal-diagram">
+          <!-- Dynamic diagram content -->
+        </div>
+      </div>
+      <div class="diagram-modal-controls" id="diagram-modal-controls">
+        <!-- Dynamic controls -->
+      </div>
+    </div>
+  </div>
+
   <!-- Theme Toggle -->
   <div id="theme-toggle" class="theme-toggle" title="Toggle dark mode" onclick="toggleThemeSimple()">
     <div class="toggle-track">
@@ -89,6 +107,7 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js" onerror="console.error('Failed to load Mermaid from CDN')"></script>
   <script src="loading.js"></script>
   <script src="shell.js"></script>
 </body>

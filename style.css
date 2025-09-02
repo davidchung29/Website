@@ -186,6 +186,13 @@ body {
   overflow-y: auto;
 }
 
+/* Override for project window to handle scrolling properly */
+.project-window .window-content {
+  padding: 0;
+  height: calc(100% - 60px);
+  overflow-y: auto;
+}
+
 /* Shell window specific content height */
 #shell-container .window-content {
   height: calc(100% - 60px);
@@ -334,9 +341,14 @@ body {
   width: 500px;
   min-width: 500px;
   max-width: 500px;
+  height: 80vh;
   opacity: 1;
   transform: translateX(0);
   align-self: center;
+}
+
+.project-window .window-content {
+  /* Styles moved to earlier rule to avoid conflicts */
 }
 
 .project-placeholder {
@@ -349,12 +361,15 @@ body {
 }
 
 /* Project Window Content Styles */
-.project-window-content {
+.project-window-content,
+.project-modal-content {
   font-family: var(--ui-font);
   line-height: 1.6;
+  padding: 20px;
 }
 
-.project-window-content h3 {
+.project-window-content h3,
+.project-modal-content h3 {
   color: var(--text-primary);
   font-size: 16px;
   font-weight: 600;
@@ -363,24 +378,28 @@ body {
   padding-bottom: 8px;
 }
 
-.project-window-content h3:first-child {
+.project-window-content h3:first-child,
+.project-modal-content h3:first-child {
   margin-top: 0;
 }
 
-.project-window-content p {
+.project-window-content p,
+.project-modal-content p {
   color: var(--text-secondary);
   font-size: 14px;
   margin: 12px 0;
 }
 
-.project-window-content .tech-stack {
+.project-window-content .tech-stack,
+.project-modal-content .tech-stack {
   margin: 20px 0;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
-.project-window-content .tech-tag {
+.project-window-content .tech-tag,
+.project-modal-content .tech-tag {
   background: var(--primary-bg);
   color: var(--text-primary);
   padding: 4px 12px;
@@ -390,13 +409,15 @@ body {
   border: 1px solid var(--border-color);
 }
 
-.project-window-content .project-links {
+.project-window-content .project-links,
+.project-modal-content .project-links {
   margin-top: 24px;
   padding-top: 16px;
   border-top: 1px solid var(--border-color);
 }
 
-.project-window-content .project-link {
+.project-window-content .project-link,
+.project-modal-content .project-link {
   display: inline-block;
   color: var(--accent-color);
   text-decoration: none;
@@ -411,7 +432,8 @@ body {
   background: var(--secondary-bg);
 }
 
-.project-window-content .project-link:hover {
+.project-window-content .project-link:hover,
+.project-modal-content .project-link:hover {
   background: var(--accent-color);
   color: var(--secondary-bg);
   transform: translateY(-1px);
@@ -661,5 +683,425 @@ body {
   
   .toggle-icon.moon {
     right: 5px;
+  }
+}
+
+/* System Diagram Styles */
+.system-diagram {
+  margin: 20px 0;
+  padding: 16px;
+  background: var(--primary-bg);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+}
+
+.system-diagram h4 {
+  margin: 0 0 12px 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.diagram-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  background: var(--secondary-bg);
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  overflow: auto;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.diagram-container:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-light);
+}
+
+.diagram-container::after {
+  content: '🔍 Click to enlarge';
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.diagram-container:hover::after {
+  opacity: 1;
+}
+
+.diagram-container svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Mermaid diagram theme adjustments */
+.diagram-container .mermaid {
+  background: transparent;
+}
+
+/* Mockly Preview Styles */
+.mockly-preview {
+  margin: 20px 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  background: var(--primary-bg);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mockly-preview:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
+}
+
+.mockly-preview-header {
+  padding: 12px 16px;
+  background: var(--secondary-bg);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mockly-preview-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mockly-preview-title::before {
+  content: "🌐";
+  font-size: 12px;
+}
+
+.mockly-preview-url {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-family: var(--terminal-font);
+}
+
+.mockly-preview-content {
+  height: 400px;
+  position: relative;
+  overflow: hidden;
+  background: #f8f9fa;
+}
+
+.mockly-preview-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: white;
+  transform: scale(0.8);
+  transform-origin: top left;
+  width: 125%;
+  height: 125%;
+}
+
+.mockly-preview-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.mockly-preview:hover .mockly-preview-overlay {
+  opacity: 1;
+}
+
+.mockly-preview-overlay-content {
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 16px 24px;
+  border-radius: 8px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.mockly-preview-overlay-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.mockly-preview-overlay-subtitle {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.mockly-preview-fallback {
+  height: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  position: relative;
+}
+
+.mockly-preview-fallback::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.5" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+  opacity: 0.3;
+}
+
+.mockly-preview-fallback .mockly-preview-logo {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  z-index: 1;
+  position: relative;
+}
+
+.mockly-preview-fallback .mockly-preview-tagline {
+  font-size: 16px;
+  margin-bottom: 8px;
+  opacity: 0.9;
+  z-index: 1;
+  position: relative;
+}
+
+.mockly-preview-fallback .mockly-preview-subtitle {
+  font-size: 14px;
+  opacity: 0.7;
+  z-index: 1;
+  position: relative;
+}
+
+.mockly-preview-fallback .mockly-preview-cta {
+  margin-top: 20px;
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 1;
+  position: relative;
+  backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
+}
+
+.mockly-preview-fallback .mockly-preview-cta:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Interactive diagram controls */
+.diagram-controls {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.diagram-btn {
+  padding: 6px 12px;
+  font-size: 11px;
+  background: var(--secondary-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.diagram-btn:hover,
+.diagram-btn.active {
+  background: var(--accent-color);
+  color: var(--secondary-bg);
+  border-color: var(--accent-color);
+}
+
+/* Diagram Modal */
+.diagram-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  padding: 20px;
+}
+
+.diagram-modal.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.diagram-modal-content {
+  background: var(--secondary-bg);
+  border-radius: 12px;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: auto;
+  box-shadow: var(--shadow-medium);
+  position: relative;
+}
+
+.diagram-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--primary-bg);
+  border-radius: 12px 12px 0 0;
+}
+
+.diagram-modal-title {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 16px;
+}
+
+.diagram-modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.diagram-modal-close:hover {
+  color: var(--text-primary);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.diagram-modal-body {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 500px;
+  max-height: calc(90vh - 140px);
+  overflow: auto;
+}
+
+.diagram-modal-diagram {
+  width: 100%;
+  min-height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.diagram-modal-diagram svg {
+  max-width: calc(90vw - 40px) !important;
+  max-height: calc(90vh - 200px) !important;
+  width: auto !important;
+  height: auto !important;
+  min-width: 800px;
+  min-height: 400px;
+}
+
+.diagram-modal-controls {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  background: var(--primary-bg);
+  border-radius: 0 0 12px 12px;
+}
+
+/* Responsive adjustments for diagrams */
+@media (max-width: 768px) {
+  .diagram-container {
+    min-height: 150px;
+  }
+  
+  .diagram-container::after {
+    content: '🔍 Tap to enlarge';
+  }
+  
+  .diagram-modal {
+    padding: 10px;
+  }
+  
+  .diagram-modal-content {
+    max-width: 95vw;
+    max-height: 95vh;
+  }
+  
+  .diagram-modal-header {
+    padding: 12px 16px;
+  }
+  
+  .diagram-modal-body {
+    padding: 16px;
+  }
+  
+  .diagram-modal-controls {
+    padding: 12px 16px;
+    flex-wrap: wrap;
+  }
+  
+  .mockly-preview-content {
+    height: 200px;
+    padding: 16px;
+  }
+  
+  .mockly-preview-logo {
+    font-size: 24px;
+  }
+  
+  .mockly-preview-tagline {
+    font-size: 14px;
+  }
+  
+  .mockly-preview-subtitle {
+    font-size: 12px;
   }
 }
