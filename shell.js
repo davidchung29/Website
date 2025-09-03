@@ -358,7 +358,7 @@ function showProjectWindow(projectId) {
         <div class="project-window-content">
           <div class="mockly-preview" onclick="window.open('https://mockly.pro/', '_blank')">
             <div class="mockly-preview-header">
-              <div class="mockly-preview-title">Live Preview</div>
+              <div class="mockly-preview-title">david browser</div>
               <div class="mockly-preview-url">mockly.pro</div>
             </div>
             <div class="mockly-preview-content" id="mockly-preview-content-desktop">
