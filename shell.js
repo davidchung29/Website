@@ -742,7 +742,6 @@ function showInfoModal(type) {
             <span class="tech-tag">html5</span>
             <span class="tech-tag">css3</span>
             <span class="tech-tag">javascript</span>
-            <span class="tech-tag">Responsive Design</span>
           </div>
         </div>
       `
