@@ -168,6 +168,7 @@ function appendOutput(content) {
 
     i am a student + full stack engineer who enjoys building creative, scalable systems.
     in my free time, i play bass in a few bands, lift, and spend time with friends and family.
+    currently, i'm an ai & ios engineer intern at valuemate (sep–dec 2025).
 
     i believe in creating software that is not only functional but also 
     intuitive, maintainable, and resilient.
