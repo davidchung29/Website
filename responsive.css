@@ -1,14 +1,15 @@
 @media (max-width: 768px) {
   #main-container {
-    padding: 20px 20px 40px 20px; /* Increased bottom padding */
+    padding: 16px 12px 40px 12px; /* tighter sides */
     gap: 16px;
   }
   
   #shell-container {
-    width: 95vw;
-    height: 85vh;
+    width: calc(100% - 24px); /* margin-safe width */
+    max-width: 760px;
+    height: auto;
     border-radius: 16px;
-    margin-bottom: 20px; /* Added bottom margin */
+    margin: 0 auto 20px auto; /* center with side margin */
   }
   
   #shell-header {
@@ -16,7 +17,7 @@
   }
   
   #shell-output, #shell-input-area {
-    padding: 24px;
+    padding: 16px;
   }
   
   /* Mobile command buttons - floating row remains scrollable */

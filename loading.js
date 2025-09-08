@@ -96,11 +96,18 @@ function initPortfolio() {
   setTimeout(() => {
     document.getElementById('loading-screen').style.display = 'none';
     const container = document.getElementById('shell-container');
-    container.style.display = 'block';
-    container.classList.add('fade-in');
+    if (container) {
+      container.style.display = 'block';
+      container.classList.add('fade-in');
+    }
     
-    showWelcomeMessage();
-    setupShellInput();
+    // Initialize terminal
+    if (typeof showWelcomeMessage === 'function') showWelcomeMessage();
+    if (typeof setupShellInput === 'function') setupShellInput();
+    
+    // Initialize pager + GitHub stats
+    if (typeof initScreenPager === 'function') initScreenPager();
+    if (typeof loadGitHubStats === 'function') loadGitHubStats('davidchung29');
     
     // Initialize theme system after portfolio is loaded
     if (typeof initThemeSystem === 'function') {

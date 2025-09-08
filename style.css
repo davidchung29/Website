@@ -51,15 +51,79 @@ body {
   background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
 }
 
+/* Screen viewport for horizontal paging */
+#screen-viewport {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  max-width: 1600px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+#screen-track {
+  display: flex;
+  flex-wrap: nowrap;
+  width: 200%;
+  height: 100%;
+  transition: transform 0.4s ease-in-out;
+  will-change: transform;
+}
+
+.screen {
+  flex: 0 0 50%;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 20px;
+  overflow: visible;
+}
+
+/* On larger viewports, center the slide content horizontally */
+@media (min-width: 1024px) {
+  .screen {
+    justify-content: center;
+  }
+}
+
+.screen-pager {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 1000;
+}
+
+.pager-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border-color);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.pager-dot.active {
+  background: var(--text-primary);
+  transform: scale(1.2);
+}
+
 /* Main Container Layout */
 #main-container {
   display: flex;
   gap: 20px;
   align-items: flex-start;
   justify-content: center;
-  width: 100%;
-  max-width: 1400px;
-  padding: 20px;
+  width: min(100%, 1100px);
+  max-width: 1100px;
+  padding: 20px 16px; /* slight horizontal padding */
   transition: all 0.3s ease;
 }
 
@@ -200,9 +264,11 @@ body {
 
 /* Terminal Window Specific */
 #shell-container {
-  width: 800px;
+  width: clamp(320px, 100%, 760px);
+  max-width: 760px;
   height: 700px;
   transition: all 0.3s ease;
+  overflow: hidden;
 }
 
 #shell-container .window-content {
@@ -327,6 +393,7 @@ body {
 
 /* Project Window Specific */
 .project-window {
+  display: none;
   width: 0;
   min-width: 0;
   max-width: 0;
@@ -338,6 +405,7 @@ body {
 }
 
 .project-window.active {
+  display: block;
   width: 500px;
   min-width: 500px;
   max-width: 500px;
@@ -347,9 +415,7 @@ body {
   align-self: center;
 }
 
-.project-window .window-content {
-  /* Styles moved to earlier rule to avoid conflicts */
-}
+
 
 .project-placeholder {
   display: flex;
@@ -599,6 +665,10 @@ body {
     align-items: center;
     gap: 16px;
   }
+  .screen {
+    align-items: flex-start;
+    padding-top: 16px;
+  }
   
   .project-window.active {
     width: 100%;
@@ -615,6 +685,8 @@ body {
 
 /* Mobile toggle adjustments */
 @media (max-width: 768px) {
+  #screen-track { width: 200%; }
+  .screen { padding: 12px; align-items: flex-start; padding-top: 16px; }
   .theme-toggle {
     bottom: 20px;
     right: 20px;
@@ -1104,4 +1176,100 @@ body {
   .mockly-preview-subtitle {
     font-size: 12px;
   }
+}
+
+/* Me screen */
+.me-window {
+  width: 1000px;
+  max-width: 1100px;
+}
+.me-window .window-content {
+  height: auto;
+}
+.me-card {
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+}
+.me-header {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.me-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--border-color);
+}
+.me-name {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.me-subtitle, .me-location {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.me-bio {
+  margin: 16px 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+.me-list {
+  margin: 8px 0 16px 18px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+.me-section-title {
+  font-weight: 600;
+  font-size: 14px;
+  margin: 12px 0 8px 0;
+  color: var(--text-primary);
+}
+.github-chart {
+  height: 180px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--primary-bg);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+.github-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.stat-card {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px;
+  background: var(--secondary-bg);
+}
+.stat-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.stat-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.me-links {
+  display: flex;
+  gap: 10px;
+}
+.me-link {
+  border: 1px solid var(--border-color);
+  background: var(--secondary-bg);
+  color: var(--text-primary);
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.me-link:hover {
+  background: var(--accent-color);
+  color: var(--secondary-bg);
 }

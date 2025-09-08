@@ -6,9 +6,10 @@ function showWelcomeMessage() {
   // Add the welcome content directly as HTML
   output.innerHTML = `<div class="command-output">
 hey, its david!
-welcome to my interactive portfolio.
-i'm a sophomore at carnegie mellon university 
-who likes building scalable systems with thoughtful design.
+welcome to my portfolio.
+i'm a sophomore at carnegie mellon university (AI + IS).
+currently, i'm building at valuemate (ycx25)
+i like building scalable systems with thoughtful design.
 type 'help' to explore available commands.
 </div>`;
   
@@ -1839,6 +1840,17 @@ window.switchModalDiagram = switchModalDiagram;
 window.closeDiagramModal = closeDiagramModal;
 window.addDiagramClickHandlers = addDiagramClickHandlers;
 
+// Contact Modal helper (used by showContactWindow)
+function showContactModal(title, content) {
+  const overlay = document.getElementById('modal-overlay');
+  const titleEl = document.getElementById('modal-title');
+  const contentEl = document.getElementById('modal-content');
+  if (!overlay || !titleEl || !contentEl) return;
+  titleEl.textContent = title || 'Contact';
+  contentEl.innerHTML = content || '';
+  overlay.classList.add('active');
+}
+
 // Mockly iframe handling functions
 function handleMocklyIframeLoad(type) {
   console.log(`Mockly iframe loaded successfully (${type})`);
@@ -2031,4 +2043,144 @@ window.testDiagram = function() {
     alert('Mermaid is not available');
   }
 };
+
+// ---------------------------
+// Screen pager + GitHub stats
+// ---------------------------
+let currentScreenIndex = 0;
+
+function setScreen(index) {
+  const track = document.getElementById('screen-track');
+  const dots = document.querySelectorAll('#screen-pager .pager-dot');
+  if (!track || !dots.length) return;
+  const clamped = Math.max(0, Math.min(index, 1));
+  currentScreenIndex = clamped;
+  // Move by exact viewport width in pixels to avoid subpixel rounding
+  const viewport = document.getElementById('screen-viewport');
+  const vw = viewport ? viewport.clientWidth : window.innerWidth;
+  track.style.transform = `translateX(-${Math.round(clamped * vw)}px)`;
+  dots.forEach((d, i) => d.classList.toggle('active', i === clamped));
+}
+
+function initScreenPager() {
+  const pager = document.getElementById('screen-pager');
+  const track = document.getElementById('screen-track');
+  if (!pager || !track) return;
+
+  // Dot clicks
+  pager.querySelectorAll('.pager-dot').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = Number(btn.getAttribute('data-index')) || 0;
+      setScreen(idx);
+    });
+  });
+
+  // Keyboard arrows (avoid when typing in terminal input)
+  document.addEventListener('keydown', (e) => {
+    const active = document.activeElement;
+    if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA')) return;
+    if (e.key === 'ArrowRight') setScreen(currentScreenIndex + 1);
+    if (e.key === 'ArrowLeft') setScreen(currentScreenIndex - 1);
+  });
+
+  // Touch swipe
+  const viewport = document.getElementById('screen-viewport');
+  if (viewport) {
+    let startX = 0;
+    let startY = 0;
+    viewport.addEventListener('touchstart', (e) => {
+      const t = e.changedTouches[0];
+      startX = t.clientX;
+      startY = t.clientY;
+    }, { passive: true });
+    viewport.addEventListener('touchend', (e) => {
+      const t = e.changedTouches[0];
+      const dx = t.clientX - startX;
+      const dy = t.clientY - startY;
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+        if (dx < 0) setScreen(currentScreenIndex + 1);
+        else setScreen(currentScreenIndex - 1);
+      }
+    }, { passive: true });
+  }
+
+  // Start on terminal screen
+  setScreen(0);
+
+  // Re-apply pixel-based transform on resize
+  window.addEventListener('resize', () => setScreen(currentScreenIndex));
+}
+
+async function loadGitHubStats(username = 'davidchung29') {
+  const statsMount = document.getElementById('github-stats');
+  const chartMount = document.getElementById('github-chart');
+  if (!statsMount || !chartMount) return;
+  try {
+    // Basic profile
+    const userResp = await fetch(`https://api.github.com/users/${username}`);
+    const user = await userResp.json();
+
+    // Repos for stars
+    const reposResp = await fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=updated`);
+    const repos = await reposResp.json();
+    const totalStars = Array.isArray(repos) ? repos.reduce((sum, r) => sum + (r.stargazers_count || 0), 0) : 0;
+
+    // Recent activity (PushEvent counts for a lightweight chart)
+    const eventsResp = await fetch(`https://api.github.com/users/${username}/events/public?per_page=100`);
+    const events = await eventsResp.json();
+    const now = new Date();
+    const dayKey = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate()).toISOString().slice(0,10);
+    const last14 = [];
+    for (let i = 13; i >= 0; i--) {
+      const d = new Date(now);
+      d.setDate(now.getDate() - i);
+      last14.push(dayKey(d));
+    }
+    const pushCounts = Object.fromEntries(last14.map(k => [k, 0]));
+    if (Array.isArray(events)) {
+      events.forEach(ev => {
+        if (ev && ev.type === 'PushEvent' && ev.created_at) {
+          const key = dayKey(new Date(ev.created_at));
+          if (key in pushCounts) pushCounts[key] += (ev.payload?.commits?.length || 1);
+        }
+      });
+    }
+
+    // Render simple bars for last 14 days
+    const maxVal = Math.max(1, ...Object.values(pushCounts));
+    chartMount.innerHTML = `
+      <div style="display:flex;align-items:flex-end;gap:4px;height:160px;padding:12px;">
+        ${last14.map(k => {
+          const v = pushCounts[k];
+          const h = Math.max(4, Math.round((v / maxVal) * 140));
+          return `<div title="${k}: ${v} commits" style="width:10px;height:${h}px;background:var(--accent-color);opacity:${0.3 + (v ? 0.6 : 0)};border-radius:3px"></div>`;
+        }).join('')}
+      </div>
+    `;
+
+    // Render stats
+    statsMount.innerHTML = `
+      <div class="stat-card">
+        <div class="stat-label">repos</div>
+        <div class="stat-value">${user.public_repos ?? '-'}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">stars</div>
+        <div class="stat-value">${totalStars}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">followers</div>
+        <div class="stat-value">${user.followers ?? '-'}</div>
+      </div>
+    `;
+  } catch (e) {
+    console.error('Failed to load GitHub stats', e);
+    statsMount.innerHTML = '<div class="stat-card"><div class="stat-label">github</div><div class="stat-value">unavailable</div></div>';
+  }
+}
+
+// Expose for loader
+window.initScreenPager = initScreenPager;
+window.navigateToScreen = setScreen;
+window.loadGitHubStats = loadGitHubStats;
   
