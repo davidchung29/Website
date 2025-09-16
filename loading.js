@@ -105,9 +105,8 @@ function initPortfolio() {
     if (typeof showWelcomeMessage === 'function') showWelcomeMessage();
     if (typeof setupShellInput === 'function') setupShellInput();
     
-    // Initialize pager + GitHub stats
+    // Initialize pager
     if (typeof initScreenPager === 'function') initScreenPager();
-    if (typeof loadGitHubStats === 'function') loadGitHubStats('davidchung29');
     
     // Initialize theme system after portfolio is loaded
     if (typeof initThemeSystem === 'function') {

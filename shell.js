@@ -6,10 +6,10 @@ function showWelcomeMessage() {
   // Add the welcome content directly as HTML
   output.innerHTML = `<div class="command-output">
 hey, its david!
-welcome to my portfolio.
-i'm a sophomore at carnegie mellon university (AI + IS).
+
+i'm a student at carnegie mellon university (AI + IS).
 currently, i'm building at valuemate (ycx25)
-i like building scalable systems with thoughtful design.
+
 type 'help' to explore available commands.
 </div>`;
   
@@ -167,9 +167,9 @@ function appendOutput(content) {
   <div class="about-text">
     <strong>who i am</strong>
 
-    i am a student + full stack engineer who enjoys building creative, scalable systems.
+    i'm a student + full stack engineer who enjoys building creative, scalable systems.
     in my free time, i play bass in a few bands, lift, and spend time with friends and family.
-    currently, i'm an ai & ios engineer intern at valuemate (sep–dec 2025).
+    currently, i'm an ai  engineer intern at valuemate
 
     i believe in creating software that is not only functional but also 
     intuitive, maintainable, and resilient.
@@ -183,21 +183,21 @@ function appendOutput(content) {
 <strong>featured projects</strong>
 
 <div class="project-grid">
+  <div class="project-item clickable-project" onclick="showProjectWindow('medicly')">
+    <div class="project-name">medicly</div>
+    <div class="project-desc">🏆 winner of cmu hacks 2025 🏆 \n ai-powered physical therapy analysis platform</div>
+  </div>
   <div class="project-item clickable-project" onclick="showProjectWindow('mockly')">
     <div class="project-name">mockly</div>
     <div class="project-desc">web app using cv and fine-tuned llm to evaluate behavioral interviews (neetcode for behavioral interviews)</div>
   </div>
   <div class="project-item clickable-project" onclick="showProjectWindow('matrix')">
     <div class="project-name">matrix</div>
-    <div class="project-desc">low-latency scalable data warehouse indexing a lot of terabytes (built in amazon)</div>
+    <div class="project-desc">amazon digital payments team \n low-latency scalable data warehouse indexing 2B documents in real-time</div>
   </div>
   <div class="project-item clickable-project" onclick="showProjectWindow('myeyes')">
     <div class="project-name">myeyes</div>
     <div class="project-desc">ios app that uses cv and lidar to provide real-time scene understanding for the blind</div>
-  </div>
-  <div class="project-item clickable-project" onclick="showProjectWindow('gomokuai')">
-    <div class="project-name">gomokuai</div>
-    <div class="project-desc">fun gomoku ai bot i built in high school</div>
   </div>
 </div>
 <div class="command-help">fyi: click on any project above for detailed information</div>
@@ -421,37 +421,73 @@ function showProjectWindow(projectId) {
         </div>
       `
     },
-    gomokuai: {
-      title: 'gomokuAI - gomoku ai bot',
+    medicly: {
+      title: 'Medicly - AI-Powered Physical Therapy Platform',
       content: `
        <div class="project-window-content">
+          <div class="mockly-preview" onclick="window.open('http://medicly.dev/', '_blank')">
+            <div class="mockly-preview-header">
+              <div class="mockly-preview-title">david browser</div>
+              <div class="mockly-preview-url">medicly.dev</div>
+            </div>
+            <div class="mockly-preview-content" id="medicly-preview-content-desktop">
+              <iframe 
+                class="mockly-preview-iframe" 
+                src="http://medicly.dev/" 
+                title="Medicly Live Preview"
+                loading="lazy"
+                sandbox="allow-scripts allow-same-origin"
+                onload="handleMediclyIframeLoad('desktop')"
+                onerror="handleMediclyIframeError('desktop')">
+              </iframe>
+              <div class="mockly-preview-overlay">
+                <div class="mockly-preview-overlay-content">
+                  <div class="mockly-preview-overlay-title">Click to Visit Full Site</div>
+                  <div class="mockly-preview-overlay-subtitle">medicly.dev</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
           <h3>overview</h3>
-          <p>gomokuAI is a gomoku ai bot i built in high school while taking CMU CS 15-112 over the summer</p>
+          <p>Medicly is an AI-powered rehabilitation tracking platform with intelligent pose analysis and personalized recovery insights. The platform enables 10-minute physical therapy evaluations verified by doctors and provides a 20x workflow optimizer for healthcare professionals.</p>
           
           <div class="system-diagram">
             <h4>System Architecture</h4>
-            <div class="diagram-container" id="diagram-gomokuai"></div>
-            <div class="diagram-controls" id="diagram-controls-gomokuai">
-              <button class="diagram-btn active" data-type="architecture" onclick="switchDiagram('gomokuai', 'architecture')">Architecture</button>
-              <button class="diagram-btn" data-type="algorithm" onclick="switchDiagram('gomokuai', 'algorithm')">AI Algorithm</button>
+            <div class="diagram-container" id="diagram-medicly"></div>
+            <div class="diagram-controls" id="diagram-controls-medicly">
+              <button class="diagram-btn active" data-type="architecture" onclick="switchDiagram('medicly', 'architecture')">Architecture</button>
+              <button class="diagram-btn" data-type="analysis" onclick="switchDiagram('medicly', 'analysis')">Analysis Pipeline</button>
+              <button class="diagram-btn" data-type="deployment" onclick="switchDiagram('medicly', 'deployment')">Deployment</button>
             </div>
           </div>
           
           <h3>key features</h3>
           <p>
-          • supports ai vs. player, player vs. player
-          • flip mode where the column of a placed piece is reversed each turn
+          • ai-powered pose analysis with real-time movement tracking<br>
+          • 10-minute doctor-verified physical therapy evaluations<br>
+          • 20x workflow optimization for healthcare professionals<br>
+          • personalized recovery insights and progress tracking<br>
+          • intelligent rehabilitation recommendations
 
           
           <h3>implementation</h3>
-          <p>built in python, ai uses custom board scoring mechanicsm + memoization + graph search w pruning, utilizes cmu_112_graphics for graphics</p>
+          <p>utilizes next.js for frontend + api calls, fastapi for backend, supabase for database, railway for deployment, google oauth for authentication, mediapipe for pose detection, and claude ai for intelligent feedback.</p>
           
           <div class="tech-stack">
-            <span class="tech-tag">python</span>
+            <span class="tech-tag">next.js</span>
+            <span class="tech-tag">fastapi</span>
+            <span class="tech-tag">supabase</span>
+            <span class="tech-tag">railway</span>
+            <span class="tech-tag">google oauth</span>
+            <span class="tech-tag">mediapipe</span>
+            <span class="tech-tag">claude ai</span>
+            <span class="tech-tag">biodigital human</span>
           </div>
           
           <div class="project-links">
-            <a href="https://github.com/davidchung29/gomokuAI" class="project-link">github</a>
+            <a href="https://github.com/scrappydevs/medicly/tree/main/frontend" class="project-link">github</a>
+            <a href="http://medicly.dev/" class="project-link">live demo</a>
           </div>
         </div>
       `
@@ -481,6 +517,11 @@ function showProjectWindow(projectId) {
           checkMocklyIframeLoad();
         }
         
+        // Check iframe loading for Medicly project
+        if (projectId === 'medicly') {
+          checkMediclyIframeLoad();
+        }
+        
         // Add click handlers to diagrams
         addDiagramClickHandlers();
       }, 500);
@@ -508,6 +549,11 @@ function showProjectWindow(projectId) {
         // Check iframe loading for Mockly project
         if (projectId === 'mockly') {
           checkMocklyIframeLoad();
+        }
+        
+        // Check iframe loading for Medicly project
+        if (projectId === 'medicly') {
+          checkMediclyIframeLoad();
         }
         
         // Add click handlers to diagrams
@@ -680,37 +726,73 @@ function showProjectModal(projectId) {
         </div>
       `
     },
-    gomokuai: {
-      title: 'gomokuAI - gomoku ai bot',
+    medicly: {
+      title: 'Medicly - AI-Powered Physical Therapy Platform',
       content: `
        <div class="project-modal-content">
+          <div class="mockly-preview" onclick="window.open('http://medicly.dev/', '_blank')">
+            <div class="mockly-preview-header">
+              <div class="mockly-preview-title">Live Preview</div>
+              <div class="mockly-preview-url">medicly.dev</div>
+            </div>
+            <div class="mockly-preview-content" id="medicly-preview-content-modal">
+              <iframe 
+                class="mockly-preview-iframe" 
+                src="http://medicly.dev/" 
+                title="Medicly Live Preview"
+                loading="lazy"
+                sandbox="allow-scripts allow-same-origin"
+                onload="handleMediclyIframeLoad('modal')"
+                onerror="handleMediclyIframeError('modal')">
+              </iframe>
+              <div class="mockly-preview-overlay">
+                <div class="mockly-preview-overlay-content">
+                  <div class="mockly-preview-overlay-title">Click to Visit Full Site</div>
+                  <div class="mockly-preview-overlay-subtitle">medicly.dev</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
           <h3>overview</h3>
-          <p>gomokuAI is a gomoku ai bot i built in high school while taking CMU CS 15-112 over the summer</p>
+          <p>Medicly is an AI-powered rehabilitation tracking platform with intelligent pose analysis and personalized recovery insights. The platform enables 10-minute physical therapy evaluations verified by doctors and provides a 20x workflow optimizer for healthcare professionals.</p>
           
           <div class="system-diagram">
             <h4>System Architecture</h4>
-            <div class="diagram-container" id="diagram-gomokuai"></div>
-            <div class="diagram-controls" id="diagram-controls-gomokuai">
-              <button class="diagram-btn active" data-type="architecture" onclick="switchDiagram('gomokuai', 'architecture')">Architecture</button>
-              <button class="diagram-btn" data-type="algorithm" onclick="switchDiagram('gomokuai', 'algorithm')">AI Algorithm</button>
+            <div class="diagram-container" id="diagram-medicly"></div>
+            <div class="diagram-controls" id="diagram-controls-medicly">
+              <button class="diagram-btn active" data-type="architecture" onclick="switchDiagram('medicly', 'architecture')">Architecture</button>
+              <button class="diagram-btn" data-type="analysis" onclick="switchDiagram('medicly', 'analysis')">Analysis Pipeline</button>
+              <button class="diagram-btn" data-type="deployment" onclick="switchDiagram('medicly', 'deployment')">Deployment</button>
             </div>
           </div>
           
           <h3>key features</h3>
           <p>
-          • supports ai vs. player, player vs. player
-          • flip mode where the column of a placed piece is reversed each turn
+          • ai-powered pose analysis with real-time movement tracking<br>
+          • 10-minute doctor-verified physical therapy evaluations<br>
+          • 20x workflow optimization for healthcare professionals<br>
+          • personalized recovery insights and progress tracking<br>
+          • intelligent rehabilitation recommendations
 
           
           <h3>implementation</h3>
-          <p>built in python, ai uses custom board scoring mechanicsm + memoization + graph search w pruning, utilizes cmu_112_graphics for graphics</p>
+          <p>utilizes next.js for frontend + api calls, fastapi for backend, supabase for database, railway for deployment, google oauth for authentication, mediapipe for pose detection, and claude ai for intelligent feedback.</p>
           
           <div class="tech-stack">
-            <span class="tech-tag">python</span>
+            <span class="tech-tag">next.js</span>
+            <span class="tech-tag">fastapi</span>
+            <span class="tech-tag">supabase</span>
+            <span class="tech-tag">railway</span>
+            <span class="tech-tag">google oauth</span>
+            <span class="tech-tag">mediapipe</span>
+            <span class="tech-tag">claude ai</span>
+            <span class="tech-tag">biodigital human</span>
           </div>
           
           <div class="project-links">
-            <a href="https://github.com/davidchung29/gomokuAI" class="project-link">github</a>
+            <a href="https://github.com/scrappydevs/medicly/tree/main/frontend" class="project-link">github</a>
+            <a href="http://medicly.dev/" class="project-link">live demo</a>
           </div>
         </div>
       `
@@ -875,7 +957,7 @@ window.addEventListener('resize', function() {
       // Check if it's a project/contact modal (not info modal)
       const modalTitle = document.getElementById('modal-title').textContent;
       if (modalTitle.includes('myEyes') || modalTitle.includes('Matrix') || 
-          modalTitle.includes('Mockly') || modalTitle.includes('gomokuAI') ||
+          modalTitle.includes('Mockly') || modalTitle.includes('Medicly') ||
           modalTitle.includes('LinkedIn') || modalTitle.includes('GitHub')) {
         closeModal();
       }
@@ -1340,12 +1422,19 @@ function tryInitializeMermaid() {
 tryInitializeMermaid();
 
 // Try to initialize theme system multiple ways to ensure it works
-document.addEventListener('DOMContentLoaded', initThemeSystem);
-window.addEventListener('load', initThemeSystem);
+document.addEventListener('DOMContentLoaded', function() {
+  initThemeSystem();
+  initTechStackDodging();
+});
+window.addEventListener('load', function() {
+  initThemeSystem();
+  initTechStackDodging();
+});
 
 // Also initialize immediately if possible
 if (document.readyState !== 'loading') {
   initThemeSystem();
+  initTechStackDodging();
 }
 
 // Diagram rendering functions
@@ -1732,97 +1821,178 @@ function getProjectDiagrams(projectId) {
         `
       }
     },
-    gomokuai: {
+    medicly: {
       architecture: {
-        name: 'Game Architecture',
+        name: 'System Architecture',
         definition: `
           graph TB
-            subgraph "Game Interface"
-              UI[CMU Graphics UI<br/>Game Board Display]
-              Input[Mouse Input<br/>Click Handler]
-              Render[Board Renderer<br/>Visual Updates]
+            subgraph "Patient Frontend (Next.js)"
+              PatientUI[Patient Interface<br/>Session Creation]
+              VideoUpload[Video Upload<br/>Exercise Recording]
+              PainDesc[Pain Description<br/>Input Form]
             end
             
-            subgraph "Game Logic"
-              Board[Board State<br/>15x15 Grid]
-              Rules[Game Rules<br/>Win Condition Check]
-              Turn[Turn Manager<br/>Player/AI Switch]
+            subgraph "Doctor Frontend (Next.js)"
+              DoctorUI[Doctor Dashboard<br/>Review Interface]
+              VideoReview[Video Review<br/>AI Analysis Display]
+              ExerciseApproval[Exercise Plan<br/>Approval/Edit/Reject]
+              BioViz[3D Muscle Visualization<br/>BioDigital Integration]
             end
             
-            subgraph "AI Engine"
-              Eval[Board Evaluator<br/>Position Scoring]
-              Search[Graph Search<br/>Alpha-Beta Pruning]
-              Memo[Memoization<br/>Position Cache]
+            subgraph "Backend Processing"
+              API[FastAPI Server<br/>Session Management]
+              VideoProc[Video Processing<br/>MediaPipe + OpenCV]
+              AngleCalc[Joint Angle<br/>Time-Series Analysis]
+              KeyFrame[Keyframe Extraction<br/>Claude Analysis]
+              ExerciseMatch[Exercise Matching<br/>Claude + DB Lookup]
             end
             
-            subgraph "Game Modes"
-              PvP[Player vs Player]
-              PvAI[Player vs AI]
-              Flip[Flip Mode<br/>Column Reversal]
+            subgraph "Database (Supabase)"
+              SessionDB[(Session Database<br/>Patient Records)]
+              ExerciseDB[(Evaluation Exercises<br/>Exercise Library)]
+              WorkoutDB[(Workout Database<br/>Treatment Plans)]
+              VideoStorage[(Video Storage<br/>Supabase Bucket)]
             end
             
-            Input --> Turn
-            Turn --> Board
-            Board --> Rules
-            Rules --> UI
-            UI --> Render
+            subgraph "AI Services"
+              Claude[Claude AI<br/>Analysis & Matching]
+              BioDigital[BioDigital API<br/>3D Anatomy Models]
+            end
             
-            Turn --> Eval
-            Eval --> Search
-            Search --> Memo
-            Memo --> Board
+            PatientUI --> API
+            PainDesc --> Claude
+            VideoUpload --> VideoStorage
+            API --> SessionDB
+            API --> ExerciseDB
             
-            Turn --> PvP
-            Turn --> PvAI
-            Turn --> Flip
+            VideoStorage --> VideoProc
+            VideoProc --> AngleCalc
+            VideoProc --> KeyFrame
+            AngleCalc --> Claude
+            KeyFrame --> Claude
+            Claude --> ExerciseMatch
+            ExerciseMatch --> WorkoutDB
             
-            style UI fill:#e3f2fd
-            style Search fill:#fff8e1
-            style Rules fill:#e8f5e8
-            style Flip fill:#f3e5f5
+            API --> DoctorUI
+            VideoReview --> VideoStorage
+            VideoReview --> BioViz
+            BioViz --> BioDigital
+            ExerciseApproval --> WorkoutDB
+            
+            style PatientUI fill:#e3f2fd
+            style DoctorUI fill:#f3e5f5
+            style API fill:#009688
+            style Claude fill:#ff6b35
+            style BioDigital fill:#1d4ed8
+            style SessionDB fill:#336791
         `
       },
-      algorithm: {
-        name: 'AI Algorithm',
+      analysis: {
+        name: 'Analysis Pipeline',
         definition: `
-          graph TD
-            Start[AI Turn Start]
+          sequenceDiagram
+            participant Patient
+            participant PatientUI as Patient Frontend
+            participant DoctorUI as Doctor Frontend
+            participant API as FastAPI Backend
+            participant Claude as Claude AI
+            participant VideoProc as MediaPipe + OpenCV
+            participant DB as Supabase Database
+            participant BioDigital as BioDigital API
             
-            subgraph "Position Evaluation"
-              Scan[Scan All Empty Positions]
-              Score[Calculate Position Score]
-              Pattern[Pattern Recognition<br/>Threats & Opportunities]
+            Patient->>PatientUI: Create New Session
+            PatientUI->>API: Create Session Entry
+            API->>DB: Store Session in Database
+            
+            Patient->>PatientUI: Describe Pain/Issue
+            PatientUI->>Claude: Send Pain Description
+            Claude->>DB: Match to Evaluation Exercise
+            DB->>Claude: Return Exercise from Library
+            Claude->>PatientUI: Display Matched Exercise
+            
+            Patient->>PatientUI: Upload Exercise Video
+            PatientUI->>DB: Store Video in Supabase Bucket
+            
+            API->>VideoProc: Process Video
+            VideoProc->>VideoProc: Extract Pose Landmarks
+            VideoProc->>VideoProc: Calculate Joint Angles
+            VideoProc->>Claude: Send Angles + Keyframes
+            Claude->>Claude: Analyze Movement Quality
+            Claude->>DB: Match to Workout Plan
+            DB->>Claude: Return Recommended Workout
+            Claude->>API: Comprehensive Analysis + Exercise Plan
+            
+            API->>DoctorUI: Notify New Session Ready
+            DoctorUI->>DB: Fetch Patient Video
+            DoctorUI->>API: Request AI Analysis
+            API->>DoctorUI: Send Analysis + Exercise Plan
+            DoctorUI->>BioDigital: Request Muscle Visualization
+            BioDigital->>DoctorUI: Return 3D Anatomy Models
+            
+            DoctorUI->>DoctorUI: Review Video + AI Analysis
+            DoctorUI->>DoctorUI: Approve/Edit/Reject Exercise Plan
+            
+            alt Exercise Plan Approved
+                DoctorUI->>API: Approve Exercise Plan
+                API->>DB: Update Session Status
+                API->>PatientUI: Notify Exercise Plan Ready
+                PatientUI->>Patient: Start Exercise Plan
+            else Exercise Plan Rejected
+                DoctorUI->>API: Reject Exercise Plan
+                API->>DB: Update Session Status
+                API->>PatientUI: Notify Plan Needs Revision
+            end
+        `
+      },
+      deployment: {
+        name: 'Deployment Architecture',
+        definition: `
+          graph TB
+            subgraph "Frontend Deployment (Railway)"
+              NextJS[Next.js App<br/>SSR + API Routes]
+              CDN[Railway CDN<br/>Global Distribution]
             end
             
-            subgraph "Search Algorithm"
-              Minimax[Minimax with<br/>Alpha-Beta Pruning]
-              Depth[Search Depth: 4-6<br/>Based on Game State]
-              Cache[Check Memoization<br/>Cache]
+            subgraph "Backend Deployment (Railway)"
+              FastAPI[FastAPI Server<br/>Python 3.11+]
+              Workers[Uvicorn Workers<br/>Async Processing]
             end
             
-            subgraph "Decision Making"
-              Best[Select Best Move]
-              Validate[Validate Move<br/>Legal & Optimal]
-                Place[Place Stone]
+            subgraph "Database (Supabase)"
+              PG[(PostgreSQL<br/>Managed Database)]
+              Storage[Supabase Storage<br/>File Management]
+              Auth[Google OAuth<br/>Authentication]
             end
             
-            Start --> Scan
-            Scan --> Score
-            Score --> Pattern
-            Pattern --> Cache
+            subgraph "External APIs"
+              Claude[Claude AI API<br/>Anthropic]
+              BioDigital[BioDigital Human API<br/>3D Models]
+              Google[Google OAuth<br/>User Authentication]
+            end
             
-            Cache --> Minimax
-            Minimax --> Depth
-            Depth --> Best
-            Best --> Validate
-            Validate --> Place
+            subgraph "Client Devices"
+              Web[Web Browser<br/>Desktop/Mobile]
+              Mobile[Mobile Browser<br/>iOS/Android]
+            end
             
-            Cache -.-> Best
+            Web --> CDN
+            Mobile --> CDN
+            CDN --> NextJS
+            NextJS --> FastAPI
+            FastAPI --> Workers
+            Workers --> PG
+            Workers --> Storage
+            Workers --> Auth
+            Workers --> Claude
+            NextJS --> BioDigital
+            NextJS --> Google
             
-            style Start fill:#e3f2fd
-            style Minimax fill:#fff8e1
-            style Best fill:#e8f5e8
-            style Place fill:#f3e5f5
+            style NextJS fill:#000000
+            style FastAPI fill:#009688
+            style PG fill:#336791
+            style Claude fill:#ff6b35
+            style BioDigital fill:#1d4ed8
+            style Google fill:#4285f4
         `
       }
     }
@@ -1912,6 +2082,121 @@ function checkMocklyIframeLoad() {
 window.handleMocklyIframeLoad = handleMocklyIframeLoad;
 window.handleMocklyIframeError = handleMocklyIframeError;
 window.showMocklyFallback = showMocklyFallback;
+
+// Medicly iframe handling functions
+function handleMediclyIframeLoad(type) {
+  console.log(`Medicly iframe loaded successfully (${type})`);
+  // Iframe loaded successfully, no action needed
+}
+
+function handleMediclyIframeError(type) {
+  console.log(`Medicly iframe failed to load (${type}), showing fallback`);
+  showMediclyFallback(type);
+}
+
+function showMediclyFallback(type) {
+  const containerId = type === 'desktop' ? 'medicly-preview-content-desktop' : 'medicly-preview-content-modal';
+  const container = document.getElementById(containerId);
+  
+  if (container) {
+    container.innerHTML = `
+      <div class="mockly-preview-fallback">
+        <div class="mockly-preview-logo">Medicly</div>
+        <div class="mockly-preview-tagline">AI-Powered Physical Therapy Platform</div>
+        <div class="mockly-preview-subtitle">10-minute doctor-verified evaluations</div>
+        <div class="mockly-preview-cta">Click to Visit Site →</div>
+      </div>
+    `;
+  }
+}
+
+// Check if iframe fails to load after a timeout
+function checkMediclyIframeLoad() {
+  setTimeout(() => {
+    const desktopIframe = document.querySelector('#medicly-preview-content-desktop iframe');
+    const modalIframe = document.querySelector('#medicly-preview-content-modal iframe');
+    
+    if (desktopIframe) {
+      try {
+        // Try to access iframe content to check if it loaded
+        if (!desktopIframe.contentDocument && !desktopIframe.contentWindow) {
+          handleMediclyIframeError('desktop');
+        }
+      } catch (e) {
+        // Cross-origin restrictions mean it might be loading correctly
+        console.log('Medicly iframe may be loading (cross-origin restrictions)');
+      }
+    }
+    
+    if (modalIframe) {
+      try {
+        if (!modalIframe.contentDocument && !modalIframe.contentWindow) {
+          handleMediclyIframeError('modal');
+        }
+      } catch (e) {
+        console.log('Medicly iframe may be loading (cross-origin restrictions)');
+      }
+    }
+  }, 5000); // Check after 5 seconds
+}
+
+// Make functions globally accessible
+window.handleMediclyIframeLoad = handleMediclyIframeLoad;
+window.handleMediclyIframeError = handleMediclyIframeError;
+window.showMediclyFallback = showMediclyFallback;
+
+// Tech stack cursor dodging effect
+function initTechStackDodging() {
+  const techStack = document.querySelector('.me-tech-stack');
+  const techTags = document.querySelectorAll('.me-tech-tag');
+  
+  if (!techStack || techTags.length === 0) return;
+  
+  techStack.addEventListener('mousemove', function(e) {
+    const rect = techStack.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    
+    techTags.forEach(tag => {
+      const tagRect = tag.getBoundingClientRect();
+      const tagX = tagRect.left - rect.left + tagRect.width / 2;
+      const tagY = tagRect.top - rect.top + tagRect.height / 2;
+      
+      // Calculate distance from cursor to tag center
+      const distance = Math.sqrt(
+        Math.pow(mouseX - tagX, 2) + Math.pow(mouseY - tagY, 2)
+      );
+      
+      // Dodge effect within a certain radius
+      const dodgeRadius = 60;
+      const maxDodge = 8;
+      
+      if (distance < dodgeRadius) {
+        // Calculate dodge direction (away from cursor)
+        const angle = Math.atan2(tagY - mouseY, tagX - mouseX);
+        const dodgeAmount = (dodgeRadius - distance) / dodgeRadius * maxDodge;
+        
+        const dodgeX = Math.cos(angle) * dodgeAmount;
+        const dodgeY = Math.sin(angle) * dodgeAmount;
+        
+        tag.style.transform = `translate(${dodgeX}px, ${dodgeY}px)`;
+      } else {
+        tag.style.transform = 'translate(0px, 0px)';
+      }
+    });
+  });
+  
+  // Reset positions when mouse leaves
+  techStack.addEventListener('mouseleave', function() {
+    techTags.forEach(tag => {
+      tag.style.transform = 'translate(0px, 0px)';
+    });
+  });
+}
+
+// Make function globally accessible
+window.initTechStackDodging = initTechStackDodging;
+
 
 // Diagram Modal Functions
 function showDiagramModal(projectId, diagramType) {

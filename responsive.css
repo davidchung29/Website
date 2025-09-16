@@ -258,4 +258,38 @@
   .window-header {
     padding: 10px 14px; /* even more compact on very small screens */
   }
+  
+  /* Me-card responsive adjustments */
+  .me-highlights-container {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .me-timeline {
+    padding-left: 16px;
+    height: 240px; /* Smaller height for mobile */
+  }
+  
+  .me-timeline::before {
+    left: 6px;
+  }
+  
+  .me-timeline-dot {
+    left: -16px;
+    width: 10px;
+    height: 10px;
+  }
+  
+  .me-timeline-content {
+    padding: 10px;
+  }
+  
+  .me-timeline-header {
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .me-timeline-date {
+    align-self: flex-start;
+  }
 } 
