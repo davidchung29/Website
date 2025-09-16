@@ -262,16 +262,16 @@
   /* Me-card responsive adjustments */
   .me-highlights-container {
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
   }
   
   .me-timeline {
     padding-left: 16px;
-    height: 240px; /* Smaller height for mobile */
+    height: 192px; /* Smaller height for mobile (80% of 240px) */
   }
   
   .me-timeline::before {
-    left: 6px;
+    left: 7px;
   }
   
   .me-timeline-dot {
