@@ -76,31 +76,33 @@
 .command-button {
   background: var(--secondary-bg);
   border: 1px solid var(--border-color);
-  border-radius: 6px;
-  padding: 6px 12px;
-  font-family: var(--terminal-font);
-  font-size: 12px;
+  border-radius: 980px;
+  padding: 8px 16px;
+  font-family: var(--ui-font);
+  font-size: 13px;
+  font-weight: 500;
   color: var(--text-primary);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
-  min-height: 32px;
+  min-height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
+  letter-spacing: -0.016em;
 }
 
 .command-button:hover {
   background: var(--accent-color);
   color: var(--secondary-bg);
   border-color: var(--accent-color);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transform: scale(1.02);
+  box-shadow: var(--shadow-light);
 }
 
 .command-button:active {
-  transform: translateY(0);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  transform: scale(0.98);
+  box-shadow: none;
 }
 
 /* Adjust input area to accommodate buttons */
@@ -222,14 +224,15 @@
 .project-item {
   background: var(--primary-bg);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 16px;
-  transition: all 0.2s ease;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .project-item:hover {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
   box-shadow: var(--shadow-light);
+  border-color: var(--text-secondary);
 }
 
 .project-name {

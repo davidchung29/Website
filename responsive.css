@@ -1,19 +1,45 @@
 @media (max-width: 768px) {
+  body {
+    font-size: 15px;
+  }
+
   #main-container {
-    padding: 16px 12px 40px 12px; /* tighter sides */
+    padding: 20px 16px 60px 16px;
     gap: 16px;
   }
-  
+
   #shell-container {
-    width: calc(100% - 24px); /* margin-safe width */
-    max-width: 760px;
+    width: 100%;
+    max-width: 100%;
     height: auto;
-    border-radius: 16px;
-    margin: 0 auto 20px auto; /* center with side margin */
+    min-height: 500px;
+    border-radius: 12px;
+    margin: 0 auto 20px auto;
   }
-  
+
+  .me-window {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .window-title {
+    font-size: 15px;
+  }
+
   #shell-header {
     padding: 16px 24px;
+  }
+
+  .me-name {
+    font-size: 20px;
+  }
+
+  .me-subtitle, .me-location {
+    font-size: 14px;
+  }
+
+  .me-section-title {
+    font-size: 15px;
   }
   
   #shell-output, #shell-input-area {
@@ -166,15 +192,21 @@
 
 @media (max-width: 480px) {
   #main-container {
-    padding: 16px 16px 50px 16px; /* Even more bottom padding for smaller screens */
+    padding: 16px 12px 60px 12px;
     gap: 12px;
   }
-  
+
   #shell-container {
-    width: 98vw;
-    height: 90vh;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    min-height: 450px;
     border-radius: 12px;
-    margin-bottom: 30px; /* More bottom margin for smaller screens */
+    margin-bottom: 20px;
+  }
+
+  .me-window {
+    width: 100%;
   }
   
   #shell-header {
