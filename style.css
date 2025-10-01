@@ -1267,6 +1267,7 @@ body {
 .me-links {
   display: flex;
   gap: 10px;
+  justify-content: center;
 }
 .me-link {
   border: 1.5px solid var(--border-color);
@@ -1350,7 +1351,7 @@ body {
 .me-timeline {
   position: relative;
   padding-left: 20px;
-  height: 224px; /* Fixed height for ~2.5 cards (80% of 280px) */
+  height: 280px; /* Match the height of recent highlights section */
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: thin;
