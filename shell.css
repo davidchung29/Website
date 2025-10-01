@@ -74,35 +74,36 @@
 }
 
 .command-button {
-  background: var(--secondary-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 980px;
-  padding: 8px 16px;
-  font-family: var(--ui-font);
-  font-size: 13px;
+  background: var(--primary-bg);
+  border: 1.5px solid var(--border-color);
+  border-radius: 6px;
+  padding: 7px 14px;
+  font-family: var(--terminal-font);
+  font-size: 12px;
   font-weight: 500;
-  color: var(--text-primary);
+  color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
-  min-height: 36px;
+  min-height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  letter-spacing: -0.016em;
+  letter-spacing: 0.02em;
+  text-transform: lowercase;
 }
 
 .command-button:hover {
   background: var(--accent-color);
-  color: var(--secondary-bg);
+  color: var(--primary-bg);
   border-color: var(--accent-color);
-  transform: scale(1.02);
-  box-shadow: var(--shadow-light);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-medium);
 }
 
 .command-button:active {
-  transform: scale(0.98);
-  box-shadow: none;
+  transform: translateY(0);
+  box-shadow: var(--shadow-subtle);
 }
 
 /* Adjust input area to accommodate buttons */

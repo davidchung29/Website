@@ -1,32 +1,44 @@
 :root {
-  /* Apple Design System - Light Mode Colors */
-  --primary-bg: #f5f5f7;
-  --secondary-bg: #ffffff;
-  --text-primary: #1d1d1f;
-  --text-secondary: #86868b;
-  --accent-color: #0071e3;
-  --border-color: #d2d2d7;
-  --shadow-light: 0 2px 8px rgba(0,0,0,0.08);
-  --shadow-medium: 0 4px 16px rgba(0,0,0,0.12);
+  /* Apple meets OpenAI - Monochrome Light Mode */
+  --primary-bg: #ffffff;
+  --secondary-bg: #fafafa;
+  --tertiary-bg: #f5f5f5;
+  --text-primary: #0d0d0d;
+  --text-secondary: #6e6e6e;
+  --text-tertiary: #a0a0a0;
+  --accent-color: #0d0d0d;
+  --accent-hover: #2d2d2d;
+  --border-color: #e0e0e0;
+  --border-hover: #c0c0c0;
+  --shadow-subtle: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-medium: 0 2px 8px rgba(0,0,0,0.08);
+  --shadow-strong: 0 4px 16px rgba(0,0,0,0.12);
 
-  /* Apple Typography */
-  --terminal-font: 'SF Mono', 'Monaco', 'Menlo', 'Consolas', monospace;
-  --ui-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  /* Smart Typography - Quirky Edge */
+  --terminal-font: 'SF Mono', 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
+  --ui-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+  --display-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
 
-  /* Apple Transitions */
+  /* Smooth Transitions */
   --theme-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --theme-transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 [data-theme="dark"] {
-  /* Apple Design System - Dark Mode Colors */
-  --primary-bg: #000000;
-  --secondary-bg: #1d1d1f;
-  --text-primary: #f5f5f7;
-  --text-secondary: #86868b;
-  --accent-color: #0a84ff;
-  --border-color: #424245;
-  --shadow-light: 0 2px 8px rgba(0,0,0,0.4);
-  --shadow-medium: 0 4px 16px rgba(0,0,0,0.6);
+  /* Apple meets OpenAI - Monochrome Dark Mode */
+  --primary-bg: #0d0d0d;
+  --secondary-bg: #1a1a1a;
+  --tertiary-bg: #2d2d2d;
+  --text-primary: #ececec;
+  --text-secondary: #a0a0a0;
+  --text-tertiary: #6e6e6e;
+  --accent-color: #ffffff;
+  --accent-hover: #e0e0e0;
+  --border-color: #333333;
+  --border-hover: #4a4a4a;
+  --shadow-subtle: 0 1px 3px rgba(0,0,0,0.3);
+  --shadow-medium: 0 2px 8px rgba(0,0,0,0.4);
+  --shadow-strong: 0 4px 16px rgba(0,0,0,0.6);
 }
 
 * {
@@ -37,10 +49,10 @@ body {
   background: var(--primary-bg);
   color: var(--text-primary);
   font-family: var(--ui-font);
-  font-size: 17px;
-  line-height: 1.47059;
+  font-size: 16px;
+  line-height: 1.6;
   font-weight: 400;
-  letter-spacing: -0.022em;
+  letter-spacing: -0.011em;
   margin: 0;
   padding: 0;
   min-height: 100vh;
@@ -149,7 +161,7 @@ body {
 /* Unified Window System */
 .window {
   background: var(--secondary-bg);
-  border-radius: 18px;
+  border-radius: 16px;
   box-shadow: var(--shadow-medium);
   overflow: hidden;
   transition: var(--theme-transition), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -161,9 +173,9 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 24px;
+  padding: 18px 24px;
   border-bottom: 1px solid var(--border-color);
-  background: var(--primary-bg);
+  background: var(--secondary-bg);
 }
 
 .window-title-area {
@@ -197,10 +209,12 @@ body {
 }
 
 .window-title {
-  font-weight: 600;
-  font-size: 15px;
+  font-weight: 500;
+  font-size: 14px;
   color: var(--text-primary);
-  letter-spacing: -0.024em;
+  letter-spacing: 0.01em;
+  text-transform: lowercase;
+  font-family: var(--terminal-font);
 }
 
 .window-controls {
@@ -213,27 +227,25 @@ body {
   height: 12px;
   border-radius: 50%;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
-  padding: 16px;
-  margin: -16px;
 }
 
 .control-dot.close {
-  background: #ff5f56;
+  background: var(--text-primary);
 }
 
 .control-dot.minimize {
-  background: #ffbd2e;
+  background: var(--text-secondary);
 }
 
 .control-dot.maximize {
-  background: #27ca3f;
+  background: var(--text-tertiary);
 }
 
 .control-dot:hover {
-  transform: scale(1.1);
-  filter: brightness(1.1);
+  transform: scale(1.15);
+  opacity: 0.7;
 }
 
 /* macOS-style hover icons */
@@ -1228,8 +1240,10 @@ body {
   border: 1px solid var(--border-color);
 }
 .me-name {
-  font-weight: 700;
+  font-weight: 600;
+  font-size: 19px;
   color: var(--text-primary);
+  letter-spacing: -0.02em;
 }
 .me-subtitle, .me-location {
   font-size: 13px;
@@ -1246,32 +1260,36 @@ body {
   font-size: 14px;
 }
 .me-section-title {
-  font-weight: 600;
-  font-size: 14px;
+  font-weight: 500;
+  font-size: 13px;
   margin: 12px 0 8px 0;
   color: var(--text-primary);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-family: var(--terminal-font);
 }
 .me-links {
   display: flex;
   gap: 10px;
 }
 .me-link {
-  border: 1px solid var(--border-color);
-  background: var(--secondary-bg);
+  border: 1.5px solid var(--border-color);
+  background: var(--primary-bg);
   color: var(--text-primary);
-  padding: 12px 20px;
-  border-radius: 12px;
+  padding: 11px 20px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  letter-spacing: -0.024em;
+  letter-spacing: -0.01em;
 }
 .me-link:hover {
   background: var(--accent-color);
-  color: var(--secondary-bg);
-  transform: scale(1.02);
-  box-shadow: var(--shadow-light);
+  color: var(--primary-bg);
+  border-color: var(--accent-color);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-medium);
 }
 
 /* Tech stack tags */
@@ -1284,17 +1302,19 @@ body {
 }
 
 .me-tech-tag {
-  background: var(--primary-bg);
-  color: var(--text-primary);
-  padding: 6px 14px;
-  border-radius: 16px;
-  font-size: 13px;
+  background: var(--secondary-bg);
+  color: var(--text-secondary);
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 12px;
   font-weight: 500;
   border: 1px solid var(--border-color);
   position: relative;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: default;
-  letter-spacing: -0.016em;
+  letter-spacing: 0.02em;
+  text-transform: lowercase;
+  font-family: var(--terminal-font);
 }
 
 /* Highlights container - two column layout */
