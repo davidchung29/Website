@@ -226,15 +226,7 @@ body {
 }
 
 .control-dot.close {
-  background: var(--text-primary);
-}
-
-.control-dot.minimize {
-  background: var(--text-secondary);
-}
-
-.control-dot.maximize {
-  background: var(--text-tertiary);
+  background: #ff3b30;
 }
 
 .control-dot:hover {
