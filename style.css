@@ -90,17 +90,10 @@ body {
   width: 50%;
   height: 100%;
   display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
+  align-items: center;
+  justify-content: center;
   padding: 20px;
   overflow: visible;
-}
-
-/* On larger viewports, center the slide content horizontally */
-@media (min-width: 1024px) {
-  .screen {
-    justify-content: center;
-  }
 }
 
 .screen-pager {
