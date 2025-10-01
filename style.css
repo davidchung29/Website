@@ -1217,10 +1217,12 @@ body {
 /* Me screen */
 .me-window {
   width: 100%;
-  max-width: 880px;
+  max-width: 760px;
+  height: clamp(500px, 80vh, 700px);
 }
 .me-window .window-content {
-  height: auto;
+  height: calc(100% - 60px);
+  overflow-y: auto;
 }
 .me-card {
   border: none;
