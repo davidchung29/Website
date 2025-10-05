@@ -80,11 +80,11 @@ function animateTiles() {
         tile.element.style.backgroundColor = 'rgba(0, 0, 0, 0.15)';
         tile.element.style.borderColor = 'rgba(0, 0, 0, 0.3)';
         tile.flipped = true;
-      }, index * 20); // Slight stagger within the wave
+      }, index * 50); // Increased stagger within the wave for smoother animation
     });
     
     currentWave++;
-    setTimeout(flipNextWave, 1); // Delay between waves
+    setTimeout(flipNextWave, 100); // Increased delay between waves for smoother animation
   }
   
   // Start the animation
