@@ -276,6 +276,10 @@
   transform: translateX(4px);
 }
 
+[data-theme="dark"] .contact-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
 .contact-link.linkedin-contact {
   position: relative;
 }
