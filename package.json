@@ -1,0 +1,15 @@
+{
+  "name": "david-chung-website",
+  "version": "1.0.0",
+  "description": "Personal website with AI chat assistant",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}
+

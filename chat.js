@@ -1,4 +1,4 @@
-// Chat Terminal with Tool Calls
+// Chat Terminal with Context-Based AI
 
 // Data structure for David's information
 const davidData = {
@@ -147,267 +147,100 @@ const davidData = {
   }
 };
 
-// Tool functions
-const tools = {
-  get_projects: () => {
-    return davidData.projects.map(p => ({
-      name: p.name,
-      link: p.link,
-      role: p.role,
-      date: p.date,
-      hackathon: p.hackathon,
-      hackathonLink: p.hackathonLink,
-      wins: p.wins,
-      desc: p.desc,
-      stats: p.stats,
-      tech: p.tech,
-      details: p.details,
-      fullDescription: p.fullDescription
-    }));
-  },
-  
-  get_project_details: (params) => {
-    const projectName = params?.project_name || params; // Handle both new format and old format
-    const project = davidData.projects.find(
-      p => p.name.toLowerCase() === projectName.toLowerCase()
-    );
-    return project || null;
-  },
-  
-  search_projects: (params) => {
-    const keyword = params?.keyword || params; // Handle both new format and old format
-    const lowerKeyword = keyword.toLowerCase();
-    return davidData.projects.filter(p => 
-      p.name.toLowerCase().includes(lowerKeyword) ||
-      p.desc.toLowerCase().includes(lowerKeyword) ||
-      p.fullDescription.toLowerCase().includes(lowerKeyword) ||
-      p.role.toLowerCase().includes(lowerKeyword) ||
-      p.hackathon.toLowerCase().includes(lowerKeyword) ||
-      p.tech.some(tech => tech.toLowerCase().includes(lowerKeyword))
-    );
-  },
-  
-  get_project_by_hackathon: (params) => {
-    const hackathonName = params?.hackathon_name || params; // Handle both new format and old format
-    const lowerName = hackathonName.toLowerCase();
-    return davidData.projects.filter(p => 
-      p.hackathon.toLowerCase().includes(lowerName)
-    );
-  },
-  
-  get_experience: (params = {}) => {
-    let experience = davidData.experience;
-    
-    // Filter by organization if specified
-    if (params.organization) {
-      const orgLower = params.organization.toLowerCase();
-      experience = experience.filter(exp => {
-        const expOrgLower = exp.org.toLowerCase();
-        return expOrgLower.includes(orgLower) || orgLower.includes(expOrgLower) ||
-               expOrgLower.includes('cmu') && orgLower.includes('cmu') ||
-               expOrgLower.includes('teel') && orgLower.includes('teel');
-      });
-    }
-    
-    // Filter by type if specified
-    if (params.filter_type) {
-      const filterType = params.filter_type.toLowerCase();
-      if (filterType === 'research') {
-        experience = experience.filter(exp => 
-          exp.org.toLowerCase().includes('teel') || 
-          exp.org.toLowerCase().includes('research') ||
-          exp.role.toLowerCase().includes('research')
-        );
-      } else if (filterType === 'ai') {
-        experience = experience.filter(exp => 
-          exp.role.toLowerCase().includes('ai') ||
-          exp.org.toLowerCase().includes('ai')
-        );
-      }
-    }
-    
-    return experience;
-  },
-  
-  get_contact_info: () => {
-    return davidData.contact;
-  },
-  
-  get_resume: () => {
-    return davidData.contact.resume;
-  },
-  
-  get_timeline: () => {
-    // Combine projects and experience in chronological order
-    const timeline = [];
-    davidData.experience.forEach(exp => {
-      timeline.push({ type: 'experience', ...exp });
-    });
-    davidData.projects.forEach(proj => {
-      timeline.push({ type: 'project', ...proj });
-    });
-    return timeline;
-  },
-  
-  get_skills: () => {
-    return davidData.skills;
-  },
-  
-  get_education: () => {
-    return davidData.education;
-  },
-  
-  get_leadership: () => {
-    return davidData.leadership;
-  }
-};
+// Tool functions removed - using context-based approach instead
 
 // OpenAI API Configuration
-// IMPORTANT: For production, use a backend proxy to keep API keys secure
-// This client-side approach is for development only
-// To set your API key:
-// 1. Option A: Set environment variable (requires backend)
-// 2. Option B: Replace 'YOUR_OPENAI_API_KEY' below (NOT RECOMMENDED for production)
-const OPENAI_API_KEY = 'YOUR_OPENAI_API_KEY'; // Set this or use environment variable
+// Uses Vite environment variables
+// In development: reads from .env file (VITE_OPENAI_API_KEY)
+// In production: Railway injects VITE_OPENAI_API_KEY environment variable
+const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
 const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
 
-// Define available tools for OpenAI function calling
-const openAITools = [
-  {
-    type: 'function',
-    function: {
-      name: 'get_projects',
-      description: 'Get all of David\'s projects with details',
-      parameters: { type: 'object', properties: {} }
-    }
-  },
-  {
-    type: 'function',
-    function: {
-      name: 'get_project_details',
-      description: 'Get detailed information about a specific project. Use when asked about Haven, Medicly, or Yumi specifically.',
-      parameters: {
-        type: 'object',
-        properties: {
-          project_name: {
-            type: 'string',
-            description: 'Name of the project (Haven, Medicly, or Yumi)',
-            enum: ['Haven', 'Medicly', 'Yumi', 'haven', 'medicly', 'yumi']
-          }
-        },
-        required: ['project_name']
-      }
-    }
-  },
-  {
-    type: 'function',
-    function: {
-      name: 'search_projects',
-      description: 'Search or filter projects by keyword (e.g., healthcare, AI, iOS, mobile, full stack, etc.)',
-      parameters: {
-        type: 'object',
-        properties: {
-          keyword: {
-            type: 'string',
-            description: 'Keyword to search for in projects (e.g., healthcare, AI, iOS, mobile, full stack)'
-          }
-        },
-        required: ['keyword']
-      }
-    }
-  },
-  {
-    type: 'function',
-    function: {
-      name: 'get_project_by_hackathon',
-      description: 'Get projects from a specific hackathon (CalHacks, HackCMU, or HackHarvard)',
-      parameters: {
-        type: 'object',
-        properties: {
-          hackathon_name: {
-            type: 'string',
-            description: 'Name of the hackathon',
-            enum: ['CalHacks', 'HackCMU', 'HackHarvard', 'calhacks', 'hackcmu', 'hackharvard']
-          }
-        },
-        required: ['hackathon_name']
-      }
-    }
-  },
-  {
-    type: 'function',
-    function: {
-      name: 'get_experience',
-      description: 'Get David\'s work experience. Can filter by organization if specified (e.g., Amazon, ValueMate, CMU Teel Labs).',
-      parameters: {
-        type: 'object',
-        properties: {
-          organization: {
-            type: 'string',
-            description: 'Optional: Filter by specific organization (Amazon, ValueMate, CMU Teel Labs, Carnegie Mellon, etc.)'
-          },
-          filter_type: {
-            type: 'string',
-            description: 'Optional: Filter by type (research, AI, software engineering, etc.)',
-            enum: ['research', 'AI', 'software engineering', 'internship']
-          }
-        }
-      }
-    }
-  },
-  {
-    type: 'function',
-    function: {
-      name: 'get_contact_info',
-      description: 'Get David\'s contact information (email, phone, LinkedIn, GitHub)',
-      parameters: { type: 'object', properties: {} }
-    }
-  },
-  {
-    type: 'function',
-    function: {
-      name: 'get_resume',
-      description: 'Get David\'s resume download link',
-      parameters: { type: 'object', properties: {} }
-    }
-  },
-  {
-    type: 'function',
-    function: {
-      name: 'get_timeline',
-      description: 'Get chronological timeline of David\'s experiences and projects',
-      parameters: { type: 'object', properties: {} }
-    }
-  },
-  {
-    type: 'function',
-    function: {
-      name: 'get_skills',
-      description: 'Get David\'s technical skills (languages, frameworks, tools)',
-      parameters: { type: 'object', properties: {} }
-    }
-  },
-  {
-    type: 'function',
-    function: {
-      name: 'get_education',
-      description: 'Get David\'s education information (school, degree, graduation date). Only use when explicitly asked about education, not when asked about work at CMU.',
-      parameters: { type: 'object', properties: {} }
-    }
-  },
-  {
-    type: 'function',
-    function: {
-      name: 'get_leadership',
-      description: 'Get David\'s leadership experience (CSYA)',
-      parameters: { type: 'object', properties: {} }
-    }
-  }
-];
+if (!OPENAI_API_KEY) {
+  console.warn('VITE_OPENAI_API_KEY is not set. Please set it in .env file or Railway environment variables.');
+}
 
-// Detect tool call using OpenAI
-async function detectToolCall(query) {
+// Create context prompt with all David's information
+function createContextPrompt() {
+  let context = `You are David Chung's AI assistant. Here is all the information about David:
+
+BIOGRAPHY:
+${davidData.bio}
+
+EDUCATION:
+- School: ${davidData.education.school}
+- Degree: ${davidData.education.degree}
+- Location: ${davidData.education.location}
+- Graduation: ${davidData.education.graduation}
+
+WORK EXPERIENCE:
+`;
+  
+  davidData.experience.forEach(exp => {
+    context += `\n${exp.org} (${exp.orgLink})
+- Role: ${exp.role}
+- Period: ${exp.period}
+- Location: ${exp.location}
+- Description: ${exp.desc}
+- Details:
+`;
+    exp.details.forEach(detail => {
+      context += `  • ${detail}\n`;
+    });
+  });
+  
+  context += `\nPROJECTS:\n`;
+  davidData.projects.forEach(proj => {
+    context += `\n${proj.name} (${proj.link})
+- Role: ${proj.role}
+- Date: ${proj.date}
+- Hackathon: ${proj.hackathon} (${proj.hackathonLink})
+- Achievement: ${proj.wins} (${proj.stats})
+- Description: ${proj.desc}
+- Full Description: ${proj.fullDescription}
+- Tech Stack: ${proj.tech.join(', ')}
+- Details:
+`;
+    proj.details.forEach(detail => {
+      context += `  • ${detail}\n`;
+    });
+  });
+  
+  context += `\nLEADERSHIP:\n`;
+  davidData.leadership.forEach(lead => {
+    context += `\n${lead.org} (${lead.orgLink})
+- Role: ${lead.role}
+- Period: ${lead.period}
+- Location: ${lead.location}
+- Details:
+`;
+    lead.details.forEach(detail => {
+      context += `  • ${detail}\n`;
+    });
+  });
+  
+  context += `\nTECHNICAL SKILLS:
+- Languages: ${davidData.skills.languages.join(', ')}
+- Frameworks & Libraries: ${davidData.skills.frameworks.join(', ')}
+- Developer Tools: ${davidData.skills.tools.join(', ')}
+
+CONTACT INFORMATION:
+- Email: ${davidData.contact.email}
+- Phone: ${davidData.contact.phone}
+- LinkedIn: ${davidData.contact.linkedin}
+- GitHub: ${davidData.contact.github}
+- Resume: ${davidData.contact.resume}
+
+Answer questions naturally and conversationally based on this information. Be specific and accurate. If asked about something not in the context, say you don't have that information.`;
+  
+  return context;
+}
+
+// Get AI response using OpenAI with full context
+async function getAIResponse(query) {
   try {
+    const contextPrompt = createContextPrompt();
+    
     const response = await fetch(OPENAI_API_URL, {
       method: 'POST',
       headers: {
@@ -419,258 +252,33 @@ async function detectToolCall(query) {
         messages: [
           {
             role: 'system',
-            content: `You are an AI assistant helping answer questions about David Chung. 
-            Analyze the user's question and determine if you need to call a function to get information.
-            If the question asks about David's work at a specific organization (like "CMU Teel Labs", "Amazon", "ValueMate"), use get_experience with the organization parameter.
-            If the question asks about research experience, use get_experience with filter_type: "research".
-            If the question asks about education/school (not work at CMU), use get_education.
-            If no function is needed, respond with a conversational answer.
-            Extract entities accurately - "CMU Teel Labs" or "CMU ACE-AI/TEEL Labs" refers to work/research, not education.
-            For questions about fitness for a role, use get_experience and get_skills to gather relevant information.`
+            content: contextPrompt
           },
           {
             role: 'user',
             content: query
           }
         ],
-        tools: openAITools,
-        tool_choice: 'auto',
-        temperature: 0.1
+        temperature: 0.7,
+        max_tokens: 500
       })
     });
 
     if (!response.ok) {
-      throw new Error(`OpenAI API error: ${response.statusText}`);
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(`OpenAI API error: ${errorData.error?.message || response.statusText}`);
     }
 
     const data = await response.json();
-    const choice = data.choices[0];
-    
-    // Check if OpenAI wants to call a function
-    if (choice.message.tool_calls && choice.message.tool_calls.length > 0) {
-      const toolCall = choice.message.tool_calls[0];
-      return {
-        tool: toolCall.function.name,
-        params: JSON.parse(toolCall.function.arguments || '{}')
-      };
-    }
-    
-    // No tool call needed - return conversational response
-    return {
-      tool: null,
-      conversationalResponse: choice.message.content
-    };
+    return data.choices[0].message.content;
     
   } catch (error) {
     console.error('OpenAI API error:', error);
-    // Fallback to basic pattern matching if API fails
-    return fallbackToolDetection(query);
+    throw error;
   }
 }
 
-// Fallback tool detection if OpenAI API fails
-function fallbackToolDetection(query) {
-  const lowerQuery = query.toLowerCase();
-  
-  // Simple fallback patterns
-  if (lowerQuery.includes('project') && (lowerQuery.includes('haven') || lowerQuery.includes('medicly') || lowerQuery.includes('yumi'))) {
-    const projects = ['haven', 'medicly', 'yumi'];
-    for (const proj of projects) {
-      if (lowerQuery.includes(proj)) {
-        return { tool: 'get_project_details', params: { project_name: proj } };
-      }
-    }
-  }
-  
-  if (lowerQuery.includes('projects') && !lowerQuery.includes('specific')) {
-    return { tool: 'get_projects', params: {} };
-  }
-  
-  if (lowerQuery.includes('experience') || lowerQuery.includes('work') || lowerQuery.includes('job')) {
-    return { tool: 'get_experience', params: {} };
-  }
-  
-  if (lowerQuery.includes('contact') || lowerQuery.includes('email') || lowerQuery.includes('linkedin')) {
-    return { tool: 'get_contact_info', params: {} };
-  }
-  
-  if (lowerQuery.includes('resume') || lowerQuery.includes('cv')) {
-    return { tool: 'get_resume', params: {} };
-  }
-  
-  if (lowerQuery.includes('skills') || lowerQuery.includes('tech stack')) {
-    return { tool: 'get_skills', params: {} };
-  }
-  
-  if ((lowerQuery.includes('education') || lowerQuery.includes('school') || lowerQuery.includes('degree')) && !lowerQuery.includes('work') && !lowerQuery.includes('cmu teel') && !lowerQuery.includes('research')) {
-    return { tool: 'get_education', params: {} };
-  }
-  
-  return { tool: null, conversationalResponse: null };
-}
-
-// Format tool result for display
-function formatToolResult(tool, result) {
-  if (!result || (Array.isArray(result) && result.length === 0)) {
-    return "No results found.";
-  }
-  
-  let output = "";
-  
-  switch(tool) {
-    case 'get_projects':
-      result.forEach((p, i) => {
-        output += `→ ${p.name} (${p.link})\n`;
-        output += `  ${p.role} — ${p.wins} at ${p.hackathon}\n`;
-        output += `  ${p.desc} (${p.stats})\n`;
-        output += `  Tech: ${p.tech.join(', ')}\n\n`;
-      });
-      break;
-      
-    case 'get_project_details':
-      const p = result;
-      output += `${p.name}\n`;
-      output += `Link: ${p.link}\n`;
-      output += `Role: ${p.role}\n`;
-      output += `Date: ${p.date}\n`;
-      output += `Hackathon: ${p.hackathon}\n`;
-      output += `Achievement: ${p.wins} (${p.stats})\n`;
-      output += `Tech Stack: ${p.tech.join(', ')}\n\n`;
-      output += `Description: ${p.fullDescription || p.desc}\n\n`;
-      output += `Details:\n`;
-      p.details.forEach(detail => {
-        output += `  → ${detail}\n`;
-      });
-      break;
-      
-    case 'search_projects':
-    case 'get_project_by_hackathon':
-      result.forEach((p, i) => {
-        output += `→ ${p.name} (${p.link})\n`;
-        output += `  ${p.desc} — ${p.wins} at ${p.hackathon}\n`;
-        output += `  Tech: ${p.tech.join(', ')}\n\n`;
-      });
-      break;
-      
-    case 'get_experience':
-      result.forEach((exp, i) => {
-        output += `→ ${exp.org}\n`;
-        output += `  ${exp.role}\n`;
-        output += `  ${exp.period} | ${exp.location}\n`;
-        if (exp.orgLink) {
-          output += `  ${exp.orgLink}\n`;
-        }
-        output += `  ${exp.desc}\n`;
-        if (exp.details && exp.details.length > 0) {
-          exp.details.forEach(detail => {
-            output += `    • ${detail}\n`;
-          });
-        }
-        output += `\n`;
-      });
-      break;
-      
-    case 'get_contact_info':
-      output += `Email: ${result.email}\n`;
-      output += `Phone: ${result.phone}\n`;
-      output += `LinkedIn: ${result.linkedin}\n`;
-      output += `GitHub: ${result.github}\n`;
-      output += `Resume: ${result.resume}\n`;
-      output += `\nYou can download David's resume using the link on the main page.`;
-      break;
-      
-    case 'get_resume':
-      output += `Resume available: ${result}\n`;
-      output += `You can download it from the main page footer.`;
-      break;
-      
-    case 'get_timeline':
-      result.forEach((item, i) => {
-        if (item.type === 'experience') {
-          output += `→ ${item.org} — ${item.role}\n`;
-          output += `  ${item.period} | ${item.location}\n\n`;
-        } else {
-          output += `→ ${item.name} — ${item.hackathon}\n`;
-          output += `  ${item.date} | ${item.wins}\n\n`;
-        }
-      });
-      break;
-      
-    case 'get_skills':
-      output += `Languages: ${result.languages.join(', ')}\n\n`;
-      output += `Frameworks & Libraries: ${result.frameworks.join(', ')}\n\n`;
-      output += `Developer Tools: ${result.tools.join(', ')}`;
-      break;
-      
-    case 'get_education':
-      output += `${result.school}\n`;
-      output += `${result.degree}\n`;
-      output += `${result.location}\n`;
-      output += `Graduation: ${result.graduation}`;
-      break;
-      
-    case 'get_leadership':
-      result.forEach((lead, i) => {
-        output += `→ ${lead.org} (${lead.orgLink})\n`;
-        output += `  ${lead.role}\n`;
-        output += `  ${lead.period} | ${lead.location}\n`;
-        if (lead.details && lead.details.length > 0) {
-          lead.details.forEach(detail => {
-            output += `    • ${detail}\n`;
-          });
-        }
-        output += `\n`;
-      });
-      break;
-  }
-  
-  return output.trim();
-}
-
-// Generate conversational response (for non-tool queries)
-function generateConversationalResponse(query) {
-  const lowerQuery = query.toLowerCase();
-  
-  // Extract key topics
-  const aiKeywords = ['ai', 'artificial intelligence', 'machine learning', 'llm', 'ml'];
-  const hackathonKeywords = ['hackathon', 'hack', 'win', 'won', 'calhacks', 'hackcmu', 'hackharvard'];
-  const experienceKeywords = ['experience', 'work', 'job', 'company', 'intern', 'internship'];
-  const projectKeywords = ['project', 'built', 'created', 'made'];
-  const healthcareKeywords = ['healthcare', 'health', 'medical', 'patient'];
-  
-  let response = "";
-  
-  // AI-related questions
-  if (aiKeywords.some(k => lowerQuery.includes(k))) {
-    response = "David has extensive AI experience. He's currently an AI/ML Software Engineer Intern at ValueMate (YC W25), developing AI agents and infrastructure. He's also an LLM Research Assistant at CMU ACE-AI/TEEL Labs, exploring LLMs in practical applications. His projects include Haven (multi-agent system), Medicly (AI-powered physical therapy analysis), and Yumi (social network with AI agents).";
-  }
-  // Hackathon questions
-  else if (hackathonKeywords.some(k => lowerQuery.includes(k))) {
-    response = "David has won multiple hackathons:\n\n→ CalHacks 2025 — Haven won Y Combinator (1st), Fetch.ai (1st), and LiveKit Best Startup\n→ HackCMU 2025 — Medicly won Grand Prize (1/250+ teams)\n→ HackHarvard 2025 — Yumi won 3rd Place (3/180+ teams)";
-  }
-  // Experience questions
-  else if (experienceKeywords.some(k => lowerQuery.includes(k))) {
-    response = "David has worked at:\n\n→ Amazon — Software Development Engineer Intern, building scalable backend systems\n→ ValueMate (YC) — AI/ML Software Engineer Intern, developing AI agents\n→ CMU ACE-AI/TEEL Labs — LLM Research Assistant, exploring practical LLM applications";
-  }
-  // Project questions
-  else if (projectKeywords.some(k => lowerQuery.includes(k))) {
-    response = "David has built several notable projects:\n\n→ Haven — Multi-agent system for patient anomaly detection (CalHacks winner)\n→ Medicly — Converts smartphone video into clinician-ready findings (HackCMU Grand Prize)\n→ Yumi — Social network for food utilizing AI agents (HackHarvard 3rd Place)";
-  }
-  // Healthcare questions
-  else if (healthcareKeywords.some(k => lowerQuery.includes(k))) {
-    response = "David has worked on healthcare projects:\n\n→ Haven — Multi-agent system for patient anomaly detection\n→ Medicly — Converts smartphone video into clinician-ready findings with 3D mesh visualization";
-  }
-  // General/about questions
-  else if (lowerQuery.includes('who') || lowerQuery.includes('about') || lowerQuery.includes('tell me')) {
-    response = davidData.bio;
-  }
-  // Default
-  else {
-    response = "I can help you learn about David's experience, projects, hackathon wins, and more. Try asking about his AI experience, projects, or work history!";
-  }
-  
-  return response;
-}
+// Old tool-based functions removed - now using context-based approach
 
 // Initialize chat
 function initChat() {
@@ -728,25 +336,10 @@ ask me anything about david — his experience, projects, hackathon wins, or any
   }
   
   // Add AI message
-  function addAIMessage(text, toolCall = null, toolResult = null) {
+  function addAIMessage(text) {
     const messageDiv = document.createElement('div');
     messageDiv.className = 'chat-message ai';
-    
-    let content = '';
-    
-    if (toolCall) {
-      content += `<div class="tool-call">[Tool: ${toolCall}]</div>`;
-    }
-    
-    if (toolResult) {
-      content += `<div class="tool-result">${toolResult}</div>`;
-    }
-    
-    if (text) {
-      content += `<div class="message-content">${text}</div>`;
-    }
-    
-    messageDiv.innerHTML = content;
+    messageDiv.innerHTML = `<div class="message-content">${text}</div>`;
     chatOutput.appendChild(messageDiv);
     chatOutput.scrollTop = chatOutput.scrollHeight;
   }
@@ -764,32 +357,10 @@ ask me anything about david — his experience, projects, hackathon wins, or any
     const typingDiv = showTyping();
     
     try {
-      // Use OpenAI to detect tool call
-      const toolCallResult = await detectToolCall(query);
-      
+      // Get AI response with full context
+      const response = await getAIResponse(query);
       removeTyping(typingDiv);
-      
-      if (toolCallResult.tool) {
-        // Execute tool call
-        const { tool, params } = toolCallResult;
-        let result;
-        
-        if (params && Object.keys(params).length > 0) {
-          result = tools[tool](params);
-        } else {
-          result = tools[tool]();
-        }
-        
-        const formattedResult = formatToolResult(tool, result);
-        addAIMessage(null, tool, formattedResult);
-      } else if (toolCallResult.conversationalResponse) {
-        // Use OpenAI's conversational response
-        addAIMessage(toolCallResult.conversationalResponse);
-      } else {
-        // Fallback to local conversational response
-        const response = generateConversationalResponse(query);
-        addAIMessage(response);
-      }
+      addAIMessage(response);
     } catch (error) {
       removeTyping(typingDiv);
       console.error('Error handling input:', error);
