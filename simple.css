@@ -158,6 +158,20 @@ body {
   font-weight: 400;
   font-style: italic;
   line-height: 1.5;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.experience-date {
+  font-size: 14px;
+  color: #666666;
+  font-weight: 400;
+  font-style: normal;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .experience-desc {
@@ -387,6 +401,10 @@ body {
   .experience-role,
   .experience-desc {
     font-size: 15px;
+  }
+  
+  .experience-date {
+    font-size: 13px;
   }
   
   .project-list .experience-item {
