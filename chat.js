@@ -166,14 +166,16 @@ const tools = {
     }));
   },
   
-  get_project_details: (projectName) => {
+  get_project_details: (params) => {
+    const projectName = params?.project_name || params; // Handle both new format and old format
     const project = davidData.projects.find(
       p => p.name.toLowerCase() === projectName.toLowerCase()
     );
     return project || null;
   },
   
-  search_projects: (keyword) => {
+  search_projects: (params) => {
+    const keyword = params?.keyword || params; // Handle both new format and old format
     const lowerKeyword = keyword.toLowerCase();
     return davidData.projects.filter(p => 
       p.name.toLowerCase().includes(lowerKeyword) ||
@@ -185,15 +187,46 @@ const tools = {
     );
   },
   
-  get_project_by_hackathon: (hackathonName) => {
+  get_project_by_hackathon: (params) => {
+    const hackathonName = params?.hackathon_name || params; // Handle both new format and old format
     const lowerName = hackathonName.toLowerCase();
     return davidData.projects.filter(p => 
       p.hackathon.toLowerCase().includes(lowerName)
     );
   },
   
-  get_experience: () => {
-    return davidData.experience;
+  get_experience: (params = {}) => {
+    let experience = davidData.experience;
+    
+    // Filter by organization if specified
+    if (params.organization) {
+      const orgLower = params.organization.toLowerCase();
+      experience = experience.filter(exp => {
+        const expOrgLower = exp.org.toLowerCase();
+        return expOrgLower.includes(orgLower) || orgLower.includes(expOrgLower) ||
+               expOrgLower.includes('cmu') && orgLower.includes('cmu') ||
+               expOrgLower.includes('teel') && orgLower.includes('teel');
+      });
+    }
+    
+    // Filter by type if specified
+    if (params.filter_type) {
+      const filterType = params.filter_type.toLowerCase();
+      if (filterType === 'research') {
+        experience = experience.filter(exp => 
+          exp.org.toLowerCase().includes('teel') || 
+          exp.org.toLowerCase().includes('research') ||
+          exp.role.toLowerCase().includes('research')
+        );
+      } else if (filterType === 'ai') {
+        experience = experience.filter(exp => 
+          exp.role.toLowerCase().includes('ai') ||
+          exp.org.toLowerCase().includes('ai')
+        );
+      }
+    }
+    
+    return experience;
   },
   
   get_contact_info: () => {
@@ -229,66 +262,251 @@ const tools = {
   }
 };
 
-// Detect if query needs tool call
-function needsToolCall(query) {
-  const lowerQuery = query.toLowerCase();
-  
-  // Tool call patterns
-  const toolPatterns = {
-    'get_projects': /\b(show|list|get|fetch|display|what are|tell me about)\s+(your|david'?s|the)\s+(projects|project)/i,
-    'get_project_details': /\b(tell me|more|details|about|describe)\s+(about\s+)?(haven|medicly|yumi)/i,
-    'search_projects': /\b(show|find|search|filter)\s+(projects|project).*?(healthcare|ai|ios|mobile|full.?stack)/i,
-    'get_project_by_hackathon': /\b(what|which|show|tell).*?(calhacks|hackcmu|hackharvard)/i,
-    'get_experience': /\b(show|list|get|tell me about)\s+(your|david'?s|the)\s+(experience|work|jobs|companies)/i,
-    'get_contact_info': /\b(contact|reach|email|linkedin|how to contact|contact info)/i,
-    'get_resume': /\b(resume|cv|send|download|get|share)\s+(your|david'?s|the)\s*(resume|cv)?/i,
-    'get_timeline': /\b(timeline|chronological|history|show me your history)/i,
-    'get_skills': /\b(skills|tech stack|technologies|programming languages|what can you do|what technologies)/i,
-    'get_education': /\b(education|school|degree|cmu|carnegie mellon|where did you go|what did you study)/i,
-    'get_leadership': /\b(leadership|csya|founder|director|led|team)/i
-  };
-  
-  for (const [tool, pattern] of Object.entries(toolPatterns)) {
-    if (pattern.test(query)) {
-      return tool;
+// OpenAI API Configuration
+// IMPORTANT: For production, use a backend proxy to keep API keys secure
+// This client-side approach is for development only
+// To set your API key:
+// 1. Option A: Set environment variable (requires backend)
+// 2. Option B: Replace 'YOUR_OPENAI_API_KEY' below (NOT RECOMMENDED for production)
+const OPENAI_API_KEY = 'YOUR_OPENAI_API_KEY'; // Set this or use environment variable
+const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
+
+// Define available tools for OpenAI function calling
+const openAITools = [
+  {
+    type: 'function',
+    function: {
+      name: 'get_projects',
+      description: 'Get all of David\'s projects with details',
+      parameters: { type: 'object', properties: {} }
+    }
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'get_project_details',
+      description: 'Get detailed information about a specific project. Use when asked about Haven, Medicly, or Yumi specifically.',
+      parameters: {
+        type: 'object',
+        properties: {
+          project_name: {
+            type: 'string',
+            description: 'Name of the project (Haven, Medicly, or Yumi)',
+            enum: ['Haven', 'Medicly', 'Yumi', 'haven', 'medicly', 'yumi']
+          }
+        },
+        required: ['project_name']
+      }
+    }
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'search_projects',
+      description: 'Search or filter projects by keyword (e.g., healthcare, AI, iOS, mobile, full stack, etc.)',
+      parameters: {
+        type: 'object',
+        properties: {
+          keyword: {
+            type: 'string',
+            description: 'Keyword to search for in projects (e.g., healthcare, AI, iOS, mobile, full stack)'
+          }
+        },
+        required: ['keyword']
+      }
+    }
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'get_project_by_hackathon',
+      description: 'Get projects from a specific hackathon (CalHacks, HackCMU, or HackHarvard)',
+      parameters: {
+        type: 'object',
+        properties: {
+          hackathon_name: {
+            type: 'string',
+            description: 'Name of the hackathon',
+            enum: ['CalHacks', 'HackCMU', 'HackHarvard', 'calhacks', 'hackcmu', 'hackharvard']
+          }
+        },
+        required: ['hackathon_name']
+      }
+    }
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'get_experience',
+      description: 'Get David\'s work experience. Can filter by organization if specified (e.g., Amazon, ValueMate, CMU Teel Labs).',
+      parameters: {
+        type: 'object',
+        properties: {
+          organization: {
+            type: 'string',
+            description: 'Optional: Filter by specific organization (Amazon, ValueMate, CMU Teel Labs, Carnegie Mellon, etc.)'
+          },
+          filter_type: {
+            type: 'string',
+            description: 'Optional: Filter by type (research, AI, software engineering, etc.)',
+            enum: ['research', 'AI', 'software engineering', 'internship']
+          }
+        }
+      }
+    }
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'get_contact_info',
+      description: 'Get David\'s contact information (email, phone, LinkedIn, GitHub)',
+      parameters: { type: 'object', properties: {} }
+    }
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'get_resume',
+      description: 'Get David\'s resume download link',
+      parameters: { type: 'object', properties: {} }
+    }
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'get_timeline',
+      description: 'Get chronological timeline of David\'s experiences and projects',
+      parameters: { type: 'object', properties: {} }
+    }
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'get_skills',
+      description: 'Get David\'s technical skills (languages, frameworks, tools)',
+      parameters: { type: 'object', properties: {} }
+    }
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'get_education',
+      description: 'Get David\'s education information (school, degree, graduation date). Only use when explicitly asked about education, not when asked about work at CMU.',
+      parameters: { type: 'object', properties: {} }
+    }
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'get_leadership',
+      description: 'Get David\'s leadership experience (CSYA)',
+      parameters: { type: 'object', properties: {} }
     }
   }
-  
-  return null;
+];
+
+// Detect tool call using OpenAI
+async function detectToolCall(query) {
+  try {
+    const response = await fetch(OPENAI_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${OPENAI_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        messages: [
+          {
+            role: 'system',
+            content: `You are an AI assistant helping answer questions about David Chung. 
+            Analyze the user's question and determine if you need to call a function to get information.
+            If the question asks about David's work at a specific organization (like "CMU Teel Labs", "Amazon", "ValueMate"), use get_experience with the organization parameter.
+            If the question asks about research experience, use get_experience with filter_type: "research".
+            If the question asks about education/school (not work at CMU), use get_education.
+            If no function is needed, respond with a conversational answer.
+            Extract entities accurately - "CMU Teel Labs" or "CMU ACE-AI/TEEL Labs" refers to work/research, not education.
+            For questions about fitness for a role, use get_experience and get_skills to gather relevant information.`
+          },
+          {
+            role: 'user',
+            content: query
+          }
+        ],
+        tools: openAITools,
+        tool_choice: 'auto',
+        temperature: 0.1
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`OpenAI API error: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    const choice = data.choices[0];
+    
+    // Check if OpenAI wants to call a function
+    if (choice.message.tool_calls && choice.message.tool_calls.length > 0) {
+      const toolCall = choice.message.tool_calls[0];
+      return {
+        tool: toolCall.function.name,
+        params: JSON.parse(toolCall.function.arguments || '{}')
+      };
+    }
+    
+    // No tool call needed - return conversational response
+    return {
+      tool: null,
+      conversationalResponse: choice.message.content
+    };
+    
+  } catch (error) {
+    console.error('OpenAI API error:', error);
+    // Fallback to basic pattern matching if API fails
+    return fallbackToolDetection(query);
+  }
 }
 
-// Extract parameters from query
-function extractParams(query, tool) {
+// Fallback tool detection if OpenAI API fails
+function fallbackToolDetection(query) {
   const lowerQuery = query.toLowerCase();
   
-  if (tool === 'get_project_details') {
+  // Simple fallback patterns
+  if (lowerQuery.includes('project') && (lowerQuery.includes('haven') || lowerQuery.includes('medicly') || lowerQuery.includes('yumi'))) {
     const projects = ['haven', 'medicly', 'yumi'];
     for (const proj of projects) {
       if (lowerQuery.includes(proj)) {
-        return proj;
+        return { tool: 'get_project_details', params: { project_name: proj } };
       }
     }
   }
   
-  if (tool === 'search_projects') {
-    const keywords = ['healthcare', 'ai', 'ios', 'mobile', 'full stack', 'fullstack'];
-    for (const keyword of keywords) {
-      if (lowerQuery.includes(keyword)) {
-        return keyword;
-      }
-    }
+  if (lowerQuery.includes('projects') && !lowerQuery.includes('specific')) {
+    return { tool: 'get_projects', params: {} };
   }
   
-  if (tool === 'get_project_by_hackathon') {
-    const hackathons = ['calhacks', 'hackcmu', 'hackharvard'];
-    for (const hack of hackathons) {
-      if (lowerQuery.includes(hack)) {
-        return hack;
-      }
-    }
+  if (lowerQuery.includes('experience') || lowerQuery.includes('work') || lowerQuery.includes('job')) {
+    return { tool: 'get_experience', params: {} };
   }
   
-  return null;
+  if (lowerQuery.includes('contact') || lowerQuery.includes('email') || lowerQuery.includes('linkedin')) {
+    return { tool: 'get_contact_info', params: {} };
+  }
+  
+  if (lowerQuery.includes('resume') || lowerQuery.includes('cv')) {
+    return { tool: 'get_resume', params: {} };
+  }
+  
+  if (lowerQuery.includes('skills') || lowerQuery.includes('tech stack')) {
+    return { tool: 'get_skills', params: {} };
+  }
+  
+  if ((lowerQuery.includes('education') || lowerQuery.includes('school') || lowerQuery.includes('degree')) && !lowerQuery.includes('work') && !lowerQuery.includes('cmu teel') && !lowerQuery.includes('research')) {
+    return { tool: 'get_education', params: {} };
+  }
+  
+  return { tool: null, conversationalResponse: null };
 }
 
 // Format tool result for display
@@ -534,7 +752,7 @@ ask me anything about david — his experience, projects, hackathon wins, or any
   }
   
   // Handle user input
-  function handleInput() {
+  async function handleInput() {
     const query = chatInput.value.trim();
     if (!query) return;
     
@@ -545,18 +763,18 @@ ask me anything about david — his experience, projects, hackathon wins, or any
     // Show typing indicator
     const typingDiv = showTyping();
     
-    // Simulate thinking delay
-    setTimeout(() => {
+    try {
+      // Use OpenAI to detect tool call
+      const toolCallResult = await detectToolCall(query);
+      
       removeTyping(typingDiv);
       
-      // Check if tool call is needed
-      const tool = needsToolCall(query);
-      
-      if (tool) {
-        const params = extractParams(query, tool);
+      if (toolCallResult.tool) {
+        // Execute tool call
+        const { tool, params } = toolCallResult;
         let result;
         
-        if (params) {
+        if (params && Object.keys(params).length > 0) {
           result = tools[tool](params);
         } else {
           result = tools[tool]();
@@ -564,12 +782,19 @@ ask me anything about david — his experience, projects, hackathon wins, or any
         
         const formattedResult = formatToolResult(tool, result);
         addAIMessage(null, tool, formattedResult);
+      } else if (toolCallResult.conversationalResponse) {
+        // Use OpenAI's conversational response
+        addAIMessage(toolCallResult.conversationalResponse);
       } else {
-        // Conversational response
+        // Fallback to local conversational response
         const response = generateConversationalResponse(query);
         addAIMessage(response);
       }
-    }, 500);
+    } catch (error) {
+      removeTyping(typingDiv);
+      console.error('Error handling input:', error);
+      addAIMessage("Sorry, I encountered an error. Please try again.");
+    }
   }
   
   // Event listeners
