@@ -76,6 +76,10 @@ body {
   animation-delay: 0.2s;
 }
 
+.section:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -109,17 +113,33 @@ body {
   display: flex;
   flex-direction: column;
   gap: 40px;
+  position: relative;
 }
 
 .experience-item {
   display: flex;
   flex-direction: column;
-  padding-left: 0;
+  padding-left: 20px;
+  position: relative;
   transition: padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.experience-item::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #000000;
+  font-weight: 400;
+  font-size: 19px;
+  line-height: 1.35;
+}
+
 .experience-item:hover {
-  padding-left: 8px;
+  padding-left: 28px;
+}
+
+.experience-item:hover::before {
+  left: 8px;
 }
 
 .experience-org {
@@ -145,6 +165,33 @@ body {
   color: #333333;
   line-height: 1.75;
   font-weight: 400;
+}
+
+.project-list {
+  position: relative;
+}
+
+.project-list .experience-item {
+  position: relative;
+  padding-left: 20px;
+}
+
+.project-list .experience-item::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #000000;
+  font-weight: 400;
+  font-size: 19px;
+  line-height: 1.35;
+}
+
+.project-list .experience-item:hover {
+  padding-left: 28px;
+}
+
+.project-list .experience-item:hover::before {
+  left: 8px;
 }
 
 .footer {
@@ -201,12 +248,25 @@ body {
     font-size: 17px;
   }
   
+  .experience-item:hover {
+    padding-left: 22px;
+  }
+  
+  .experience-item:hover::before {
+    left: 4px;
+  }
+  
+  .experience-item::before {
+    font-size: 18px;
+    line-height: 1.35;
+  }
+  
   .experience-list {
     gap: 36px;
   }
   
-  .experience-item:hover {
-    padding-left: 4px;
+  .experience-item {
+    padding-left: 18px;
   }
   
   .experience-org {
@@ -216,5 +276,22 @@ body {
   .experience-role,
   .experience-desc {
     font-size: 15px;
+  }
+  
+  .project-list .experience-item {
+    padding-left: 18px;
+  }
+  
+  .project-list .experience-item::before {
+    font-size: 18px;
+    line-height: 1.35;
+  }
+  
+  .project-list .experience-item:hover {
+    padding-left: 22px;
+  }
+  
+  .project-list .experience-item:hover::before {
+    left: 4px;
   }
 }
