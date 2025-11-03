@@ -153,7 +153,17 @@ const davidData = {
 // Uses Vite environment variables
 // In development: reads from .env file (VITE_OPENAI_API_KEY)
 // In production: Netlify injects VITE_OPENAI_API_KEY environment variable
-const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
+let OPENAI_API_KEY;
+try {
+  // Safely access import.meta.env
+  if (typeof import.meta !== 'undefined' && import.meta.env) {
+    OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
+  } else {
+    console.warn('import.meta.env is not available. Make sure Vite build is configured correctly.');
+  }
+} catch (e) {
+  console.error('Error accessing import.meta.env:', e);
+}
 const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
 
 // Check if API key is available
