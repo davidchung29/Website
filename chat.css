@@ -1,0 +1,273 @@
+/* Chat Terminal Styles - Copied from shell design */
+
+.chat-terminal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.95);
+  width: 600px;
+  max-width: 90vw;
+  max-height: 80vh;
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 1001;
+  overflow: hidden;
+}
+
+.liquid-overlay.active .chat-terminal {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.chat-terminal:hover,
+.chat-terminal * {
+  pointer-events: auto;
+}
+
+.chat-terminal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e5e5e5;
+  background: #ffffff;
+}
+
+.chat-terminal-title {
+  font-family: 'SF Mono', 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: #000000;
+  letter-spacing: 0.02em;
+}
+
+.chat-terminal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #666666;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.chat-terminal-close:hover {
+  background: #f5f5f5;
+  color: #000000;
+}
+
+.chat-terminal-content {
+  display: flex;
+  flex-direction: column;
+  height: calc(80vh - 60px);
+  min-height: 500px;
+  max-height: 600px;
+}
+
+.chat-output {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  font-family: 'SF Mono', 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #000000;
+  letter-spacing: 0.3px;
+  scroll-behavior: smooth;
+  background: #ffffff;
+}
+
+.chat-output::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-output::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chat-output::-webkit-scrollbar-thumb {
+  background: #dadce0;
+  border-radius: 3px;
+}
+
+.chat-output::-webkit-scrollbar-thumb:hover {
+  background: #bdc1c6;
+}
+
+.chat-input-area {
+  border-top: 1px solid #e5e5e5;
+  background: #ffffff;
+}
+
+.chat-input-container {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  gap: 12px;
+}
+
+.chat-prompt {
+  color: #1a73e8;
+  font-weight: 600;
+  font-family: 'SF Mono', 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
+  font-size: 14px;
+  letter-spacing: 0.3px;
+  flex-shrink: 0;
+}
+
+.chat-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: 'SF Mono', 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
+  font-size: 14px;
+  color: #000000;
+  letter-spacing: 0.3px;
+  padding: 8px 0;
+}
+
+.chat-input::placeholder {
+  color: #666666;
+  opacity: 0.6;
+}
+
+/* Message styles */
+.chat-message {
+  margin: 16px 0;
+  padding: 0;
+}
+
+.chat-message.user {
+  text-align: right;
+}
+
+.chat-message.user .message-content {
+  display: inline-block;
+  text-align: left;
+  color: #000000;
+}
+
+.chat-message.ai {
+  color: #000000;
+}
+
+.message-content {
+  white-space: pre-line;
+  line-height: 1.6;
+}
+
+/* Tool call indicator */
+.tool-call {
+  margin: 8px 0;
+  padding: 8px 12px;
+  background: #f5f5f5;
+  border-left: 3px solid #1a73e8;
+  border-radius: 4px;
+  font-family: 'SF Mono', 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
+  font-size: 12px;
+  color: #666666;
+  font-weight: 500;
+}
+
+.tool-result {
+  margin: 8px 0 16px 0;
+  padding-left: 0;
+  white-space: pre-line;
+  line-height: 1.6;
+}
+
+.tool-result-item {
+  margin: 4px 0;
+  padding-left: 16px;
+  position: relative;
+}
+
+.tool-result-item::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: #666666;
+}
+
+/* Welcome message */
+.welcome-message {
+  color: #000000;
+  line-height: 1.6;
+}
+
+/* Typing indicator */
+.typing-indicator {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  margin: 16px 0;
+}
+
+.typing-dot {
+  width: 6px;
+  height: 6px;
+  background: #666666;
+  border-radius: 50%;
+  animation: typing 1.4s infinite;
+}
+
+.typing-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typing {
+  0%, 60%, 100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 768px) {
+  .chat-terminal {
+    width: 95vw;
+    max-height: 85vh;
+  }
+  
+  .chat-terminal-content {
+    max-height: calc(85vh - 60px);
+    min-height: 400px;
+  }
+  
+  .chat-output {
+    font-size: 13px;
+    padding: 16px;
+  }
+  
+  .chat-input {
+    font-size: 13px;
+  }
+  
+  .chat-prompt {
+    font-size: 13px;
+  }
+}
+

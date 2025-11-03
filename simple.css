@@ -216,6 +216,67 @@ body {
   border-bottom-width: 2px;
 }
 
+/* Floating Action Button */
+.fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #000000;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.fab:active {
+  transform: scale(0.95);
+}
+
+.fab svg {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fab.active svg {
+  transform: rotate(45deg);
+}
+
+/* Liquid Overlay */
+.liquid-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #000000;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0;
+  clip-path: circle(0% at calc(100% - 24px) calc(100% - 24px));
+  transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.3s ease;
+}
+
+.liquid-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+  clip-path: circle(150% at calc(100% - 24px) calc(100% - 24px));
+}
+
 @media (max-width: 768px) {
   .page {
     padding: 80px 28px;
@@ -293,5 +354,25 @@ body {
   
   .project-list .experience-item:hover::before {
     left: 4px;
+  }
+  
+  .fab {
+    bottom: 20px;
+    right: 20px;
+    width: 48px;
+    height: 48px;
+  }
+  
+  .fab svg {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .liquid-overlay {
+    clip-path: circle(0% at calc(100% - 20px) calc(100% - 20px));
+  }
+  
+  .liquid-overlay.active {
+    clip-path: circle(150% at calc(100% - 20px) calc(100% - 20px));
   }
 }

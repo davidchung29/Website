@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>David Chung</title>
   <link rel="stylesheet" href="simple.css">
+  <link rel="stylesheet" href="chat.css">
+  <script src="fab.js"></script>
 </head>
 <body>
   <div class="page">
@@ -28,19 +30,19 @@
           <div class="experience-item">
             <div class="experience-org">Amazon</div>
             <div class="experience-role">Software Development Engineer Intern</div>
-            <div class="experience-desc">Building scalable backend systems for digital payments infrastructure.</div>
+            <div class="experience-desc">Built scalable backend systems for digital payments team.</div>
           </div>
 
           <div class="experience-item">
             <div class="experience-org">ValueMate (YC)</div>
             <div class="experience-role">AI/ML Software Engineer Intern</div>
-            <div class="experience-desc">Developing AI systems and machine learning pipelines for startup infrastructure.</div>
+            <div class="experience-desc">Developing AI agents and infrastructure for real-estate appraisors.</div>
           </div>
 
           <div class="experience-item">
-            <div class="experience-org">CMU Teel Labs</div>
+            <div class="experience-org">CMU ACE-AI/TEEL Labs</div>
             <div class="experience-role">LLM Research Assistant</div>
-            <div class="experience-desc">Exploring the boundaries of machine learning and practical applications.</div>
+            <div class="experience-desc">Exploring the boundaries of LLM in practical applications. <br> Funded by Accenture</div>
           </div>
         </div>
       </section>
@@ -51,19 +53,19 @@
           <div class="experience-item">
             <div class="experience-org">Haven</div>
             <div class="experience-role">Winner of Y Combinator (1st), Fetch.ai (1st), and LiveKit Best Startup at CalHacks 2025</div>
-            <div class="experience-desc">AI Lead — Multi-agent system for patient anomaly detection.</div>
+            <div class="experience-desc">AI Lead — Multi-agent system for patient anomaly detection.<br>1/700+ teams</div>
           </div>
 
           <div class="experience-item">
             <div class="experience-org">Medicly</div>
             <div class="experience-role">Grand Prize Winner at HackCMU 2025</div>
-            <div class="experience-desc">Full Stack Lead — Converts smartphone video into clinician-ready findings.</div>
+            <div class="experience-desc">Full Stack Lead — Converts smartphone video into clinician-ready findings.<br>1/250+ teams</div>
           </div>
 
           <div class="experience-item">
             <div class="experience-org">Yumi</div>
             <div class="experience-role">3rd Place at HackHarvard 2025</div>
-            <div class="experience-desc">iOS + AI Lead — Social network for food utilizing AI agents.</div>
+            <div class="experience-desc">iOS + AI Lead — Social network for food utilizing AI agents.<br>3/180+ teams</div>
           </div>
         </div>
       </section>
@@ -72,6 +74,46 @@
         <a href="David Chung.pdf" download class="resume-link">Download Resume</a>
       </div>
     </div>
+
+    <!-- Floating Action Button -->
+    <button class="fab" id="fab" aria-label="Toggle overlay">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M12 8v8M8 12h8"/>
+      </svg>
+    </button>
+
+    <!-- Liquid Overlay -->
+    <div class="liquid-overlay" id="liquidOverlay">
+      <!-- Chat Terminal Window -->
+      <div class="chat-terminal" id="chatTerminal">
+        <div class="chat-terminal-header">
+          <div class="chat-terminal-title">davidchung.io</div>
+          <button class="chat-terminal-close" id="chatClose" aria-label="Close chat">×</button>
+        </div>
+        
+        <div class="chat-terminal-content">
+          <div class="chat-output" id="chatOutput"></div>
+          
+          <div class="chat-input-area">
+            <div class="chat-input-container">
+              <span class="chat-prompt">→</span>
+              <input 
+                type="text" 
+                class="chat-input" 
+                id="chatInput" 
+                placeholder="Ask me anything..." 
+                autocomplete="off"
+                autocapitalize="none"
+                autocorrect="off"
+                spellcheck="false"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+  <script src="chat.js"></script>
 </body>
 </html>
