@@ -1,24 +1,27 @@
-/* Chat Terminal Styles - Copied from shell design */
+/* Chat Terminal Styles - Option 5: Small Dark Terminal Card */
 
 .chat-terminal {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(0.95);
-  width: 600px;
-  max-width: 90vw;
-  max-height: 80vh;
-  background: #ffffff;
-  border: 1px solid #e5e5e5;
-  border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  transform: translate(-50%, -50%) scale(0.85);
+  width: 550px;
+  height: 650px;
+  max-width: calc(100vw - 48px);
+  max-height: calc(100vh - 48px);
+  background: #000000;
+  border: 1px solid #333333;
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform-origin: center center;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1001;
   overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
 .liquid-overlay.active .chat-terminal {
@@ -36,60 +39,61 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 20px;
-  border-bottom: 1px solid #e5e5e5;
-  background: #ffffff;
+  padding: 12px 16px;
+  border-bottom: 1px solid #333333;
+  background: #000000;
 }
 
 .chat-terminal-title {
   font-family: 'SF Mono', 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
-  font-size: 13px;
-  font-weight: 600;
-  color: #000000;
-  letter-spacing: 0.02em;
+  font-size: 12px;
+  font-weight: 500;
+  color: #00ff41;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .chat-terminal-close {
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 20px;
   color: #666666;
   cursor: pointer;
   padding: 0;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 4px;
   transition: all 0.2s ease;
   line-height: 1;
+  font-family: 'SF Mono', 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
 }
 
 .chat-terminal-close:hover {
-  background: #f5f5f5;
-  color: #000000;
+  background: #1a1a1a;
+  color: #ffffff;
 }
 
 .chat-terminal-content {
   display: flex;
   flex-direction: column;
-  height: calc(80vh - 60px);
-  min-height: 500px;
-  max-height: 600px;
+  flex: 1;
+  min-height: 0;
 }
 
 .chat-output {
   flex: 1;
-  padding: 20px;
+  padding: 16px;
   overflow-y: auto;
   font-family: 'SF Mono', 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.6;
-  color: #000000;
-  letter-spacing: 0.3px;
+  color: #ffffff;
+  letter-spacing: 0.02em;
   scroll-behavior: smooth;
-  background: #ffffff;
+  background: #000000;
 }
 
 .chat-output::-webkit-scrollbar {
@@ -101,32 +105,32 @@
 }
 
 .chat-output::-webkit-scrollbar-thumb {
-  background: #dadce0;
+  background: #333333;
   border-radius: 3px;
 }
 
 .chat-output::-webkit-scrollbar-thumb:hover {
-  background: #bdc1c6;
+  background: #444444;
 }
 
 .chat-input-area {
-  border-top: 1px solid #e5e5e5;
-  background: #ffffff;
+  border-top: 1px solid #333333;
+  background: #000000;
 }
 
 .chat-input-container {
   display: flex;
   align-items: center;
-  padding: 16px 20px;
-  gap: 12px;
+  padding: 14px 16px;
+  gap: 10px;
 }
 
 .chat-prompt {
-  color: #1a73e8;
+  color: #00ff41;
   font-weight: 600;
   font-family: 'SF Mono', 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
-  font-size: 14px;
-  letter-spacing: 0.3px;
+  font-size: 13px;
+  letter-spacing: 0.05em;
   flex-shrink: 0;
 }
 
@@ -136,20 +140,20 @@
   outline: none;
   background: transparent;
   font-family: 'SF Mono', 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
-  font-size: 14px;
-  color: #000000;
-  letter-spacing: 0.3px;
-  padding: 8px 0;
+  font-size: 13px;
+  color: #ffffff;
+  letter-spacing: 0.02em;
+  padding: 4px 0;
 }
 
 .chat-input::placeholder {
   color: #666666;
-  opacity: 0.6;
+  opacity: 0.8;
 }
 
 /* Message styles */
 .chat-message {
-  margin: 16px 0;
+  margin: 12px 0;
   padding: 0;
 }
 
@@ -160,11 +164,11 @@
 .chat-message.user .message-content {
   display: inline-block;
   text-align: left;
-  color: #000000;
+  color: #ffffff;
 }
 
 .chat-message.ai {
-  color: #000000;
+  color: #ffffff;
 }
 
 .message-content {
@@ -175,21 +179,23 @@
 /* Tool call indicator */
 .tool-call {
   margin: 8px 0;
-  padding: 8px 12px;
-  background: #f5f5f5;
-  border-left: 3px solid #1a73e8;
-  border-radius: 4px;
+  padding: 6px 10px;
+  background: #1a1a1a;
+  border-left: 2px solid #00ff41;
+  border-radius: 2px;
   font-family: 'SF Mono', 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
-  font-size: 12px;
-  color: #666666;
+  font-size: 11px;
+  color: #00ff41;
   font-weight: 500;
+  letter-spacing: 0.02em;
 }
 
 .tool-result {
-  margin: 8px 0 16px 0;
+  margin: 8px 0 14px 0;
   padding-left: 0;
   white-space: pre-line;
   line-height: 1.6;
+  color: #cccccc;
 }
 
 .tool-result-item {
@@ -202,12 +208,12 @@
   content: "→";
   position: absolute;
   left: 0;
-  color: #666666;
+  color: #00ff41;
 }
 
 /* Welcome message */
 .welcome-message {
-  color: #000000;
+  color: #ffffff;
   line-height: 1.6;
 }
 
@@ -216,7 +222,7 @@
   display: inline-flex;
   gap: 4px;
   align-items: center;
-  margin: 16px 0;
+  margin: 12px 0;
 }
 
 .typing-dot {
@@ -248,26 +254,31 @@
 
 @media (max-width: 768px) {
   .chat-terminal {
-    width: 95vw;
-    max-height: 85vh;
+    width: calc(100vw - 40px);
+    height: calc(100vh - 40px);
+    max-width: calc(100vw - 40px);
+    max-height: calc(100vh - 40px);
+    transform: translate(-50%, -50%) scale(0.9);
   }
   
-  .chat-terminal-content {
-    max-height: calc(85vh - 60px);
-    min-height: 400px;
+  .liquid-overlay.active .chat-terminal {
+    transform: translate(-50%, -50%) scale(1);
   }
   
   .chat-output {
-    font-size: 13px;
-    padding: 16px;
+    font-size: 12px;
+    padding: 14px;
   }
   
   .chat-input {
-    font-size: 13px;
+    font-size: 12px;
   }
   
   .chat-prompt {
-    font-size: 13px;
+    font-size: 12px;
+  }
+  
+  .chat-terminal-title {
+    font-size: 11px;
   }
 }
-
