@@ -152,12 +152,17 @@ const davidData = {
 // OpenAI API Configuration
 // Uses Vite environment variables
 // In development: reads from .env file (VITE_OPENAI_API_KEY)
-// In production: Railway injects VITE_OPENAI_API_KEY environment variable
+// In production: Netlify injects VITE_OPENAI_API_KEY environment variable
 const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
 const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
 
-if (!OPENAI_API_KEY) {
-  console.warn('VITE_OPENAI_API_KEY is not set. Please set it in .env file or Railway environment variables.');
+// Check if API key is available
+function checkAPIKey() {
+  if (!OPENAI_API_KEY) {
+    console.error('VITE_OPENAI_API_KEY is not set.');
+    return false;
+  }
+  return true;
 }
 
 // Create context prompt with all David's information
@@ -238,6 +243,10 @@ Answer questions naturally and conversationally based on this information. Be sp
 
 // Get AI response using OpenAI with full context
 async function getAIResponse(query) {
+  if (!OPENAI_API_KEY) {
+    throw new Error('API key not configured');
+  }
+  
   try {
     const contextPrompt = createContextPrompt();
     
@@ -266,7 +275,8 @@ async function getAIResponse(query) {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(`OpenAI API error: ${errorData.error?.message || response.statusText}`);
+      const errorMsg = errorData.error?.message || response.statusText;
+      throw new Error(`OpenAI API error: ${errorMsg}`);
     }
 
     const data = await response.json();
@@ -274,6 +284,12 @@ async function getAIResponse(query) {
     
   } catch (error) {
     console.error('OpenAI API error:', error);
+    
+    // Re-throw with more context if it's a network error
+    if (error instanceof TypeError && error.message.includes('fetch')) {
+      throw new Error('Network error: Failed to connect to OpenAI API');
+    }
+    
     throw error;
   }
 }
@@ -349,6 +365,12 @@ ask me anything about david — his experience, projects, hackathon wins, or any
     const query = chatInput.value.trim();
     if (!query) return;
     
+    // Check if API key is configured
+    if (!checkAPIKey()) {
+      addAIMessage(`⚠️ API key not configured. Please set VITE_OPENAI_API_KEY in Netlify environment variables.`);
+      return;
+    }
+    
     // Add user message
     addUserMessage(query);
     chatInput.value = '';
@@ -364,7 +386,21 @@ ask me anything about david — his experience, projects, hackathon wins, or any
     } catch (error) {
       removeTyping(typingDiv);
       console.error('Error handling input:', error);
-      addAIMessage("Sorry, I encountered an error. Please try again.");
+      
+      // Show user-friendly error message
+      let errorMessage = "Sorry, I encountered an error. ";
+      
+      if (error.message.includes('API key')) {
+        errorMessage += "The API key may not be configured correctly. Please check Netlify environment variables.";
+      } else if (error.message.includes('network') || error.message.includes('fetch')) {
+        errorMessage += "Network error. Please check your connection.";
+      } else if (error.message.includes('OpenAI')) {
+        errorMessage += `OpenAI API error: ${error.message}`;
+      } else {
+        errorMessage += "Please try again.";
+      }
+      
+      addAIMessage(errorMessage);
     }
   }
   
