@@ -149,31 +149,9 @@ const davidData = {
 
 // Tool functions removed - using context-based approach instead
 
-// OpenAI API Configuration
-// Uses Vite environment variables
-// In development: reads from .env file (VITE_OPENAI_API_KEY)
-// In production: Netlify injects VITE_OPENAI_API_KEY environment variable
-let OPENAI_API_KEY;
-try {
-  // Safely access import.meta.env
-  if (typeof import.meta !== 'undefined' && import.meta.env) {
-    OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
-  } else {
-    console.warn('import.meta.env is not available. Make sure Vite build is configured correctly.');
-  }
-} catch (e) {
-  console.error('Error accessing import.meta.env:', e);
-}
-const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
-
-// Check if API key is available
-function checkAPIKey() {
-  if (!OPENAI_API_KEY) {
-    console.error('VITE_OPENAI_API_KEY is not set.');
-    return false;
-  }
-  return true;
-}
+// Netlify Function endpoint for OpenAI API
+// The function handles API calls server-side to avoid CORS issues
+const NETLIFY_FUNCTION_URL = '/.netlify/functions/openai-chat';
 
 // Create context prompt with all David's information
 function createContextPrompt() {
@@ -251,53 +229,37 @@ Answer questions naturally and conversationally based on this information. Be sp
   return context;
 }
 
-// Get AI response using OpenAI with full context
+// Get AI response using Netlify function (which proxies to OpenAI)
 async function getAIResponse(query) {
-  if (!OPENAI_API_KEY) {
-    throw new Error('API key not configured');
-  }
-  
   try {
     const contextPrompt = createContextPrompt();
     
-    const response = await fetch(OPENAI_API_URL, {
+    const response = await fetch(NETLIFY_FUNCTION_URL, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${OPENAI_API_KEY}`
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        messages: [
-          {
-            role: 'system',
-            content: contextPrompt
-          },
-          {
-            role: 'user',
-            content: query
-          }
-        ],
-        temperature: 0.7,
-        max_tokens: 500
+        query: query,
+        contextPrompt: contextPrompt
       })
     });
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      const errorMsg = errorData.error?.message || response.statusText;
-      throw new Error(`OpenAI API error: ${errorMsg}`);
+      const errorMsg = errorData.error || response.statusText;
+      throw new Error(errorMsg);
     }
 
     const data = await response.json();
-    return data.choices[0].message.content;
+    return data.response;
     
   } catch (error) {
-    console.error('OpenAI API error:', error);
+    console.error('Error calling Netlify function:', error);
     
     // Re-throw with more context if it's a network error
     if (error instanceof TypeError && error.message.includes('fetch')) {
-      throw new Error('Network error: Failed to connect to OpenAI API');
+      throw new Error('Network error: Failed to connect to server');
     }
     
     throw error;
@@ -375,12 +337,6 @@ ask me anything about david — his experience, projects, hackathon wins, or any
     const query = chatInput.value.trim();
     if (!query) return;
     
-    // Check if API key is configured
-    if (!checkAPIKey()) {
-      addAIMessage(`⚠️ API key not configured. Please set VITE_OPENAI_API_KEY in Netlify environment variables.`);
-      return;
-    }
-    
     // Add user message
     addUserMessage(query);
     chatInput.value = '';
@@ -400,14 +356,14 @@ ask me anything about david — his experience, projects, hackathon wins, or any
       // Show user-friendly error message
       let errorMessage = "Sorry, I encountered an error. ";
       
-      if (error.message.includes('API key')) {
-        errorMessage += "The API key may not be configured correctly. Please check Netlify environment variables.";
-      } else if (error.message.includes('network') || error.message.includes('fetch')) {
-        errorMessage += "Network error. Please check your connection.";
+      if (error.message.includes('API key') || error.message.includes('not configured')) {
+        errorMessage += "The API key may not be configured correctly. Please check Netlify environment variables (OPENAI_API_KEY).";
+      } else if (error.message.includes('network') || error.message.includes('fetch') || error.message.includes('Failed to connect')) {
+        errorMessage += "Network error. Please check your connection and try again.";
       } else if (error.message.includes('OpenAI')) {
-        errorMessage += `OpenAI API error: ${error.message}`;
+        errorMessage += error.message;
       } else {
-        errorMessage += "Please try again.";
+        errorMessage += error.message || "Please try again.";
       }
       
       addAIMessage(errorMessage);
