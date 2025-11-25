@@ -19,7 +19,24 @@ exports.handler = async (event, context) => {
     };
   }
 
-  // Only allow POST requests
+  // Allow GET for health check / diagnostics
+  if (event.httpMethod === 'GET') {
+    const hasKey = !!(process.env.OPENAI_API_KEY || process.env.VITE_OPENAI_API_KEY);
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({ 
+        status: 'ok',
+        hasApiKey: hasKey,
+        functionName: 'openai-chat',
+        message: hasKey 
+          ? 'Function is ready. API key is configured.' 
+          : 'Function is ready but API key is not configured. Please set OPENAI_API_KEY in Netlify environment variables and redeploy.'
+      })
+    };
+  }
+
+  // Only allow POST requests for actual API calls
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
@@ -30,14 +47,24 @@ exports.handler = async (event, context) => {
 
   try {
     // Get API key from Netlify environment variable
-    const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+    // Check both OPENAI_API_KEY and VITE_OPENAI_API_KEY for compatibility
+    const OPENAI_API_KEY = process.env.OPENAI_API_KEY || process.env.VITE_OPENAI_API_KEY;
+    
+    // Log for debugging (will appear in Netlify function logs)
+    console.log('Environment check:', {
+      hasOpenAIKey: !!process.env.OPENAI_API_KEY,
+      hasViteKey: !!process.env.VITE_OPENAI_API_KEY,
+      allEnvKeys: Object.keys(process.env).filter(k => k.includes('OPENAI'))
+    });
     
     if (!OPENAI_API_KEY) {
+      console.error('OPENAI_API_KEY not found in environment variables');
+      console.error('Available env keys:', Object.keys(process.env).filter(k => k.includes('OPENAI') || k.includes('API')));
       return {
         statusCode: 500,
         headers,
         body: JSON.stringify({ 
-          error: 'OpenAI API key not configured. Please set OPENAI_API_KEY in Netlify environment variables.' 
+          error: 'OpenAI API key not configured. The OPENAI_API_KEY environment variable is not available to this function. Please ensure: 1) The variable is set in Netlify (Site settings → Environment variables), 2) The scope includes "Functions", and 3) You have redeployed the site after adding the variable.' 
         })
       };
     }
