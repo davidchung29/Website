@@ -2,7 +2,7 @@
 
 // Data structure for David's information
 const davidData = {
-  bio: "Hey, I'm David. I want to make impact by developing products using new technology. At Carnegie Mellon, I'm studying information systems and computer science, learning to translate between human intention and machine execution. My work spans scalable infrastructure at Amazon, AI systems at ValueMate (YC W25), LLM research at CMU Teel Labs, and hackathon wins at Cal Hacks, HackCMU, and HackHarvard. I'm using AI to bridge human needs with technological solutions—transforming healthcare, accessibility, and how we interact with everyday systems.",
+  bio: "Hey, I'm David. I want to make impact by developing products using new technology. I'm currently studying information systems and computer science @ CMU.",
   
   education: {
     school: "Carnegie Mellon University",
@@ -28,14 +28,27 @@ const davidData = {
       ]
     },
     {
+      org: "Figma",
+      orgLink: "https://www.figma.com/",
+      role: "Software Engineer Intern",
+      location: "San Francisco, CA",
+      startDate: "Summer 2026",
+      endDate: "Summer 2026",
+      period: "Summer 2026",
+      desc: "Incoming SWE intern.",
+      details: [
+        "Incoming Software Engineer Intern for summer 2026"
+      ]
+    },
+    {
       org: "ValueMate (YC X25)",
       orgLink: "https://valuemate.ai/",
       role: "AI Software Engineer Intern",
       location: "Pittsburgh, PA",
       startDate: "Sep 2025",
-      endDate: "Dec 2025",
-      period: "Sep 2025 -- Dec 2025",
-      desc: "Developing AI agents and infrastructure for real-estate appraisors.",
+      endDate: "Nov 2025",
+      period: "Sep 2025 -- Nov 2025",
+      desc: "Developed AI agents and infrastructure for real-estate appraisors.",
       details: [
         "Developed iOS app reducing appraisal turnarounds by 80%, enabling appraisers to complete 5X more appraisals",
         "Shipped core iOS floor plan editor with Swift, built smart PDF editor with AI and BAML integrations",
@@ -92,7 +105,8 @@ const davidData = {
       details: [
         "Grand Prize (1/250+ teams) at HackCMU 2025 w/ sponsors from Anthropic, Citadel, Stripe, Jane Street & HRT",
         "Converts raw smartphone video into clinician-ready findings with 3D mesh visualization & exercise suggestions",
-        "Built a MediaPipe/OpenCV pose pipeline with keyframe splicing and joint-angle time-series data into a Claude feedback analysis loop"
+        "Built a MediaPipe/OpenCV pose pipeline with keyframe splicing and joint-angle time-series data into a Claude feedback analysis loop",
+        "Presented @ Palantir"
       ],
       fullDescription: "AI-powered rehabilitation tracking with intelligent pose analysis and personalized recovery insights."
     },
@@ -157,7 +171,7 @@ const NETLIFY_FUNCTION_URL = '/.netlify/functions/openai-chat';
 function createContextPrompt() {
   let context = `You are David Chung's AI assistant. Here is all the information about David:
 
-BIOGRAPHY:
+BIO:
 ${davidData.bio}
 
 EDUCATION:
