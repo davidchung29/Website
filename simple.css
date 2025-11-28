@@ -118,28 +118,41 @@ body {
 
 .experience-item {
   display: flex;
-  flex-direction: column;
-  padding-left: 20px;
+  flex-direction: row;
+  gap: 16px;
+  align-items: flex-start;
   position: relative;
-  transition: padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.experience-item::before {
-  content: "•";
-  position: absolute;
-  left: 0;
-  color: #000000;
-  font-weight: 400;
-  font-size: 19px;
-  line-height: 1.35;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .experience-item:hover {
-  padding-left: 28px;
+  transform: translateX(4px);
 }
 
-.experience-item:hover::before {
-  left: 8px;
+.experience-logo {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  object-fit: contain;
+  margin-top: 0px;
+  opacity: 0.9;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 4px;
+}
+
+.figma-logo {
+  width: 32px;
+  height: 32px;
+}
+
+.experience-item:hover .experience-logo {
+  opacity: 1;
+}
+
+.experience-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .experience-org {
@@ -374,24 +387,16 @@ body {
   }
   
   .experience-item:hover {
-    padding-left: 22px;
+    transform: translateX(2px);
   }
   
-  .experience-item:hover::before {
-    left: 4px;
-  }
-  
-  .experience-item::before {
-    font-size: 18px;
-    line-height: 1.35;
+  .experience-logo {
+    width: 26px;
+    height: 26px;
   }
   
   .experience-list {
     gap: 36px;
-  }
-  
-  .experience-item {
-    padding-left: 18px;
   }
   
   .experience-org {
