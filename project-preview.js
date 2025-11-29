@@ -380,6 +380,11 @@ class ProjectPreviewPanel {
       this.techStackImage.remove();
       this.techStackImage = null;
     }
+    // Clear caption if it exists
+    if (this.captionElement) {
+      this.captionElement.remove();
+      this.captionElement = null;
+    }
     
     // Reset iframe state
     this.iframe.classList.remove('loaded');
