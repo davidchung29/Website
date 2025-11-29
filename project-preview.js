@@ -278,17 +278,22 @@ class ProjectPreviewPanel {
     if (!this.isDragging) return;
     
     e.preventDefault();
+    e.stopPropagation();
     
     const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
     const windowWidth = window.innerWidth;
     
+    // Clamp clientX to window bounds to prevent over-dragging
+    const clampedX = Math.max(0, Math.min(clientX, windowWidth));
+    
     // Calculate percentage
-    let percentage = (clientX / windowWidth) * 100;
+    let percentage = (clampedX / windowWidth) * 100;
     
     // Apply constraints (minimum 400px for each side)
     const minPercentage = (this.minPanelWidth / windowWidth) * 100;
     const maxPercentage = 100 - minPercentage;
     
+    // Clamp percentage between min and max
     percentage = Math.max(minPercentage, Math.min(maxPercentage, percentage));
     
     this.updateSplitPosition(percentage);

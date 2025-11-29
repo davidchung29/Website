@@ -145,6 +145,13 @@ body.preview-active {
   flex: 1;
   overflow: hidden;
   background: #fafafa;
+  transition: pointer-events 0.1s ease;
+}
+
+/* Disable pointer events on iframe during drag */
+body.dragging-divider .preview-iframe-container,
+body.dragging-divider .preview-iframe {
+  pointer-events: none;
 }
 
 .preview-loading {
@@ -182,6 +189,12 @@ body.preview-active {
   overflow-y: auto;
   transition: width 0.1s ease;
   padding: 96px 36px;
+}
+
+/* Disable pointer events on main page during drag */
+body.dragging-divider .page {
+  pointer-events: none;
+  user-select: none;
 }
 
 /* Project cards - make clickable */
