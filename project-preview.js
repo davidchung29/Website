@@ -138,15 +138,14 @@ class ProjectPreviewPanel {
       }
     });
     
-    // Divider drag
+    // Divider drag - bind to instance methods
+    this.boundDrag = (e) => this.drag(e);
+    this.boundEndDrag = (e) => this.endDrag(e);
+    
     this.divider.addEventListener('mousedown', (e) => this.startDrag(e));
-    document.addEventListener('mousemove', (e) => this.drag(e));
-    document.addEventListener('mouseup', () => this.endDrag());
     
     // Touch support for divider
     this.divider.addEventListener('touchstart', (e) => this.startDrag(e));
-    document.addEventListener('touchmove', (e) => this.drag(e));
-    document.addEventListener('touchend', () => this.endDrag());
     
     // Iframe load event
     this.iframe.addEventListener('load', () => {
@@ -265,11 +264,20 @@ class ProjectPreviewPanel {
     this.divider.classList.add('dragging');
     document.body.classList.add('dragging-divider');
     
+    // Add event listeners when drag starts
+    document.addEventListener('mousemove', this.boundDrag);
+    document.addEventListener('mouseup', this.boundEndDrag);
+    document.addEventListener('touchmove', this.boundDrag);
+    document.addEventListener('touchend', this.boundEndDrag);
+    
     e.preventDefault();
+    e.stopPropagation();
   }
 
   drag(e) {
     if (!this.isDragging) return;
+    
+    e.preventDefault();
     
     const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
     const windowWidth = window.innerWidth;
@@ -286,12 +294,22 @@ class ProjectPreviewPanel {
     this.updateSplitPosition(percentage);
   }
 
-  endDrag() {
+  endDrag(e) {
     if (!this.isDragging) return;
     
     this.isDragging = false;
     this.divider.classList.remove('dragging');
     document.body.classList.remove('dragging-divider');
+    
+    // Remove event listeners when drag ends
+    document.removeEventListener('mousemove', this.boundDrag);
+    document.removeEventListener('mouseup', this.boundEndDrag);
+    document.removeEventListener('touchmove', this.boundDrag);
+    document.removeEventListener('touchend', this.boundEndDrag);
+    
+    if (e) {
+      e.preventDefault();
+    }
   }
 
   updateSplitPosition(percentage) {
