@@ -80,12 +80,29 @@ class ProjectPreviewPanel {
     loading.className = 'preview-loading';
     loading.textContent = 'Loading...';
     
+    // Create fallback message for sites that block iframes
+    const fallback = document.createElement('div');
+    fallback.className = 'preview-fallback';
+    fallback.innerHTML = `
+      <div class="preview-fallback-title">Preview Unavailable</div>
+      <div class="preview-fallback-text">This site cannot be displayed in an iframe due to security restrictions.</div>
+      <a href="#" target="_blank" rel="noopener noreferrer" class="preview-fallback-button">
+        Open in New Tab
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+          <polyline points="15 3 21 3 21 9"></polyline>
+          <line x1="10" y1="14" x2="21" y2="3"></line>
+        </svg>
+      </a>
+    `;
+    
     this.iframe = document.createElement('iframe');
     this.iframe.className = 'preview-iframe';
     this.iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-presentation');
     this.iframe.setAttribute('loading', 'lazy');
     
     iframeContainer.appendChild(loading);
+    iframeContainer.appendChild(fallback);
     iframeContainer.appendChild(this.iframe);
     
     // Assemble content
@@ -104,6 +121,8 @@ class ProjectPreviewPanel {
     this.githubLinkElement = githubLink;
     this.closeButtonElement = closeButton;
     this.loadingElement = loading;
+    this.fallbackElement = fallback;
+    this.fallbackButton = fallback.querySelector('.preview-fallback-button');
     this.iframeContainer = iframeContainer;
   }
 
@@ -152,6 +171,42 @@ class ProjectPreviewPanel {
       this.loadingElement.style.display = 'none';
       this.iframe.classList.add('loaded');
     });
+    
+    // Iframe error event - show fallback if can't load
+    this.iframe.addEventListener('error', () => {
+      this.showFallback();
+    });
+    
+    // Detect iframe blocking (X-Frame-Options)
+    setTimeout(() => {
+      if (this.iframe.src && !this.iframe.classList.contains('loaded')) {
+        // Check if iframe is blocked
+        try {
+          const iframeDoc = this.iframe.contentDocument || this.iframe.contentWindow.document;
+          if (!iframeDoc || iframeDoc.body === null) {
+            this.showFallback();
+          }
+        } catch (e) {
+          // Cross-origin or blocked
+          this.showFallback();
+        }
+      }
+    }, 3000); // Wait 3 seconds before checking
+  }
+  
+  showFallback() {
+    this.loadingElement.style.display = 'none';
+    this.iframe.style.display = 'none';
+    this.fallbackElement.classList.add('active');
+    // Update fallback button href
+    if (this.currentProject) {
+      this.fallbackButton.href = this.currentProject.demoUrl;
+    }
+  }
+  
+  hideFallback() {
+    this.fallbackElement.classList.remove('active');
+    this.iframe.style.display = 'block';
   }
 
   attachProjectCardListeners() {
@@ -195,8 +250,15 @@ class ProjectPreviewPanel {
   }
 
   open(project, clickedElement) {
-    if (this.isOpen) {
-      this.close();
+    // If already open with a different project, switch to new project
+    if (this.isOpen && this.currentProject && this.currentProject.name !== project.name) {
+      console.log(`Switching from ${this.currentProject.name} to ${project.name}`);
+      this.switchProject(project);
+      return;
+    }
+    
+    // If clicking same project while open, do nothing
+    if (this.isOpen && this.currentProject && this.currentProject.name === project.name) {
       return;
     }
     
@@ -208,16 +270,32 @@ class ProjectPreviewPanel {
     // Update panel content
     this.titleElement.textContent = project.name;
     this.githubLinkElement.href = project.githubLink;
-    this.iframe.src = project.demoUrl;
+    this.fallbackButton.href = project.demoUrl;
     
     // Reset iframe state
     this.iframe.classList.remove('loaded');
+    this.iframe.style.display = 'block';
     this.loadingElement.style.display = 'block';
+    this.hideFallback();
+    
+    // Try to load iframe
+    this.iframe.src = project.demoUrl;
     
     // Add active class to page and body
     const page = document.querySelector('.page');
     if (page) {
       page.classList.add('preview-active');
+      
+      // Debug scroll
+      setTimeout(() => {
+        console.log('Page scroll debug:', {
+          scrollHeight: page.scrollHeight,
+          clientHeight: page.clientHeight,
+          canScroll: page.scrollHeight > page.clientHeight,
+          overflow: window.getComputedStyle(page).overflow,
+          overflowY: window.getComputedStyle(page).overflowY
+        });
+      }, 100);
     }
     document.body.classList.add('preview-active');
     
@@ -232,6 +310,27 @@ class ProjectPreviewPanel {
       this.panel.classList.remove('opening');
       console.log('Panel fully opened');
     }, 450); // Slightly longer than animation duration
+  }
+  
+  switchProject(project) {
+    // Update current project
+    this.currentProject = project;
+    
+    console.log('Switching to:', project.name);
+    
+    // Update panel content
+    this.titleElement.textContent = project.name;
+    this.githubLinkElement.href = project.githubLink;
+    this.fallbackButton.href = project.demoUrl;
+    
+    // Reset iframe state
+    this.iframe.classList.remove('loaded');
+    this.iframe.style.display = 'block';
+    this.loadingElement.style.display = 'block';
+    this.hideFallback();
+    
+    // Load new iframe
+    this.iframe.src = project.demoUrl;
   }
 
   close() {
