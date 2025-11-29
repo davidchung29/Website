@@ -170,15 +170,33 @@ class ProjectPreviewPanel {
     this.iframe.addEventListener('load', () => {
       this.loadingElement.style.display = 'none';
       this.iframe.classList.add('loaded');
+      
+      // Clear any pending detection timeout
+      if (this.iframeDetectionTimeout) {
+        clearTimeout(this.iframeDetectionTimeout);
+        this.iframeDetectionTimeout = null;
+      }
     });
     
     // Iframe error event - show fallback if can't load
     this.iframe.addEventListener('error', () => {
       this.showFallback();
     });
+  }
+  
+  startIframeDetection(project) {
+    // Only detect blocking for external URLs, not local images
+    if (project.demoType === 'image') {
+      return;
+    }
     
-    // Detect iframe blocking (X-Frame-Options)
-    setTimeout(() => {
+    // Clear any existing timeout
+    if (this.iframeDetectionTimeout) {
+      clearTimeout(this.iframeDetectionTimeout);
+    }
+    
+    // Detect iframe blocking (X-Frame-Options) after 3 seconds
+    this.iframeDetectionTimeout = setTimeout(() => {
       if (this.iframe.src && !this.iframe.classList.contains('loaded')) {
         // Check if iframe is blocked
         try {
@@ -187,11 +205,11 @@ class ProjectPreviewPanel {
             this.showFallback();
           }
         } catch (e) {
-          // Cross-origin or blocked
+          // Cross-origin or blocked - show fallback
           this.showFallback();
         }
       }
-    }, 3000); // Wait 3 seconds before checking
+    }, 5000); // Wait 5 seconds (increased from 3) before checking
   }
   
   showFallback() {
@@ -225,14 +243,10 @@ class ProjectPreviewPanel {
     // Find all project cards
     const projectCards = document.querySelectorAll('.project-list .experience-item');
     
-    console.log('Found project cards:', projectCards.length);
-    console.log('Found projects in davidData:', window.davidData.projects.length);
-    
     projectCards.forEach((card, index) => {
       const project = window.davidData.projects[index];
       
       if (project && project.demoUrl) {
-        console.log(`Attaching click listener to ${project.name}`);
         card.style.cursor = 'pointer';
         card.addEventListener('click', (e) => {
           // Don't open if clicking on a link
@@ -240,11 +254,8 @@ class ProjectPreviewPanel {
             return;
           }
           
-          console.log(`Opening preview for ${project.name}`);
           this.open(project, card);
         });
-      } else {
-        console.log(`Skipping card ${index}: no demoUrl`);
       }
     });
   }
@@ -252,7 +263,6 @@ class ProjectPreviewPanel {
   open(project, clickedElement) {
     // If already open with a different project, switch to new project
     if (this.isOpen && this.currentProject && this.currentProject.name !== project.name) {
-      console.log(`Switching from ${this.currentProject.name} to ${project.name}`);
       this.switchProject(project);
       return;
     }
@@ -265,37 +275,26 @@ class ProjectPreviewPanel {
     this.isOpen = true;
     this.currentProject = project;
     
-    console.log('Opening panel for:', project.name);
-    
     // Update panel content
     this.titleElement.textContent = project.name;
     this.githubLinkElement.href = project.githubLink;
-    this.fallbackButton.href = project.demoUrl;
+    this.fallbackButton.href = project.link || project.demoUrl;
     
-    // Reset iframe state
-    this.iframe.classList.remove('loaded');
-    this.iframe.style.display = 'block';
-    this.loadingElement.style.display = 'block';
-    this.hideFallback();
-    
-    // Try to load iframe
-    this.iframe.src = project.demoUrl;
+    // Check if it's an image or iframe
+    if (project.demoType === 'image') {
+      // Show image instead of iframe
+      this.showImage(project.demoUrl, project.techStackUrl);
+    } else {
+      // Show iframe
+      this.showIframe(project.demoUrl);
+      // Start detection for iframe blocking
+      this.startIframeDetection(project);
+    }
     
     // Add active class to page and body
     const page = document.querySelector('.page');
     if (page) {
       page.classList.add('preview-active');
-      
-      // Debug scroll
-      setTimeout(() => {
-        console.log('Page scroll debug:', {
-          scrollHeight: page.scrollHeight,
-          clientHeight: page.clientHeight,
-          canScroll: page.scrollHeight > page.clientHeight,
-          overflow: window.getComputedStyle(page).overflow,
-          overflowY: window.getComputedStyle(page).overflowY
-        });
-      }, 100);
     }
     document.body.classList.add('preview-active');
     
@@ -308,20 +307,64 @@ class ProjectPreviewPanel {
     // Remove opening class after animation (this prevents click-outside from closing immediately)
     setTimeout(() => {
       this.panel.classList.remove('opening');
-      console.log('Panel fully opened');
     }, 450); // Slightly longer than animation duration
   }
   
-  switchProject(project) {
-    // Update current project
-    this.currentProject = project;
+  showImage(imageUrl, techStackUrl) {
+    // Clear any iframe detection timeout
+    if (this.iframeDetectionTimeout) {
+      clearTimeout(this.iframeDetectionTimeout);
+      this.iframeDetectionTimeout = null;
+    }
     
-    console.log('Switching to:', project.name);
+    // Hide iframe and fallback
+    this.iframe.style.display = 'none';
+    this.iframe.src = ''; // Clear iframe source
+    this.iframe.classList.remove('loaded');
+    this.hideFallback();
+    this.loadingElement.style.display = 'none';
     
-    // Update panel content
-    this.titleElement.textContent = project.name;
-    this.githubLinkElement.href = project.githubLink;
-    this.fallbackButton.href = project.demoUrl;
+    // Clear previous images
+    if (this.previewImage) {
+      this.previewImage.remove();
+      this.previewImage = null;
+    }
+    if (this.techStackImage) {
+      this.techStackImage.remove();
+      this.techStackImage = null;
+    }
+    
+    // Create main demo image
+    this.previewImage = document.createElement('img');
+    this.previewImage.className = 'preview-image';
+    this.previewImage.src = imageUrl;
+    this.iframeContainer.appendChild(this.previewImage);
+    
+    // Create tech stack image if provided
+    if (techStackUrl) {
+      this.techStackImage = document.createElement('img');
+      this.techStackImage.className = 'preview-image';
+      this.techStackImage.src = techStackUrl;
+      this.iframeContainer.appendChild(this.techStackImage);
+    }
+  }
+  
+  showIframe(iframeUrl) {
+    // Clear any iframe detection timeout
+    if (this.iframeDetectionTimeout) {
+      clearTimeout(this.iframeDetectionTimeout);
+      this.iframeDetectionTimeout = null;
+    }
+    
+    // Hide and cleanup images if they exist
+    if (this.previewImage) {
+      this.previewImage.remove();
+      this.previewImage = null;
+    }
+    if (this.techStackImage) {
+      this.techStackImage.remove();
+      this.techStackImage = null;
+    }
     
     // Reset iframe state
     this.iframe.classList.remove('loaded');
@@ -329,8 +372,27 @@ class ProjectPreviewPanel {
     this.loadingElement.style.display = 'block';
     this.hideFallback();
     
-    // Load new iframe
-    this.iframe.src = project.demoUrl;
+    // Try to load iframe
+    this.iframe.src = iframeUrl;
+  }
+  
+  switchProject(project) {
+    // Update current project
+    this.currentProject = project;
+    
+    // Update panel content
+    this.titleElement.textContent = project.name;
+    this.githubLinkElement.href = project.githubLink;
+    this.fallbackButton.href = project.link || project.demoUrl;
+    
+    // Check if it's an image or iframe
+    if (project.demoType === 'image') {
+      this.showImage(project.demoUrl, project.techStackUrl);
+    } else {
+      this.showIframe(project.demoUrl);
+      // Start detection for iframe blocking
+      this.startIframeDetection(project);
+    }
   }
 
   close() {

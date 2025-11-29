@@ -149,10 +149,22 @@ body.preview-active {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  background: #fafafa;
+  background: #ffffff;
   transition: pointer-events 0.1s ease;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch; /* Changed from flex-start to stretch */
+  padding: 0;
+  margin: 0;
+}
+
+/* Ensure loading and fallback don't interfere with top alignment */
+.preview-iframe-container .preview-loading,
+.preview-iframe-container .preview-fallback {
+  position: absolute;
+  top: 50%;
 }
 
 /* Disable pointer events on iframe during drag */
@@ -239,6 +251,22 @@ body.dragging-divider .preview-iframe {
 
 .preview-iframe.loaded {
   opacity: 1;
+}
+
+/* Preview image for GIFs/PNGs */
+.preview-image {
+  width: calc(100% - 40px);
+  height: auto;
+  display: block;
+  object-fit: contain;
+  background: #ffffff;
+  margin: 0 20px 20px 20px;
+  flex-shrink: 0;
+}
+
+.preview-image:first-child {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
 }
 
 /* Main page adjustments - resize to fit left of divider */
