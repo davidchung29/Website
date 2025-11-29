@@ -1,7 +1,8 @@
 // Chat Terminal with Context-Based AI
 
 // Data structure for David's information
-const davidData = {
+// Make it global so project-preview.js can access it
+window.davidData = {
   bio: "Hey, I'm David. I want to make impact by developing products using new technology. I'm currently studying information systems and computer science @ CMU.",
   
   education: {
@@ -76,6 +77,8 @@ const davidData = {
     {
       name: "Haven",
       link: "https://devpost.com/software/haven-536r1q",
+      githubLink: "https://github.com/davidchung29/haven",
+      demoUrl: "https://haven-demo.vercel.app",
       role: "AI Lead",
       date: "Oct 2025",
       hackathon: "CalHacks 2025",
@@ -94,6 +97,8 @@ const davidData = {
     {
       name: "Medicly",
       link: "https://www.medicly.dev/",
+      githubLink: "https://github.com/davidchung29/medicly",
+      demoUrl: "https://www.medicly.dev/",
       role: "Full Stack Lead",
       date: "Sep 2025",
       hackathon: "HackCMU 2025",
@@ -113,6 +118,8 @@ const davidData = {
     {
       name: "Yumi",
       link: "https://devpost.com/software/yumi",
+      githubLink: "https://github.com/davidchung29/yumi",
+      demoUrl: "https://yumi-demo.vercel.app",
       role: "iOS + AI Lead",
       date: "Oct 2025",
       hackathon: "HackHarvard 2025",
