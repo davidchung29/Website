@@ -28,19 +28,20 @@ window.davidData = {
         "Implemented 12 zero-ETL ingestion pipelines enabling real-time ingestion of Apple Pay and Google Pay data"
       ]
     },
-    {
-      org: "Figma",
-      orgLink: "https://www.figma.com/",
-      role: "Software Engineer Intern",
-      location: "San Francisco, CA",
-      startDate: "Summer 2026",
-      endDate: "Summer 2026",
-      period: "Summer 2026",
-      desc: "Incoming SWE intern.",
-      details: [
-        "Incoming Software Engineer Intern for summer 2026"
-      ]
-    },
+    // Figma - hidden for now
+    // {
+    //   org: "Figma",
+    //   orgLink: "https://www.figma.com/",
+    //   role: "Software Engineer Intern",
+    //   location: "San Francisco, CA",
+    //   startDate: "Summer 2026",
+    //   endDate: "Summer 2026",
+    //   period: "Summer 2026",
+    //   desc: "Incoming SWE intern.",
+    //   details: [
+    //     "Incoming Software Engineer Intern for summer 2026"
+    //   ]
+    // },
     {
       org: "ValueMate (YC X25)",
       orgLink: "https://valuemate.ai/",
