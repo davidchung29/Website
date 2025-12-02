@@ -429,8 +429,15 @@ class ProjectPreviewPanel {
       const page = document.querySelector('.page');
       if (page) {
         page.classList.remove('preview-active');
+        // Clear any inline width style set during dragging
+        page.style.cssText = '';
       }
       document.body.classList.remove('preview-active');
+      
+      // Reset divider and content positions
+      this.divider.style.left = '';
+      this.content.style.left = '';
+      this.splitPosition = 50;
       
       // Clear iframe
       this.iframe.src = '';

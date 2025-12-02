@@ -298,11 +298,7 @@ body.dragging-divider .preview-iframe {
 }
 
 /* Ensure normal page scrolling when preview is NOT active */
-.page:not(.preview-active) {
-  position: relative;
-  overflow: visible;
-  touch-action: auto;
-}
+/* Note: Don't override .page styles here - let simple.css handle defaults */
 
 /* Only disable pointer events on main page during drag */
 body.dragging-divider .page {
