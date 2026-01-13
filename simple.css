@@ -29,16 +29,16 @@ body {
 
 .header {
   text-align: center;
-  margin-bottom: 64px;
+  margin-bottom: 40px;
 }
 
 .profile-picture {
-  width: 95px;
-  height: 95px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   object-fit: cover;
   display: inline-block;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -57,7 +57,7 @@ body {
 .main {
   display: flex;
   flex-direction: column;
-  gap: 64px;
+  gap: 44px;
 }
 
 .section {
@@ -110,7 +110,7 @@ body {
 .experience-list {
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 28px;
   position: relative;
 }
 
@@ -358,13 +358,13 @@ body {
   }
   
   .header {
-    margin-bottom: 48px;
+    margin-bottom: 32px;
   }
-  
+
   .profile-picture {
-    width: 85px;
-    height: 85px;
-    margin-bottom: 24px;
+    width: 72px;
+    height: 72px;
+    margin-bottom: 20px;
   }
   
   .header h1 {
@@ -373,7 +373,7 @@ body {
   }
 
   .main {
-    gap: 56px;
+    gap: 36px;
   }
 
   .section-title {
@@ -394,7 +394,7 @@ body {
   }
   
   .experience-list {
-    gap: 36px;
+    gap: 24px;
   }
   
   .experience-org {
