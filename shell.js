@@ -443,7 +443,7 @@ function showProjectWindow(projectId) {
               <div class="mockly-preview-overlay">
                 <div class="mockly-preview-overlay-content">
                   <div class="mockly-preview-overlay-title">Click to Visit Full Site</div>
-                  <div class="mockly-preview-overlay-subtitle">medicly.dev</div>
+                  <div class="mockly-preview-overlay-subtitle">yummy-ideas-956789.framer.app</div>
                 </div>
               </div>
             </div>
@@ -487,7 +487,7 @@ function showProjectWindow(projectId) {
           
           <div class="project-links">
             <a href="https://github.com/scrappydevs/medicly/tree/main/frontend" class="project-link">github</a>
-            <a href="http://medicly.dev/" class="project-link">live demo</a>
+            <a href="https://yummy-ideas-956789.framer.app/" class="project-link">live demo</a>
           </div>
         </div>
       `
@@ -730,15 +730,15 @@ function showProjectModal(projectId) {
       title: 'Medicly - AI-Powered Physical Therapy Platform',
       content: `
        <div class="project-modal-content">
-          <div class="mockly-preview" onclick="window.open('http://medicly.dev/', '_blank')">
+          <div class="mockly-preview" onclick="window.open('https://yummy-ideas-956789.framer.app/', '_blank')">
             <div class="mockly-preview-header">
               <div class="mockly-preview-title">Live Preview</div>
-              <div class="mockly-preview-url">medicly.dev</div>
+              <div class="mockly-preview-url">yummy-ideas-956789.framer.app</div>
             </div>
             <div class="mockly-preview-content" id="medicly-preview-content-modal">
-              <iframe 
-                class="mockly-preview-iframe" 
-                src="http://medicly.dev/" 
+              <iframe
+                class="mockly-preview-iframe"
+                src="https://yummy-ideas-956789.framer.app/" 
                 title="Medicly Live Preview"
                 loading="lazy"
                 sandbox="allow-scripts allow-same-origin"
@@ -748,7 +748,7 @@ function showProjectModal(projectId) {
               <div class="mockly-preview-overlay">
                 <div class="mockly-preview-overlay-content">
                   <div class="mockly-preview-overlay-title">Click to Visit Full Site</div>
-                  <div class="mockly-preview-overlay-subtitle">medicly.dev</div>
+                  <div class="mockly-preview-overlay-subtitle">yummy-ideas-956789.framer.app</div>
                 </div>
               </div>
             </div>
@@ -792,7 +792,7 @@ function showProjectModal(projectId) {
           
           <div class="project-links">
             <a href="https://github.com/scrappydevs/medicly/tree/main/frontend" class="project-link">github</a>
-            <a href="http://medicly.dev/" class="project-link">live demo</a>
+            <a href="https://yummy-ideas-956789.framer.app/" class="project-link">live demo</a>
           </div>
         </div>
       `
