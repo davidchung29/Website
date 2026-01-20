@@ -425,15 +425,15 @@ function showProjectWindow(projectId) {
       title: 'Medicly - AI-Powered Physical Therapy Platform',
       content: `
        <div class="project-window-content">
-          <div class="mockly-preview" onclick="window.open('http://medicly.dev/', '_blank')">
+          <div class="mockly-preview" onclick="window.open('https://yummy-ideas-956789.framer.app/', '_blank')">
             <div class="mockly-preview-header">
               <div class="mockly-preview-title">david browser</div>
-              <div class="mockly-preview-url">medicly.dev</div>
+              <div class="mockly-preview-url">yummy-ideas-956789.framer.app</div>
             </div>
             <div class="mockly-preview-content" id="medicly-preview-content-desktop">
-              <iframe 
-                class="mockly-preview-iframe" 
-                src="http://medicly.dev/" 
+              <iframe
+                class="mockly-preview-iframe"
+                src="https://yummy-ideas-956789.framer.app/" 
                 title="Medicly Live Preview"
                 loading="lazy"
                 sandbox="allow-scripts allow-same-origin"

@@ -100,9 +100,9 @@ window.davidData = {
     },
     {
       name: "Medicly",
-      link: "https://www.medicly.dev/",
+      link: "https://yummy-ideas-956789.framer.app/",
       githubLink: "https://github.com/davidchung29/medicly",
-      demoUrl: "https://www.medicly.dev/",
+      demoUrl: "https://yummy-ideas-956789.framer.app/",
       demoType: "iframe",
       role: "Full Stack Lead",
       date: "Sep 2025",
