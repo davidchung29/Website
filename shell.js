@@ -484,10 +484,66 @@ function showProjectWindow(projectId) {
             <span class="tech-tag">claude ai</span>
             <span class="tech-tag">biodigital human</span>
           </div>
-          
+
           <div class="project-links">
             <a href="https://github.com/scrappydevs/medicly/tree/main/frontend" class="project-link">github</a>
             <a href="https://yummy-ideas-956789.framer.app/" class="project-link">live demo</a>
+          </div>
+        </div>
+      `
+    },
+    'ace-ai': {
+      title: 'CMU ACE-AI - LLM Research Project',
+      content: `
+       <div class="project-window-content">
+          <div class="mockly-preview" onclick="window.open('https://www.cmu.edu/teel/projects/ace-ai.html', '_blank')">
+            <div class="mockly-preview-header">
+              <div class="mockly-preview-title">david browser</div>
+              <div class="mockly-preview-url">cmu.edu/teel/projects/ace-ai.html</div>
+            </div>
+            <div class="mockly-preview-content" id="ace-ai-preview-content-desktop">
+              <iframe
+                class="mockly-preview-iframe"
+                src="https://www.cmu.edu/teel/projects/ace-ai.html"
+                title="CMU ACE-AI Live Preview"
+                loading="lazy"
+                sandbox="allow-scripts allow-same-origin"
+                onload="handleAceAIIframeLoad('desktop')"
+                onerror="handleAceAIIframeError('desktop')">
+              </iframe>
+              <div class="mockly-preview-overlay">
+                <div class="mockly-preview-overlay-content">
+                  <div class="mockly-preview-overlay-title">Click to Visit Full Site</div>
+                  <div class="mockly-preview-overlay-subtitle">cmu.edu/teel/projects/ace-ai.html</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h3>overview</h3>
+          <p>Research project exploring the boundaries of LLM in practical applications, focusing on automated learning objective mapping and educational assessment. Funded by the CMU Accenture Center of Excellence for AI.</p>
+
+          <h3>key contributions</h3>
+          <p>
+          • multi-stage LLM orchestration pipeline with vector embeddings<br>
+          • RAG-based automated evaluation system<br>
+          • analysis of 5,000+ student submissions<br>
+          • learning objective alignment and mastery prediction<br>
+          • funded research by Accenture
+
+          <h3>implementation</h3>
+          <p>utilizes claude api and openai for LLM orchestration, python for backend processing, vector embeddings for semantic search, and RAG for context-aware analysis.</p>
+
+          <div class="tech-stack">
+            <span class="tech-tag">claude api</span>
+            <span class="tech-tag">openai</span>
+            <span class="tech-tag">python</span>
+            <span class="tech-tag">vector embeddings</span>
+            <span class="tech-tag">rag</span>
+          </div>
+
+          <div class="project-links">
+            <a href="https://www.cmu.edu/teel/projects/ace-ai.html" class="project-link">project page</a>
           </div>
         </div>
       `
@@ -521,7 +577,12 @@ function showProjectWindow(projectId) {
         if (projectId === 'medicly') {
           checkMediclyIframeLoad();
         }
-        
+
+        // Check iframe loading for ACE AI project
+        if (projectId === 'ace-ai') {
+          checkAceAIIframeLoad();
+        }
+
         // Add click handlers to diagrams
         addDiagramClickHandlers();
       }, 500);
@@ -555,7 +616,12 @@ function showProjectWindow(projectId) {
         if (projectId === 'medicly') {
           checkMediclyIframeLoad();
         }
-        
+
+        // Check iframe loading for ACE AI project
+        if (projectId === 'ace-ai') {
+          checkAceAIIframeLoad();
+        }
+
         // Add click handlers to diagrams
         addDiagramClickHandlers();
       }, 500); // Increased delay to ensure DOM is ready
@@ -796,6 +862,62 @@ function showProjectModal(projectId) {
           </div>
         </div>
       `
+    },
+    'ace-ai': {
+      title: 'CMU ACE-AI - LLM Research Project',
+      content: `
+       <div class="project-modal-content">
+          <div class="mockly-preview" onclick="window.open('https://www.cmu.edu/teel/projects/ace-ai.html', '_blank')">
+            <div class="mockly-preview-header">
+              <div class="mockly-preview-title">Live Preview</div>
+              <div class="mockly-preview-url">cmu.edu/teel/projects/ace-ai.html</div>
+            </div>
+            <div class="mockly-preview-content" id="ace-ai-preview-content-modal">
+              <iframe
+                class="mockly-preview-iframe"
+                src="https://www.cmu.edu/teel/projects/ace-ai.html"
+                title="CMU ACE-AI Live Preview"
+                loading="lazy"
+                sandbox="allow-scripts allow-same-origin"
+                onload="handleAceAIIframeLoad('modal')"
+                onerror="handleAceAIIframeError('modal')">
+              </iframe>
+              <div class="mockly-preview-overlay">
+                <div class="mockly-preview-overlay-content">
+                  <div class="mockly-preview-overlay-title">Click to Visit Full Site</div>
+                  <div class="mockly-preview-overlay-subtitle">cmu.edu/teel/projects/ace-ai.html</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h3>overview</h3>
+          <p>Research project exploring the boundaries of LLM in practical applications, focusing on automated learning objective mapping and educational assessment. Funded by the CMU Accenture Center of Excellence for AI.</p>
+
+          <h3>key contributions</h3>
+          <p>
+          • multi-stage LLM orchestration pipeline with vector embeddings<br>
+          • RAG-based automated evaluation system<br>
+          • analysis of 5,000+ student submissions<br>
+          • learning objective alignment and mastery prediction<br>
+          • funded research by Accenture
+
+          <h3>implementation</h3>
+          <p>utilizes claude api and openai for LLM orchestration, python for backend processing, vector embeddings for semantic search, and RAG for context-aware analysis.</p>
+
+          <div class="tech-stack">
+            <span class="tech-tag">claude api</span>
+            <span class="tech-tag">openai</span>
+            <span class="tech-tag">python</span>
+            <span class="tech-tag">vector embeddings</span>
+            <span class="tech-tag">rag</span>
+          </div>
+
+          <div class="project-links">
+            <a href="https://www.cmu.edu/teel/projects/ace-ai.html" class="project-link">project page</a>
+          </div>
+        </div>
+      `
     }
   };
 
@@ -956,8 +1078,9 @@ window.addEventListener('resize', function() {
     if (modalOverlay.classList.contains('active')) {
       // Check if it's a project/contact modal (not info modal)
       const modalTitle = document.getElementById('modal-title').textContent;
-      if (modalTitle.includes('myEyes') || modalTitle.includes('Matrix') || 
+      if (modalTitle.includes('myEyes') || modalTitle.includes('Matrix') ||
           modalTitle.includes('Mockly') || modalTitle.includes('Medicly') ||
+          modalTitle.includes('ACE-AI') ||
           modalTitle.includes('LinkedIn') || modalTitle.includes('GitHub')) {
         closeModal();
       }
@@ -2144,6 +2267,68 @@ function checkMediclyIframeLoad() {
 window.handleMediclyIframeLoad = handleMediclyIframeLoad;
 window.handleMediclyIframeError = handleMediclyIframeError;
 window.showMediclyFallback = showMediclyFallback;
+
+// ACE AI iframe handling functions
+function handleAceAIIframeLoad(type) {
+  console.log(`ACE AI iframe loaded successfully (${type})`);
+  // Iframe loaded successfully, no action needed
+}
+
+function handleAceAIIframeError(type) {
+  console.log(`ACE AI iframe failed to load (${type}), showing fallback`);
+  showAceAIFallback(type);
+}
+
+function showAceAIFallback(type) {
+  const containerId = type === 'desktop' ? 'ace-ai-preview-content-desktop' : 'ace-ai-preview-content-modal';
+  const container = document.getElementById(containerId);
+
+  if (container) {
+    container.innerHTML = `
+      <div class="mockly-preview-fallback">
+        <div class="mockly-preview-logo">CMU ACE-AI</div>
+        <div class="mockly-preview-tagline">LLM Research Project</div>
+        <div class="mockly-preview-subtitle">Automated learning objective mapping</div>
+        <div class="mockly-preview-cta">Click to Visit Site →</div>
+      </div>
+    `;
+  }
+}
+
+// Check if iframe fails to load after a timeout
+function checkAceAIIframeLoad() {
+  setTimeout(() => {
+    const desktopIframe = document.querySelector('#ace-ai-preview-content-desktop iframe');
+    const modalIframe = document.querySelector('#ace-ai-preview-content-modal iframe');
+
+    if (desktopIframe) {
+      try {
+        // Try to access iframe content to check if it loaded
+        if (!desktopIframe.contentDocument && !desktopIframe.contentWindow) {
+          handleAceAIIframeError('desktop');
+        }
+      } catch (e) {
+        // Cross-origin restrictions mean it might be loading correctly
+        console.log('ACE AI iframe may be loading (cross-origin restrictions)');
+      }
+    }
+
+    if (modalIframe) {
+      try {
+        if (!modalIframe.contentDocument && !modalIframe.contentWindow) {
+          handleAceAIIframeError('modal');
+        }
+      } catch (e) {
+        console.log('ACE AI iframe may be loading (cross-origin restrictions)');
+      }
+    }
+  }, 5000); // Check after 5 seconds
+}
+
+// Make functions globally accessible
+window.handleAceAIIframeLoad = handleAceAIIframeLoad;
+window.handleAceAIIframeError = handleAceAIIframeError;
+window.showAceAIFallback = showAceAIFallback;
 
 // Tech stack cursor dodging effect
 function initTechStackDodging() {

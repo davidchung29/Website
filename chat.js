@@ -99,6 +99,33 @@ window.davidData = {
       fullDescription: "Hospital command center powered by context-aware agentic AI that alerts nurses, unifies EHR data, and answers patient questions, improving understanding and reducing response delays and clinical error."
     },
     {
+      name: "Healthier",
+      link: "https://devpost.com/software/healthier",
+      githubLink: "https://github.com/davidchung29/healthier",
+      demoUrl: "assets/projects/nexhacks/ios.gif",
+      demoImages: ["assets/projects/nexhacks/ios.gif", "assets/projects/nexhacks/ios2.gif"],
+      dashboardUrl: "assets/projects/nexhacks/dashboard.png",
+      techStackUrl: "assets/projects/nexhacks/techstack.png",
+      demoType: "image",
+      imageLayout: "side-by-side",
+      previewCaption: "AI-powered elderly care app. Seniors scan pills/meals and chat with a voice agent. Healthcare providers get dashboards that flag risks early. 3D facility tracking for senior homes.",
+      role: "Full Stack + AI Lead",
+      date: "Jan 2026",
+      hackathon: "NexHacks 2026",
+      hackathonLink: "https://nexhacks.com/",
+      wins: "2nd Place",
+      stats: "2/300 teams",
+      desc: "AI-powered elderly care app with multimodal capture and risk scoring.",
+      tech: ["Swift", "CoreML", "YOLOv8", "LiveKit", "Claude", "Cerebras", "Overshoot", "MediaPipe", "Next.js", "FastAPI", "Supabase"],
+      details: [
+        "Placed 2nd (2/300 teams) at NexHacks 2026 for an AI-powered elderly care continuity platform",
+        "Built on-device pill detection with custom YOLOv8 model trained on 700+ annotated images, converted to CoreML for privacy-preserving iPhone inference",
+        "Implemented LiveKit WebRTC voice interface for natural check-ins and Overshoot computer vision for real-time exercise form analysis with MediaPipe pose estimation",
+        "Developed plan-vs-behavior engine with risk scoring and triage alerting system, 3D spatial care maps, and AI chat for natural language plan updates"
+      ],
+      fullDescription: "AI-powered elderly care app bridging in-clinic and at-home care. Features include on-device pill scanning with YOLOv8, LiveKit voice journaling, Overshoot exercise analysis, real-time adherence telemetry, risk scoring, and 3D facility maps for care coordination."
+    },
+    {
       name: "Medicly",
       link: "https://yummy-ideas-956789.framer.app/",
       githubLink: "https://github.com/davidchung29/medicly",
@@ -142,9 +169,30 @@ window.davidData = {
         "Architected SwiftUI iOS app and built an image pipeline with CV for food property detection"
       ],
       fullDescription: "The agentic social food network. You bring your taste. Your friends bring the vibe. AI agents orchestrate the rest."
+    },
+    {
+      name: "CMU ACE-AI",
+      link: "https://www.cmu.edu/teel/projects/ace-ai.html",
+      githubLink: "",
+      demoUrl: "https://www.cmu.edu/teel/projects/ace-ai.html",
+      demoType: "iframe",
+      role: "LLM Research Assistant",
+      date: "Sep 2025 - Dec 2025",
+      hackathon: "",
+      hackathonLink: "",
+      wins: "",
+      stats: "",
+      desc: "Automated learning objective mapping using AI agents.",
+      tech: ["Claude API", "OpenAI", "Python", "Vector Embeddings", "RAG"],
+      details: [
+        "Research funded by CMU Accenture Center of Excellence for AI",
+        "Engineered multi-stage LLM orchestration pipeline with vector embeddings and RAG for automated evaluation",
+        "Deployed system analyzing 5,000+ student submissions for learning objective alignment and mastery prediction"
+      ],
+      fullDescription: "Research project exploring the boundaries of LLM in practical applications, focusing on automated learning objective mapping and educational assessment. Funded by Accenture."
     }
   ],
-  
+
   contact: {
     email: "dichung@andrew.cmu.edu",
     phone: "213-322-5501",

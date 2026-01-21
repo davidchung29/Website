@@ -258,10 +258,31 @@ body.dragging-divider .preview-iframe {
   flex-shrink: 0;
 }
 
+/* Preview image grid for side-by-side layout */
+.preview-image-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  width: calc(100% - 40px);
+  margin: 0 20px 20px 20px;
+  flex-shrink: 0;
+}
+
+/* Smaller images for side-by-side layout */
+.preview-image-small {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  background: #ffffff;
+  margin: 0;
+  border-radius: 4px;
+}
+
 /* Preview caption text */
 .preview-caption {
   width: calc(100% - 40px);
-  margin: 0 20px 16px 20px;
+  margin: 20px 20px 16px 20px;
   padding: 0 0 16px 0;
   font-size: 16px;
   line-height: 1.7;

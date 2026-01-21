@@ -283,7 +283,7 @@ class ProjectPreviewPanel {
     // Check if it's an image or iframe
     if (project.demoType === 'image') {
       // Show image instead of iframe
-      this.showImage(project.demoUrl, project.techStackUrl, project.previewCaption);
+      this.showImage(project.demoUrl, project.techStackUrl, project.previewCaption, project.demoImages, project.imageLayout, project.dashboardUrl);
     } else {
       // Show iframe
       this.showIframe(project.demoUrl);
@@ -310,20 +310,20 @@ class ProjectPreviewPanel {
     }, 450); // Slightly longer than animation duration
   }
   
-  showImage(imageUrl, techStackUrl, caption) {
+  showImage(imageUrl, techStackUrl, caption, demoImages, imageLayout, dashboardUrl) {
     // Clear any iframe detection timeout
     if (this.iframeDetectionTimeout) {
       clearTimeout(this.iframeDetectionTimeout);
       this.iframeDetectionTimeout = null;
     }
-    
+
     // Hide iframe and fallback
     this.iframe.style.display = 'none';
     this.iframe.src = ''; // Clear iframe source
     this.iframe.classList.remove('loaded');
     this.hideFallback();
     this.loadingElement.style.display = 'none';
-    
+
     // Clear previous images and captions
     if (this.previewImage) {
       this.previewImage.remove();
@@ -333,34 +333,85 @@ class ProjectPreviewPanel {
       this.techStackImage.remove();
       this.techStackImage = null;
     }
+    if (this.dashboardImage) {
+      this.dashboardImage.remove();
+      this.dashboardImage = null;
+    }
     if (this.captionElement) {
       this.captionElement.remove();
       this.captionElement = null;
     }
-    
-    // Create elements in order and insert at the BEGINNING of container
-    // (loading, fallback, iframe are already in container but should stay hidden)
-    
-    // Create tech stack image if provided (will be inserted after demo image)
-    if (techStackUrl) {
-      this.techStackImage = document.createElement('img');
-      this.techStackImage.className = 'preview-image';
-      this.techStackImage.src = techStackUrl;
-      this.iframeContainer.insertBefore(this.techStackImage, this.iframeContainer.firstChild);
+    if (this.imageGridContainer) {
+      this.imageGridContainer.remove();
+      this.imageGridContainer = null;
     }
-    
-    // Create main demo image (insert at beginning, so it appears before tech stack)
-    this.previewImage = document.createElement('img');
-    this.previewImage.className = 'preview-image';
-    this.previewImage.src = imageUrl;
-    this.iframeContainer.insertBefore(this.previewImage, this.iframeContainer.firstChild);
-    
-    // Create caption if provided (insert at very beginning, so it appears first)
-    if (caption) {
-      this.captionElement = document.createElement('div');
-      this.captionElement.className = 'preview-caption';
-      this.captionElement.textContent = caption;
-      this.iframeContainer.insertBefore(this.captionElement, this.iframeContainer.firstChild);
+
+    // Check if we have multiple demo images with side-by-side layout
+    if (demoImages && imageLayout === 'side-by-side') {
+      // Insert in reverse order so caption appears first
+
+      // Add tech stack image (will be last)
+      if (techStackUrl) {
+        this.techStackImage = document.createElement('img');
+        this.techStackImage.className = 'preview-image';
+        this.techStackImage.src = techStackUrl;
+        this.iframeContainer.insertBefore(this.techStackImage, this.iframeContainer.firstChild);
+      }
+
+      // Add dashboard image (before tech stack)
+      if (dashboardUrl) {
+        this.dashboardImage = document.createElement('img');
+        this.dashboardImage.className = 'preview-image';
+        this.dashboardImage.src = dashboardUrl;
+        this.iframeContainer.insertBefore(this.dashboardImage, this.iframeContainer.firstChild);
+      }
+
+      // Create a grid container for side-by-side images (before dashboard)
+      this.imageGridContainer = document.createElement('div');
+      this.imageGridContainer.className = 'preview-image-grid';
+
+      // Add each demo image to the grid
+      demoImages.forEach(imgUrl => {
+        const img = document.createElement('img');
+        img.className = 'preview-image preview-image-small';
+        img.src = imgUrl;
+        this.imageGridContainer.appendChild(img);
+      });
+
+      this.iframeContainer.insertBefore(this.imageGridContainer, this.iframeContainer.firstChild);
+
+      // Add caption at the very beginning
+      if (caption) {
+        this.captionElement = document.createElement('div');
+        this.captionElement.className = 'preview-caption';
+        this.captionElement.textContent = caption;
+        this.iframeContainer.insertBefore(this.captionElement, this.iframeContainer.firstChild);
+      }
+    } else {
+      // Original behavior: single image
+      // Insert in reverse order
+
+      // Create tech stack image if provided (will be inserted after demo image)
+      if (techStackUrl) {
+        this.techStackImage = document.createElement('img');
+        this.techStackImage.className = 'preview-image';
+        this.techStackImage.src = techStackUrl;
+        this.iframeContainer.insertBefore(this.techStackImage, this.iframeContainer.firstChild);
+      }
+
+      // Create main demo image (insert at beginning, so it appears before tech stack)
+      this.previewImage = document.createElement('img');
+      this.previewImage.className = 'preview-image';
+      this.previewImage.src = imageUrl;
+      this.iframeContainer.insertBefore(this.previewImage, this.iframeContainer.firstChild);
+
+      // Create caption if provided (insert at very beginning, so it appears first)
+      if (caption) {
+        this.captionElement = document.createElement('div');
+        this.captionElement.className = 'preview-caption';
+        this.captionElement.textContent = caption;
+        this.iframeContainer.insertBefore(this.captionElement, this.iframeContainer.firstChild);
+      }
     }
   }
   
@@ -407,7 +458,7 @@ class ProjectPreviewPanel {
     
     // Check if it's an image or iframe
     if (project.demoType === 'image') {
-      this.showImage(project.demoUrl, project.techStackUrl, project.previewCaption);
+      this.showImage(project.demoUrl, project.techStackUrl, project.previewCaption, project.demoImages, project.imageLayout, project.dashboardUrl);
     } else {
       this.showIframe(project.demoUrl);
       // Start detection for iframe blocking
