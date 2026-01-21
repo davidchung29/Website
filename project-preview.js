@@ -140,16 +140,16 @@ class ProjectPreviewPanel {
     // Click outside (on main page) - with delay to prevent immediate close
     document.addEventListener('click', (e) => {
       if (!this.isOpen) return;
-      
+
       // Ignore clicks during opening animation
       if (this.panel.classList.contains('opening')) return;
-      
+
       if (!this.content.contains(e.target) && !this.divider.contains(e.target)) {
         // Check if click is on main page content
         const page = document.querySelector('.page');
         if (page && page.contains(e.target)) {
-          // Additional check: make sure we're not clicking on a project card
-          const clickedProjectCard = e.target.closest('.project-list .experience-item');
+          // Additional check: make sure we're not clicking on a clickable project card
+          const clickedProjectCard = e.target.closest('.clickable-project');
           if (!clickedProjectCard) {
             this.close();
           }
@@ -239,13 +239,16 @@ class ProjectPreviewPanel {
       }, 100);
       return;
     }
-    
-    // Find all project cards
-    const projectCards = document.querySelectorAll('.project-list .experience-item');
-    
-    projectCards.forEach((card, index) => {
-      const project = window.davidData.projects[index];
-      
+
+    // Find all clickable items (both in project list and experience list)
+    const clickableItems = document.querySelectorAll('.clickable-project');
+
+    clickableItems.forEach((card) => {
+      const projectName = card.getAttribute('data-project');
+
+      // Find the project in davidData.projects by name
+      const project = window.davidData.projects.find(p => p.name === projectName);
+
       if (project && project.demoUrl) {
         card.style.cursor = 'pointer';
         card.addEventListener('click', (e) => {
@@ -253,7 +256,7 @@ class ProjectPreviewPanel {
           if (e.target.tagName === 'A' || e.target.closest('a')) {
             return;
           }
-          
+
           this.open(project, card);
         });
       }

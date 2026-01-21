@@ -78,7 +78,7 @@ window.davidData = {
     {
       name: "Haven",
       link: "https://devpost.com/software/haven-536r1q",
-      githubLink: "https://github.com/davidchung29/haven",
+      githubLink: "https://github.com/scrappydevs/haven",
       demoUrl: "assets/projects/haven/Haven AI Chat.gif",
       techStackUrl: "assets/projects/haven/Haven Tech Stack.png",
       demoType: "image",
@@ -101,7 +101,7 @@ window.davidData = {
     {
       name: "Healthier",
       link: "https://devpost.com/software/healthier",
-      githubLink: "https://github.com/davidchung29/healthier",
+      githubLink: "https://github.com/scrappydevs/healthier",
       demoUrl: "assets/projects/nexhacks/ios.gif",
       demoImages: ["assets/projects/nexhacks/ios.gif", "assets/projects/nexhacks/ios2.gif"],
       dashboardUrl: "assets/projects/nexhacks/dashboard.png",
@@ -128,7 +128,7 @@ window.davidData = {
     {
       name: "Medicly",
       link: "https://yummy-ideas-956789.framer.app/",
-      githubLink: "https://github.com/davidchung29/medicly",
+      githubLink: "https://github.com/scrappydevs/medicly",
       demoUrl: "https://yummy-ideas-956789.framer.app/",
       demoType: "iframe",
       role: "Full Stack Lead",
@@ -150,7 +150,7 @@ window.davidData = {
     {
       name: "Yumi",
       link: "https://devpost.com/software/yumi",
-      githubLink: "https://github.com/davidchung29/yumi",
+      githubLink: "https://github.com/scrappydevs/Yumi",
       demoUrl: "assets/projects/yumi/Yumi_Demo.gif",
       techStackUrl: "assets/projects/yumi/Yumi_Tech_Stack.png",
       demoType: "image",
