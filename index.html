@@ -12,127 +12,171 @@
   <div class="app-container">
     <div class="page" id="mainPage">
     <div class="header">
-      <img src="assets/profile.jpg" alt="David Chung" class="profile-picture" />
       <h1>David Chung</h1>
+      <nav class="nav-buttons">
+        <a href="#experience" class="nav-button">experience</a>
+        <a href="#projects" class="nav-button">projects</a>
+        <a href="/David-Chung.pdf" download="David-Chung.pdf" class="nav-button">resume</a>
+      </nav>
     </div>
 
     <div class="main">
-      <section class="section">
-        <h2 class="section-title">Bio</h2>
-        <p class="section-content">
-          Hey, I'm David.<br>
-          I want to make impact by developing products using new technology. I'm currently studying Information Systems and Computer Science @ CMU.
+      <section class="section bio-section">
+        <h2 class="section-title">BIO</h2>
+        <p class="bio-text">
+          Hey, I'm David. I want to make impact by developing products using new technology. I'm currently studying Information Systems and Computer Science @ CMU.
         </p>
       </section>
 
-      <section class="section">
-        <h2 class="section-title">Experience</h2>
+      <section class="section" id="experience">
+        <h2 class="section-title">EXPERIENCE</h2>
         <div class="experience-list">
           <div class="experience-item">
             <img src="assets/logos/figma.svg" alt="Figma" class="experience-logo figma-logo" />
             <div class="experience-content">
-              <div class="experience-org">Figma</div>
-              <div class="experience-role">
-                <span>Software Engineer Intern</span>
-                <span class="experience-date">Summer 2026</span>
+              <div class="experience-header">
+                <div class="experience-org">Figma</div>
+                <div class="experience-role">SWE Intern</div>
               </div>
-              <div class="experience-desc">Incoming SWE intern.</div>
+              <div class="experience-footer">
+                <div class="experience-desc">Incoming SWE intern.</div>
+                <div class="experience-date">Summer 2026</div>
+              </div>
             </div>
           </div>
 
           <div class="experience-item">
             <img src="assets/logos/amazon.svg" alt="Amazon" class="experience-logo" />
             <div class="experience-content">
-              <div class="experience-org">Amazon</div>
-              <div class="experience-role">
-                <span>Software Development Engineer Intern</span>
-                <span class="experience-date">May 2025 - Aug 2025</span>
+              <div class="experience-header">
+                <div class="experience-org">Amazon</div>
+                <div class="experience-role">SWE Intern</div>
               </div>
-              <div class="experience-desc">Built scalable backend systems for digital payments team.</div>
+              <div class="experience-footer">
+                <div class="experience-desc">Built scalable backend systems for digital payments team.</div>
+                <div class="experience-date">May 2025 - Aug 2025</div>
+              </div>
             </div>
           </div>
 
           <div class="experience-item">
             <img src="assets/logos/valuemate.svg" alt="ValueMate" class="experience-logo" />
             <div class="experience-content">
-              <div class="experience-org">ValueMate (YC)</div>
-              <div class="experience-role">
-                <span>AI/ML Software Engineer Intern</span>
-                <span class="experience-date">Sep 2025 - Nov 2025</span>
+              <div class="experience-header">
+                <div class="experience-org">ValueMate (YC)</div>
+                <div class="experience-role">AI/ML Intern</div>
               </div>
-              <div class="experience-desc">Developed AI agents and infrastructure for real-estate appraisors.</div>
+              <div class="experience-footer">
+                <div class="experience-desc">Developed AI agents and infrastructure for real-estate appraisors.</div>
+                <div class="experience-date">Sep 2025 - Nov 2025</div>
+              </div>
             </div>
           </div>
 
           <div class="experience-item">
             <img src="assets/logos/felicis.svg" alt="Felicis Venture Capital" class="experience-logo" />
             <div class="experience-content">
-              <div class="experience-org">Felicis Venture Capital</div>
-              <div class="experience-role">
-                <span>Venture Capital Fellow</span>
-                <span class="experience-date">Jan 2026 - Present</span>
+              <div class="experience-header">
+                <div class="experience-org">Felicis Venture Capital</div>
+                <div class="experience-role">VC Fellow</div>
               </div>
-              <div class="experience-desc">1 of 14 fellows, worked with partners to support founders.</div>
+              <div class="experience-footer">
+                <div class="experience-desc">1 of 14 fellows, worked with partners to support founders.</div>
+                <div class="experience-date">Jan 2026 - Present</div>
+              </div>
             </div>
           </div>
 
           <div class="experience-item clickable-project" data-project="ace-ai" data-github="" data-demo="https://www.cmu.edu/teel/projects/ace-ai.html">
             <img src="assets/logos/aceai.svg" alt="CMU" class="experience-logo" />
             <div class="experience-content">
-              <div class="experience-org">CMU ACE-AI/TEEL Labs</div>
-              <div class="experience-role">
-                <span>LLM Research Assistant</span>
-                <span class="experience-date">Sep 2025 - Dec 2025</span>
+              <div class="experience-header">
+                <div class="experience-org">CMU ACE-AI/TEEL Labs</div>
+                <div class="experience-role">LLM Research Assistant</div>
               </div>
-              <div class="experience-desc">Automated learning objective mapping using AI agents. <br> Funded by Accenture</div>
+              <div class="experience-footer">
+                <div class="experience-desc">Automated learning objective mapping using AI agents.</div>
+                <div class="experience-date">Sep 2025 - Dec 2025</div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section class="section">
-        <h2 class="section-title">Projects</h2>
+      <section class="section" id="projects">
+        <h2 class="section-title">PROJECTS</h2>
         <div class="experience-list project-list">
           <div class="experience-item clickable-project" data-project="haven" data-github="" data-demo="https://devpost.com/software/haven-536r1q">
-            <div class="experience-org">Haven</div>
-            <div class="experience-role">
-              <span>Winner of Y Combinator (1st), Fetch.ai (1st), and LiveKit Best Startup at CalHacks 2025</span>
+            <div class="project-header">
+              <div class="project-header-left">
+                <span class="experience-org">Haven</span>
+                <span class="experience-role">#1 YC, #1 Fetch.ai, #1 LiveKit @ CalHacks</span>
+              </div>
+              <div class="project-links">
+                <a href="https://github.com/scrappydevs/haven" target="_blank" class="project-link">github</a>
+                <a href="https://devpost.com/software/haven-536r1q" target="_blank" class="project-link">devpost</a>
+              </div>
+            </div>
+            <div class="project-footer">
+              <span class="experience-desc">Multi-agent hospital command center. 1/700+ teams</span>
               <span class="experience-date">Oct 2025</span>
             </div>
-            <div class="experience-desc">AI Lead — Multi-agent system for patient anomaly detection.<br>1/700+ teams</div>
           </div>
 
           <div class="experience-item clickable-project" data-project="healthier" data-github="" data-demo="https://devpost.com/software/healthier">
-            <div class="experience-org">Healthier</div>
-            <div class="experience-role">
-              <span>2nd Place at NexHacks 2026</span>
+            <div class="project-header">
+              <div class="project-header-left">
+                <span class="experience-org">Healthier</span>
+                <span class="experience-role">#2 @ NexHacks</span>
+              </div>
+              <div class="project-links">
+                <a href="https://github.com/scrappydevs/healthier" target="_blank" class="project-link">github</a>
+                <a href="https://devpost.com/software/healthier" target="_blank" class="project-link">devpost</a>
+              </div>
+            </div>
+            <div class="project-footer">
+              <span class="experience-desc">AI-powered elderly care with pill scanning, voice journaling, and 3D tracking. 2/300 teams</span>
               <span class="experience-date">Jan 2026</span>
             </div>
-            <div class="experience-desc">Full Stack + AI Lead — AI-powered elderly care app with pill scanning, voice journaling, and 3D facility tracking.<br>2/300 teams</div>
           </div>
 
           <div class="experience-item clickable-project" data-project="medicly" data-github="https://github.com/scrappydevs/medicly" data-demo="https://yummy-ideas-956789.framer.app/">
-            <div class="experience-org">Medicly</div>
-            <div class="experience-role">
-              <span>Grand Prize Winner at HackCMU 2025</span>
+            <div class="project-header">
+              <div class="project-header-left">
+                <span class="experience-org">Medicly</span>
+                <span class="experience-role">#1 @ HackCMU</span>
+              </div>
+              <div class="project-links">
+                <a href="https://github.com/scrappydevs/medicly" target="_blank" class="project-link">github</a>
+                <a href="https://yummy-ideas-956789.framer.app/" target="_blank" class="project-link">website</a>
+              </div>
+            </div>
+            <div class="project-footer">
+              <span class="experience-desc">Converts smartphone video into clinician-ready findings. 1/250+ teams. Presented at Palantir.</span>
               <span class="experience-date">Sep 2025</span>
             </div>
-            <div class="experience-desc">Full Stack Lead — Converts smartphone video into clinician-ready findings.<br>1/250+ teams. Presented at Palantir.</div>
           </div>
 
           <div class="experience-item clickable-project" data-project="yumi" data-github="" data-demo="https://devpost.com/software/yumi">
-            <div class="experience-org">Yumi</div>
-            <div class="experience-role">
-              <span>3rd Place at HackHarvard 2025</span>
+            <div class="project-header">
+              <div class="project-header-left">
+                <span class="experience-org">Yumi</span>
+                <span class="experience-role">#3 @ HackHarvard</span>
+              </div>
+              <div class="project-links">
+                <a href="https://github.com/scrappydevs/Yumi" target="_blank" class="project-link">github</a>
+                <a href="https://devpost.com/software/yumi" target="_blank" class="project-link">devpost</a>
+              </div>
+            </div>
+            <div class="project-footer">
+              <span class="experience-desc">Social food network with AI-powered recommendations. 3/180+ teams</span>
               <span class="experience-date">Oct 2025</span>
             </div>
-            <div class="experience-desc">iOS + AI Lead — Social network for food utilizing AI agents.<br>3/180+ teams</div>
           </div>
         </div>
       </section>
 
       <div class="footer">
-        <a href="/David-Chung.pdf" download="David-Chung.pdf" class="resume-link">Download Resume</a>
         <div class="social-links">
           <a href="https://github.com/davidchung29" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="GitHub">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

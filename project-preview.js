@@ -252,8 +252,8 @@ class ProjectPreviewPanel {
       if (project && project.demoUrl) {
         card.style.cursor = 'pointer';
         card.addEventListener('click', (e) => {
-          // Don't open if clicking on a link
-          if (e.target.tagName === 'A' || e.target.closest('a')) {
+          // Don't open if clicking on a link or project-link
+          if (e.target.tagName === 'A' || e.target.closest('a') || e.target.closest('.project-link')) {
             return;
           }
 
