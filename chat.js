@@ -100,7 +100,7 @@ window.davidData = {
     },
     {
       name: "Healthier",
-      link: "https://devpost.com/software/healthier",
+      link: "https://devpost.com/software/healthier-w0baus",
       githubLink: "https://github.com/scrappydevs/healthier",
       demoUrl: "assets/projects/nexhacks/ios.gif",
       demoImages: ["assets/projects/nexhacks/ios.gif", "assets/projects/nexhacks/ios2.gif"],
