@@ -8,8 +8,8 @@
 }
 
 :root {
-  --accent: #3B82F6;
-  --accent-light: #60A5FA;
+  --accent: #C99A8E;
+  --accent-light: #D9AEA3;
 }
 
 body {
@@ -55,20 +55,21 @@ body {
 }
 
 .nav-button {
-  font-size: 15px;
-  color: #999999;
+  font-size: 14px;
+  color: #B8E0D4;
   text-decoration: none;
-  font-weight: 400;
+  font-weight: 600;
   transition: color 0.2s ease;
   position: relative;
+  text-transform: capitalize;
 }
 
 .nav-button:hover {
-  color: #000000;
+  color: var(--accent);
 }
 
 .nav-button:active {
-  color: #000000;
+  color: var(--accent);
 }
 
 .main {
@@ -125,7 +126,7 @@ body {
   font-weight: 700;
   margin-bottom: 32px;
   letter-spacing: 0.08em;
-  color: #C5D5B8;
+  color: #B8E0D4;
   text-transform: uppercase;
 }
 
