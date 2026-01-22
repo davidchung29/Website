@@ -111,9 +111,15 @@
       </section>
 
       <section class="section" id="projects">
-        <h2 class="section-title">PROJECTS</h2>
+        <div class="section-header">
+          <h2 class="section-title">PROJECTS</h2>
+          <label class="toggle-switch">
+            <input type="checkbox" id="projectViewToggle">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
         <div class="experience-list project-list">
-          <div class="experience-item clickable-project" data-project="haven" data-github="" data-demo="https://devpost.com/software/haven-536r1q">
+          <div class="experience-item clickable-project" data-project="haven" data-github="" data-demo="https://devpost.com/software/haven-536r1q" data-thumbnail="assets/projects/haven/Haven AI Chat.gif" data-oneliner="Multi-agent hospital command center. 1/700+ teams" data-awards="#1 YC, #1 Fetch.ai, #1 LiveKit @ CalHacks">
             <div class="project-header">
               <div class="project-header-left">
                 <span class="experience-org">Haven</span>
@@ -130,7 +136,7 @@
             </div>
           </div>
 
-          <div class="experience-item clickable-project" data-project="healthier" data-github="" data-demo="https://devpost.com/software/healthier-w0baus">
+          <div class="experience-item clickable-project" data-project="healthier" data-github="" data-demo="https://devpost.com/software/healthier-w0baus" data-thumbnail="assets/projects/nexhacks/demo.gif" data-oneliner="AI-powered elderly care with pill scanning, voice journaling, and 3D tracking. 2/300 teams" data-awards="#2 @ NexHacks">
             <div class="project-header">
               <div class="project-header-left">
                 <span class="experience-org">Healthier</span>
@@ -147,7 +153,7 @@
             </div>
           </div>
 
-          <div class="experience-item clickable-project" data-project="medicly" data-github="https://github.com/scrappydevs/medicly" data-demo="https://yummy-ideas-956789.framer.app/">
+          <div class="experience-item clickable-project" data-project="medicly" data-github="https://github.com/scrappydevs/medicly" data-demo="https://yummy-ideas-956789.framer.app/" data-thumbnail="assets/projects/medicly/medicly demo.gif" data-oneliner="Converts smartphone video into clinician-ready findings. 1/250+ teams. Presented at Palantir." data-awards="#1 @ HackCMU">
             <div class="project-header">
               <div class="project-header-left">
                 <span class="experience-org">Medicly</span>
@@ -164,7 +170,7 @@
             </div>
           </div>
 
-          <div class="experience-item clickable-project" data-project="yumi" data-github="" data-demo="https://devpost.com/software/yumi">
+          <div class="experience-item clickable-project" data-project="yumi" data-github="" data-demo="https://devpost.com/software/yumi" data-thumbnail="assets/projects/yumi/full demo yumi.gif" data-oneliner="Social food network with AI-powered recommendations. 3/180+ teams" data-awards="#3 @ HackHarvard">
             <div class="project-header">
               <div class="project-header-left">
                 <span class="experience-org">Yumi</span>
@@ -254,5 +260,6 @@
   <script src="chat.js"></script>
   <script src="fab.js"></script>
   <script src="project-preview.js"></script>
+  <script src="project-toggle.js"></script>
 </body>
 </html>
