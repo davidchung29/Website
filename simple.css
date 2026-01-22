@@ -141,52 +141,63 @@ body {
   margin-bottom: 0;
 }
 
-/* Apple-style toggle switch */
-.toggle-switch {
+/* View Selector Icons */
+.view-selector {
   position: relative;
-  display: inline-block;
-  width: 44px;
-  height: 26px;
-  cursor: pointer;
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  padding: 2px;
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 7px;
 }
 
-.toggle-switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.toggle-slider {
+.view-selector::before {
+  content: '';
   position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #E5E5E5;
-  transition: 0.3s;
-  border-radius: 26px;
-}
-
-.toggle-slider:before {
-  position: absolute;
-  content: "";
-  height: 22px;
-  width: 22px;
   left: 2px;
-  bottom: 2px;
-  background-color: white;
-  transition: 0.3s;
-  border-radius: 50%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  width: 32px;
+  height: 32px;
+  background: #FFFFFF;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06),
+              0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: left 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+  z-index: 0;
 }
 
-.toggle-switch input:checked + .toggle-slider {
-  background-color: var(--accent);
+.view-selector.grid-active::before {
+  left: 36px;
 }
 
-.toggle-switch input:checked + .toggle-slider:before {
-  transform: translateX(18px);
+.view-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: #CCCCCC;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0;
+  z-index: 1;
+}
+
+.view-btn:hover {
+  color: #999999;
+}
+
+.view-btn.active {
+  color: var(--accent);
+}
+
+.view-btn svg {
+  width: 18px;
+  height: 18px;
 }
 
 .section-content {
