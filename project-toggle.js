@@ -11,6 +11,26 @@ document.addEventListener('DOMContentLoaded', function() {
     originalHTML.set(item, item.innerHTML);
   });
 
+  // Initialize with grid view
+  projectList.classList.add('card-view');
+  projectItems.forEach(item => {
+    const thumbnail = item.dataset.thumbnail;
+    const name = item.querySelector('.experience-org')?.textContent || '';
+    const awards = item.dataset.awards || '';
+    const oneliner = item.dataset.oneliner || '';
+
+    const cardHTML = `
+      <img src="${thumbnail}" alt="${name}" class="project-card-thumbnail" onerror="this.style.display='none'; this.parentElement.style.background='#f0f0f0';">
+      <div class="project-card-overlay">
+        <div class="project-card-name">${name}</div>
+        <div class="project-card-awards">${awards}</div>
+        <div class="project-card-oneliner">${oneliner}</div>
+      </div>
+    `;
+
+    item.innerHTML = cardHTML;
+  });
+
   viewButtons.forEach(button => {
     button.addEventListener('click', function() {
       const view = this.dataset.view;

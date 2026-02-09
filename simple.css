@@ -63,13 +63,20 @@ body {
   text-decoration: none;
   font-weight: 700;
   letter-spacing: 0.08em;
-  transition: color 0.2s ease;
+  transition: all 0.2s ease;
   position: relative;
   text-transform: uppercase;
+  padding-bottom: 2px;
+  border-bottom: 2px solid transparent;
 }
 
 .nav-button:hover {
   color: var(--accent);
+}
+
+.nav-button.active {
+  color: var(--terracotta);
+  border-bottom-color: var(--terracotta);
 }
 
 .nav-button:active {
