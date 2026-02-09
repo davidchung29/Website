@@ -10,6 +10,9 @@
 :root {
   --accent: #B5AFA0;
   --accent-light: #C7C1B3;
+  --terracotta: #C17A6B;
+  --warm-gray: #6B6B6B;
+  --warm-gray-light: #999999;
 }
 
 body {
@@ -55,13 +58,14 @@ body {
 }
 
 .nav-button {
-  font-size: 14px;
+  font-size: 13px;
   color: #B8E0D4;
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   transition: color 0.2s ease;
   position: relative;
-  text-transform: capitalize;
+  text-transform: uppercase;
 }
 
 .nav-button:hover {
@@ -83,12 +87,23 @@ body {
 }
 
 .bio-text {
-  font-size: 16px;
+  font-family: 'Charter', 'Georgia', 'Iowan Old Style', 'Apple Garamond', 'Baskerville', 'Times New Roman', serif;
+  font-size: 17px;
   line-height: 1.7;
-  color: #333333;
+  color: var(--warm-gray);
   font-weight: 400;
   max-width: 100%;
   margin: 0;
+}
+
+.bio-greeting {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--terracotta);
+  font-style: italic;
+  display: block;
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
 }
 
 .section {
@@ -535,14 +550,14 @@ body {
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: var(--accent);
+  background: #000000;
   color: #ffffff;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
               box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
               background 0.3s ease;
@@ -552,8 +567,8 @@ body {
 
 .fab:hover {
   transform: scale(1.1);
-  background: var(--accent-light);
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+  background: #333333;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
 .fab:active {

@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>David Chung</title>
-  <meta http-equiv="refresh" content="0; url=bio.html">
+  <title>David Chung - Projects</title>
   <link rel="stylesheet" href="simple.css">
   <link rel="stylesheet" href="chat.css">
   <link rel="stylesheet" href="project-preview.css">
@@ -23,94 +22,6 @@
     </div>
 
     <div class="main">
-      <section class="section bio-section" id="bio">
-        <h2 class="section-title">BIO</h2>
-        <p class="bio-text">
-          I'm currently studying Information Systems and Computer Science @ CMU.<br>
-          I'm interested in AI product development, specifically with agentic systems and human-AI interaction design.
-        </p>
-      </section>
-
-      <section class="section" id="work">
-        <h2 class="section-title">WORK</h2>
-        <div class="experience-list">
-          <div class="experience-item clickable-work" data-company-url="https://www.figma.com">
-            <img src="assets/logos/figma.svg" alt="Figma" class="experience-logo figma-logo" />
-            <div class="experience-content">
-              <div class="experience-header">
-                <div class="experience-org">Figma</div>
-                <div class="experience-role">SWE Intern</div>
-              </div>
-              <div class="experience-footer">
-                <div class="experience-desc">Incoming SWE intern.</div>
-                <div class="experience-date">Summer 2026</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="experience-item clickable-work" data-company-url="https://www.felicis.com">
-            <img src="assets/logos/felicis.svg" alt="Felicis" class="experience-logo" />
-            <div class="experience-content">
-              <div class="experience-header">
-                <div class="experience-org">Felicis</div>
-                <div class="experience-role">VC Fellow</div>
-              </div>
-              <div class="experience-footer">
-                <div class="experience-desc">1 of 14 fellows, worked with partners to support founders.</div>
-                <div class="experience-date">Spring 2026</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="experience-item clickable-work" data-company-url="https://valuemate.ai/">
-            <img src="assets/logos/valuemate.svg" alt="ValueMate" class="experience-logo" />
-            <div class="experience-content">
-              <div class="experience-header">
-                <div class="experience-org">ValueMate (YC)</div>
-                <div class="experience-role">AI/ML Intern</div>
-              </div>
-              <div class="experience-footer">
-                <div class="experience-desc">Developed AI agents and infrastructure for real-estate appraisors.</div>
-                <div class="experience-date">Fall 2025</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="experience-item clickable-work" data-company-url="https://www.amazon.com">
-            <img src="assets/logos/amazon.svg" alt="Amazon" class="experience-logo" />
-            <div class="experience-content">
-              <div class="experience-header">
-                <div class="experience-org">Amazon</div>
-                <div class="experience-role">SWE Intern</div>
-              </div>
-              <div class="experience-footer">
-                <div class="experience-desc">Built scalable backend systems for digital payments team.</div>
-                <div class="experience-date">Summer 2025</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="research">
-        <h2 class="section-title">RESEARCH</h2>
-        <div class="experience-list">
-          <div class="experience-item clickable-work" data-company-url="https://www.cmu.edu/teel/projects/ace-ai.html">
-            <img src="assets/logos/aceai.svg" alt="CMU" class="experience-logo" />
-            <div class="experience-content">
-              <div class="experience-header">
-                <div class="experience-org">CMU ACE-AI/TEEL Labs</div>
-                <div class="experience-role">LLM Research Assistant</div>
-              </div>
-              <div class="experience-footer">
-                <div class="experience-desc">Automated learning objective mapping using AI agents.</div>
-                <div class="experience-date">Fall 2025</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section class="section" id="projects">
         <div class="section-header">
           <h2 class="section-title">PROJECTS</h2>
@@ -247,18 +158,18 @@
           <div class="chat-terminal-title">davidchung.io</div>
           <button class="chat-terminal-close" id="chatClose" aria-label="Close chat">×</button>
         </div>
-        
+
         <div class="chat-terminal-content">
           <div class="chat-output" id="chatOutput"></div>
-          
+
           <div class="chat-input-area">
             <div class="chat-input-container">
               <span class="chat-prompt">→</span>
-              <input 
-                type="text" 
-                class="chat-input" 
-                id="chatInput" 
-                placeholder="Ask me anything..." 
+              <input
+                type="text"
+                class="chat-input"
+                id="chatInput"
+                placeholder="Ask me anything..."
                 autocomplete="off"
                 autocapitalize="none"
                 autocorrect="off"
@@ -275,6 +186,5 @@
   <script src="fab.js"></script>
   <script src="project-preview.js"></script>
   <script src="project-toggle.js"></script>
-  <script src="work-links.js"></script>
 </body>
 </html>
