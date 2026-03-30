@@ -282,6 +282,21 @@ body {
   padding: 2px;
 }
 
+.ucr-logo {
+  padding: 0px;
+  position: relative;
+  top: 0.5px;
+  left: 1px;
+}
+
+.valuemate-logo {
+  padding: 0px;
+}
+
+.gclef-logo {
+  padding: 1px;
+}
+
 .experience-item:hover .experience-logo {
   opacity: 1;
   border-color: var(--accent);

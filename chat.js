@@ -58,9 +58,24 @@ window.davidData = {
       ]
     },
     {
-      org: "Carnegie Mellon University TEEL Labs",
+      org: "CMU G-CLef Lab",
+      orgLink: "https://gclef-cmu.org/",
+      role: "Research Intern",
+      location: "Pittsburgh, PA",
+      startDate: "Jan 2026",
+      endDate: "May 2026",
+      period: "Jan 2026 -- May 2026",
+      desc: "Training language models to produce better music",
+      details: [
+        "Developing AI models to generate and improve musical compositions",
+        "Exploring language model applications in music theory and composition",
+        "Working on novel approaches to computational music generation"
+      ]
+    },
+    {
+      org: "CMU TEEL Lab",
       orgLink: "https://www.cmu.edu/teel/projects/ace-ai.html",
-      role: "LLM Research Assistant",
+      role: "Research Intern",
       location: "Pittsburgh, PA",
       startDate: "Sep 2025",
       endDate: "Dec 2025",
@@ -70,6 +85,21 @@ window.davidData = {
         "Research funded by CMU Accenture Center of Excellence for AI",
         "Engineered multi-stage LLM orchestration pipeline with vector embeddings and RAG for automated evaluation",
         "Deployed system analyzing 5,000+ student submissions for learning objective alignment and mastery prediction"
+      ]
+    },
+    {
+      org: "UCR CONPAM Lab",
+      orgLink: "https://www.ucr.edu",
+      role: "Research Intern",
+      location: "Riverside, CA",
+      startDate: "Jun 2024",
+      endDate: "Aug 2024",
+      period: "Jun 2024 -- Aug 2024",
+      desc: "Eye-tracking to neurological attention span using computer vision",
+      details: [
+        "Developed computer vision system to track eye movements and map them to neurological attention patterns",
+        "Analyzed correlation between eye-tracking data and cognitive focus levels",
+        "Implemented real-time processing pipeline for attention span measurement"
       ]
     }
   ],
@@ -171,7 +201,7 @@ window.davidData = {
       fullDescription: "The agentic social food network. You bring your taste. Your friends bring the vibe. AI agents orchestrate the rest."
     },
     {
-      name: "CMU ACE-AI",
+      name: "CMU TEEL Lab",
       link: "https://www.cmu.edu/teel/projects/ace-ai.html",
       githubLink: "",
       demoUrl: "https://www.cmu.edu/teel/projects/ace-ai.html",

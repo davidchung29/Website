@@ -8,7 +8,7 @@ function showWelcomeMessage() {
 hey, its david!
 
 i'm a student at carnegie mellon university (AI + IS).
-currently, i'm building at valuemate (ycx25)
+currently, i'm building at ValueMate (YC X25)
 
 type 'help' to explore available commands.
 </div>`;
@@ -169,7 +169,7 @@ function appendOutput(content) {
 
     i'm a student + full stack engineer who enjoys building creative, scalable systems.
     in my free time, i play bass in a few bands, lift, and spend time with friends and family.
-    currently, i'm an ai  engineer intern at valuemate
+    currently, i'm an ai  engineer intern at ValueMate (YC X25)
 
     i believe in creating software that is not only functional but also 
     intuitive, maintainable, and resilient.
@@ -493,7 +493,7 @@ function showProjectWindow(projectId) {
       `
     },
     'ace-ai': {
-      title: 'CMU ACE-AI - LLM Research Project',
+      title: 'CMU TEEL Lab - LLM Research Project',
       content: `
        <div class="project-window-content">
           <div class="mockly-preview" onclick="window.open('https://www.cmu.edu/teel/projects/ace-ai.html', '_blank')">
@@ -505,7 +505,7 @@ function showProjectWindow(projectId) {
               <iframe
                 class="mockly-preview-iframe"
                 src="https://www.cmu.edu/teel/projects/ace-ai.html"
-                title="CMU ACE-AI Live Preview"
+                title="CMU TEEL Lab Live Preview"
                 loading="lazy"
                 sandbox="allow-scripts allow-same-origin"
                 onload="handleAceAIIframeLoad('desktop')"
@@ -864,7 +864,7 @@ function showProjectModal(projectId) {
       `
     },
     'ace-ai': {
-      title: 'CMU ACE-AI - LLM Research Project',
+      title: 'CMU TEEL Lab - LLM Research Project',
       content: `
        <div class="project-modal-content">
           <div class="mockly-preview" onclick="window.open('https://www.cmu.edu/teel/projects/ace-ai.html', '_blank')">
@@ -876,7 +876,7 @@ function showProjectModal(projectId) {
               <iframe
                 class="mockly-preview-iframe"
                 src="https://www.cmu.edu/teel/projects/ace-ai.html"
-                title="CMU ACE-AI Live Preview"
+                title="CMU TEEL Lab Live Preview"
                 loading="lazy"
                 sandbox="allow-scripts allow-same-origin"
                 onload="handleAceAIIframeLoad('modal')"
@@ -1080,7 +1080,7 @@ window.addEventListener('resize', function() {
       const modalTitle = document.getElementById('modal-title').textContent;
       if (modalTitle.includes('myEyes') || modalTitle.includes('Matrix') ||
           modalTitle.includes('Mockly') || modalTitle.includes('Medicly') ||
-          modalTitle.includes('ACE-AI') ||
+          modalTitle.includes('TEEL Lab') ||
           modalTitle.includes('LinkedIn') || modalTitle.includes('GitHub')) {
         closeModal();
       }
@@ -2286,7 +2286,7 @@ function showAceAIFallback(type) {
   if (container) {
     container.innerHTML = `
       <div class="mockly-preview-fallback">
-        <div class="mockly-preview-logo">CMU ACE-AI</div>
+        <div class="mockly-preview-logo">CMU TEEL Lab</div>
         <div class="mockly-preview-tagline">LLM Research Project</div>
         <div class="mockly-preview-subtitle">Automated learning objective mapping</div>
         <div class="mockly-preview-cta">Click to Visit Site →</div>
