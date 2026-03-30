@@ -233,18 +233,18 @@ body {
 .experience-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
   position: relative;
 }
 
 .experience-item {
   display: flex;
   flex-direction: row;
-  gap: 16px;
+  gap: 14px;
   align-items: flex-start;
   position: relative;
-  padding: 12px;
-  margin: -12px;
+  padding: 10px;
+  margin: -10px;
   border-radius: 8px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -261,25 +261,25 @@ body {
 }
 
 .experience-logo {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   flex-shrink: 0;
   object-fit: contain;
   margin-top: 0px;
   opacity: 0.9;
   background: #fafafa;
-  padding: 6px;
-  border-radius: 8px;
+  padding: 5px;
+  border-radius: 7px;
   border: 1px solid #f0f0f0;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .figma-logo {
-  padding: 4px;
+  padding: 3px;
 }
 
 .felicis-logo {
-  padding: 2px;
+  padding: 1px;
 }
 
 .ucr-logo {
@@ -294,7 +294,7 @@ body {
 }
 
 .gclef-logo {
-  padding: 1px;
+  padding: 0px;
 }
 
 .experience-item:hover .experience-logo {
@@ -307,19 +307,19 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
 }
 
 .experience-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
   width: 100%;
 }
 
 .experience-org {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   letter-spacing: -0.01em;
   color: #000000;
@@ -328,7 +328,7 @@ body {
 }
 
 .experience-header .experience-role {
-  font-size: 15px;
+  font-size: 13px;
   color: #666666;
   font-weight: 500;
   font-style: normal;
@@ -343,12 +343,12 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 16px;
+  gap: 14px;
   width: 100%;
 }
 
 .experience-footer .experience-date {
-  font-size: 14px;
+  font-size: 13px;
   color: #666666;
   font-weight: 400;
   font-style: normal;
@@ -359,7 +359,7 @@ body {
 }
 
 .experience-desc {
-  font-size: 15px;
+  font-size: 14px;
   color: #555555;
   line-height: 1.6;
   font-weight: 400;
@@ -692,25 +692,25 @@ body {
   }
   
   .experience-logo {
-    width: 26px;
-    height: 26px;
+    width: 24px;
+    height: 24px;
   }
-  
+
   .experience-list {
-    gap: 18px;
+    gap: 16px;
   }
-  
+
   .experience-org {
-    font-size: 17px;
+    font-size: 15px;
   }
 
   .experience-role,
   .experience-desc {
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .experience-date {
-    font-size: 13px;
+    font-size: 12px;
   }
   
   .project-list .experience-item {
