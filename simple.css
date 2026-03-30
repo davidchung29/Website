@@ -39,7 +39,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 60px;
+  margin-bottom: 12px;
   padding-bottom: 20px;
 }
 
@@ -90,17 +90,18 @@ body {
 }
 
 .bio-section {
-  margin-bottom: 0;
+  margin-bottom: 16px;
 }
 
 .bio-text {
-  font-family: 'Charter', 'Georgia', 'Iowan Old Style', 'Apple Garamond', 'Baskerville', 'Times New Roman', serif;
-  font-size: 17px;
-  line-height: 1.7;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Display', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.8;
   color: var(--warm-gray);
   font-weight: 400;
   max-width: 100%;
   margin: 0;
+  letter-spacing: 0.3px;
 }
 
 .bio-greeting {
