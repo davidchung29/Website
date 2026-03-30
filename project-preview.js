@@ -257,7 +257,8 @@ class ProjectPreviewPanel {
             return;
           }
 
-          this.open(project, card);
+          // Navigate directly to the demo URL
+          window.open(project.demoUrl, '_blank');
         });
       }
     });

@@ -5,6 +5,21 @@ document.addEventListener('DOMContentLoaded', function() {
   const projectList = document.querySelector('.project-list');
   const projectItems = document.querySelectorAll('.project-list .experience-item');
 
+  // Add click handlers to navigate to demo URL
+  projectItems.forEach(item => {
+    item.addEventListener('click', function(e) {
+      // Don't navigate if clicking on a link or project-link
+      if (e.target.tagName === 'A' || e.target.closest('a') || e.target.closest('.project-link')) {
+        return;
+      }
+      const demoUrl = this.dataset.demo;
+      if (demoUrl) {
+        window.open(demoUrl, '_blank');
+      }
+    });
+    item.style.cursor = 'pointer';
+  });
+
   // Store original list view HTML for each project
   const originalHTML = new Map();
   projectItems.forEach(item => {
