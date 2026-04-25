@@ -89,7 +89,7 @@ window.davidData = {
     },
     {
       org: "UCR CONPAM Lab",
-      orgLink: "https://www.ucr.edu",
+      orgLink: "https://memory.ucr.edu/",
       role: "Research Intern",
       location: "Riverside, CA",
       startDate: "Jun 2024",
