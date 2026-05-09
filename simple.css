@@ -126,11 +126,11 @@ body {
 .main {
   display: flex;
   flex-direction: column;
-  gap: 48px;
+  gap: 40px;
 }
 
 .bio-section {
-  margin-bottom: 16px;
+  margin-bottom: 0px;
 }
 
 .bio-text {
@@ -195,7 +195,7 @@ body {
   font-family: 'Satoshi', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 13px;
   font-weight: 700;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
   letter-spacing: 0.08em;
   color: #B8E0D4;
   text-transform: uppercase;
@@ -613,7 +613,7 @@ body {
 
 .footer {
   text-align: left;
-  padding-top: 48px;
+  padding-top: 32px;
   margin-top: auto;
   display: flex;
   flex-direction: row;
