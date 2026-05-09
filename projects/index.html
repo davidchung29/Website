@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>David Chung - Projects</title>
-  <link rel="stylesheet" href="simple.css">
-  <link rel="stylesheet" href="chat.css">
-  <link rel="stylesheet" href="project-preview.css">
+  <link rel="stylesheet" href="../simple.css">
+  <link rel="stylesheet" href="../chat.css">
+  <link rel="stylesheet" href="../project-preview.css">
 </head>
 <body>
   <div class="app-container">
@@ -14,8 +14,8 @@
     <div class="header">
       <h1>David Chung</h1>
       <nav class="nav-buttons">
-        <a href="experience.html" class="nav-button">experience</a>
-        <a href="projects.html" class="nav-button active">projects</a>
+        <a href="/experience" class="nav-button">experience</a>
+        <a href="/projects" class="nav-button active">projects</a>
         <a href="/David-Chung.pdf" download="David-Chung.pdf" class="nav-button">resume</a>
       </nav>
     </div>
@@ -42,7 +42,7 @@
           </div>
         </div>
         <div class="experience-list project-list">
-          <div class="experience-item clickable-project" data-project="haven" data-github="" data-demo="https://devpost.com/software/haven-536r1q" data-thumbnail="assets/projects/haven/Haven AI Chat.gif" data-oneliner="Multi-agent hospital command center. 1/700+ teams" data-awards="#1 YC, #1 Fetch.ai, #1 LiveKit @ CalHacks">
+          <div class="experience-item clickable-project" data-project="haven" data-github="" data-demo="https://devpost.com/software/haven-536r1q" data-thumbnail="../assets/projects/haven/Haven AI Chat.gif" data-oneliner="Multi-agent hospital command center. 1/700+ teams" data-awards="#1 YC, #1 Fetch.ai, #1 LiveKit @ CalHacks">
             <div class="project-header">
               <div class="project-header-left">
                 <span class="experience-org">Haven</span>
@@ -59,7 +59,7 @@
             </div>
           </div>
 
-          <div class="experience-item clickable-project" data-project="healthier" data-github="" data-demo="https://devpost.com/software/healthier-w0baus" data-thumbnail="assets/projects/nexhacks/demo.gif" data-oneliner="AI-powered elderly care with pill scanning, voice journaling, and 3D tracking. 2/300 teams" data-awards="#2 @ NexHacks">
+          <div class="experience-item clickable-project" data-project="healthier" data-github="" data-demo="https://devpost.com/software/healthier-w0baus" data-thumbnail="../assets/projects/nexhacks/demo.gif" data-oneliner="AI-powered elderly care with pill scanning, voice journaling, and 3D tracking. 2/300 teams" data-awards="#2 @ NexHacks">
             <div class="project-header">
               <div class="project-header-left">
                 <span class="experience-org">Healthier</span>
@@ -76,7 +76,7 @@
             </div>
           </div>
 
-          <div class="experience-item clickable-project" data-project="medicly" data-github="https://github.com/scrappydevs/medicly" data-demo="https://yummy-ideas-956789.framer.app/" data-thumbnail="assets/projects/medicly/medicly demo.gif" data-oneliner="Converts smartphone video into clinician-ready findings. 1/250+ teams. Presented at Palantir." data-awards="#1 @ HackCMU">
+          <div class="experience-item clickable-project" data-project="medicly" data-github="https://github.com/scrappydevs/medicly" data-demo="https://yummy-ideas-956789.framer.app/" data-thumbnail="../assets/projects/medicly/medicly demo.gif" data-oneliner="Converts smartphone video into clinician-ready findings. 1/250+ teams. Presented at Palantir." data-awards="#1 @ HackCMU">
             <div class="project-header">
               <div class="project-header-left">
                 <span class="experience-org">Medicly</span>
@@ -93,7 +93,7 @@
             </div>
           </div>
 
-          <div class="experience-item clickable-project" data-project="yumi" data-github="" data-demo="https://devpost.com/software/yumi" data-thumbnail="assets/projects/yumi/full demo yumi.gif" data-oneliner="Social food network with AI-powered recommendations. 3/180+ teams" data-awards="#3 @ HackHarvard">
+          <div class="experience-item clickable-project" data-project="yumi" data-github="" data-demo="https://devpost.com/software/yumi" data-thumbnail="../assets/projects/yumi/full demo yumi.gif" data-oneliner="Social food network with AI-powered recommendations. 3/180+ teams" data-awards="#3 @ HackHarvard">
             <div class="project-header">
               <div class="project-header-left">
                 <span class="experience-org">Yumi</span>
@@ -126,6 +126,22 @@
               <circle cx="4" cy="4" r="2"></circle>
             </svg>
           </a>
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+            <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
         </div>
       </div>
     </div>
@@ -180,9 +196,10 @@
     </div>
 
   </div>
-  <script src="chat.js"></script>
-  <script src="fab.js"></script>
-  <script src="project-preview.js"></script>
-  <script src="project-toggle.js"></script>
+  <script src="../chat.js"></script>
+  <script src="../fab.js"></script>
+  <script src="../project-preview.js"></script>
+  <script src="../project-toggle.js"></script>
+  <script src="../theme-toggle.js"></script>
 </body>
 </html>

@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>David Chung</title>
-  <meta http-equiv="refresh" content="0; url=experience.html">
-  <script>window.location.replace("experience.html");</script>
+  <meta http-equiv="refresh" content="0; url=/experience">
+  <script>window.location.replace("/experience");</script>
   <link rel="stylesheet" href="simple.css">
   <link rel="stylesheet" href="chat.css">
   <link rel="stylesheet" href="project-preview.css">
@@ -16,8 +16,8 @@
     <div class="header">
       <h1>David Chung</h1>
       <nav class="nav-buttons">
-        <a href="experience.html" class="nav-button">experience</a>
-        <a href="projects.html" class="nav-button">projects</a>
+        <a href="/experience" class="nav-button">experience</a>
+        <a href="/projects" class="nav-button">projects</a>
         <a href="/David-Chung.pdf" download="David-Chung.pdf" class="nav-button">resume</a>
       </nav>
     </div>
@@ -241,6 +241,22 @@
               <circle cx="4" cy="4" r="2"></circle>
             </svg>
           </a>
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+            <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
         </div>
       </div>
     </div>
@@ -300,5 +316,6 @@
   <script src="project-preview.js"></script>
   <script src="project-toggle.js"></script>
   <script src="work-links.js"></script>
+  <script src="theme-toggle.js"></script>
 </body>
 </html>
