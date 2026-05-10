@@ -288,6 +288,7 @@ body {
   padding: 10px;
   margin: -10px;
   border-radius: 8px;
+  background: transparent;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -609,6 +610,235 @@ body {
 .project-list.card-view .project-header,
 .project-list.card-view .project-footer {
   display: none;
+}
+
+/* GitHub Contributions Graph */
+#github-graph {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* Override github-calendar library styles */
+.calendar {
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Display', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  border: none !important;
+  background: transparent !important;
+}
+
+.calendar .contrib-number {
+  font-family: 'Satoshi', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 18px !important;
+  color: var(--text-primary) !important;
+  letter-spacing: -0.02em !important;
+}
+
+.calendar .contrib-column {
+  padding: 0 !important;
+}
+
+.calendar text {
+  fill: var(--text-secondary) !important;
+  font-size: 10px !important;
+}
+
+/* Dark mode for github-calendar */
+[data-theme="dark"] .calendar {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .calendar .color-0 {
+  fill: #161b22 !important;
+}
+
+[data-theme="dark"] .calendar .color-1 {
+  fill: #0e4429 !important;
+}
+
+[data-theme="dark"] .calendar .color-2 {
+  fill: #006d32 !important;
+}
+
+[data-theme="dark"] .calendar .color-3 {
+  fill: #26a641 !important;
+}
+
+[data-theme="dark"] .calendar .color-4 {
+  fill: #39d353 !important;
+}
+
+.github-stats {
+  margin-bottom: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Display', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+}
+
+.github-stats .contrib-number {
+  font-family: 'Satoshi', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.github-stats .contrib-text {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  letter-spacing: -0.01em;
+  text-transform: lowercase;
+}
+
+.contrib-grid {
+  display: flex;
+  gap: 3px;
+  overflow-x: auto;
+  padding: 4px 0;
+}
+
+.contrib-week {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.contrib-cell {
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+  background-color: var(--contrib-level-0);
+  transition: all 0.2s ease;
+  position: relative;
+  cursor: pointer;
+}
+
+.contrib-cell:hover {
+  transform: scale(1.2);
+  z-index: 100;
+}
+
+.contrib-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  font-family: 'SF Mono', 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.contrib-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: var(--text-primary);
+}
+
+.contrib-cell:hover .contrib-tooltip {
+  opacity: 1;
+}
+
+/* Contribution levels */
+:root {
+  --contrib-level-0: #ebedf0;
+  --contrib-level-1: #9be9a8;
+  --contrib-level-2: #40c463;
+  --contrib-level-3: #30a14e;
+  --contrib-level-4: #216e39;
+}
+
+[data-theme="dark"] {
+  --contrib-level-0: #161b22;
+  --contrib-level-1: #0e4429;
+  --contrib-level-2: #006d32;
+  --contrib-level-3: #26a641;
+  --contrib-level-4: #39d353;
+}
+
+.contrib-cell[data-level="0"] {
+  background-color: var(--contrib-level-0);
+}
+
+.contrib-cell[data-level="1"] {
+  background-color: var(--contrib-level-1);
+}
+
+.contrib-cell[data-level="2"] {
+  background-color: var(--contrib-level-2);
+}
+
+.contrib-cell[data-level="3"] {
+  background-color: var(--contrib-level-3);
+}
+
+.contrib-cell[data-level="4"] {
+  background-color: var(--contrib-level-4);
+}
+
+.github-svg-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 8px;
+}
+
+.github-contrib-svg {
+  max-width: 100%;
+  height: auto !important;
+  display: block;
+}
+
+.github-chart-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 8px;
+}
+
+.github-chart-img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Style GitHub's SVG contribution graph */
+.github-contrib-svg text {
+  fill: var(--text-secondary) !important;
+  font-size: 10px !important;
+}
+
+.github-contrib-svg rect {
+  rx: 2 !important;
+}
+
+/* Override GitHub's default colors for dark mode */
+[data-theme="dark"] .github-contrib-svg rect[fill="#ebedf0"] {
+  fill: #161b22 !important;
+}
+
+[data-theme="dark"] .github-contrib-svg rect[fill="#9be9a8"] {
+  fill: #0e4429 !important;
+}
+
+[data-theme="dark"] .github-contrib-svg rect[fill="#40c463"] {
+  fill: #006d32 !important;
+}
+
+[data-theme="dark"] .github-contrib-svg rect[fill="#30a14e"] {
+  fill: #26a641 !important;
+}
+
+[data-theme="dark"] .github-contrib-svg rect[fill="#216e39"] {
+  fill: #39d353 !important;
 }
 
 .footer {
