@@ -5,9 +5,8 @@ document.addEventListener('DOMContentLoaded', function() {
   expandableItems.forEach(item => {
     const header = item.querySelector('.experience-item-header');
     const content = item.querySelector('.expandable-content');
-    const chevron = item.querySelector('.expand-chevron');
 
-    if (!header || !content || !chevron) return;
+    if (!header || !content) return;
 
     header.addEventListener('click', function(e) {
       // Prevent default link behavior
