@@ -12,21 +12,55 @@ import { workExperience, researchExperience } from '../data/displayData';
     <h2 class="section-title">WORK</h2>
     <div class="experience-list">
       {workExperience.map((exp) => (
-        <div class="experience-item clickable-work" data-company-url={exp.companyUrl}>
-          <img src={exp.logo} alt={exp.org} class:list={["experience-logo", exp.logoClass]} />
-          <div class="experience-content">
-            <div class="experience-header">
-              <div class="experience-header-left">
-                <div class="experience-org">{exp.org}</div>
-                <div class="experience-role">{exp.role}</div>
+        'expandableLinks' in exp && exp.expandableLinks ? (
+          <div class="experience-item expandable-item">
+            <img src={exp.logo} alt={exp.org} class:list={["experience-logo", exp.logoClass]} />
+            <div class="experience-content">
+              <div class="experience-header">
+                <div class="experience-header-left">
+                  <div class="experience-org">{exp.org}</div>
+                  <div class="experience-role">{exp.role}</div>
+                </div>
+                <div class="experience-date">{exp.date}</div>
               </div>
-              <div class="experience-date">{exp.date}</div>
-            </div>
-            <div class="experience-footer">
-              <div class="experience-desc">{exp.desc}</div>
+              <div class="experience-footer">
+                <div class="experience-desc">
+                  {exp.desc}
+                  <div class="expandable-content">
+                    <div class="expandable-links">
+                      {exp.expandableLinks.map((link) => (
+                        <a href={link.url} target="_blank" rel="noopener noreferrer" class="expandable-link">
+                          <span class="expandable-link-text">{link.text}</span>
+                          <svg class="expandable-link-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                            <polyline points="15 3 21 3 21 9"></polyline>
+                            <line x1="10" y1="14" x2="21" y2="3"></line>
+                          </svg>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div class="experience-item clickable-work" data-company-url={exp.companyUrl}>
+            <img src={exp.logo} alt={exp.org} class:list={["experience-logo", exp.logoClass]} />
+            <div class="experience-content">
+              <div class="experience-header">
+                <div class="experience-header-left">
+                  <div class="experience-org">{exp.org}</div>
+                  <div class="experience-role">{exp.role}</div>
+                </div>
+                <div class="experience-date">{exp.date}</div>
+              </div>
+              <div class="experience-footer">
+                <div class="experience-desc">{exp.desc}</div>
+              </div>
+            </div>
+          </div>
+        )
       ))}
     </div>
   </section>

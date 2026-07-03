@@ -9,7 +9,11 @@ export const workExperience = [
     role: "SWE Intern",
     desc: "AI Product - Code Layers",
     date: "Summer 2026",
-    companyUrl: "https://www.figma.com/blog/introducing-code-layers/"
+    companyUrl: "https://www.figma.com/blog/introducing-code-layers/",
+    expandableLinks: [
+      { text: "Keynote Demo", url: "https://www.youtube.com/live/2ZCc4k_IV5w?si=w_6-dS3iRNfnXWTF&t=983" },
+      { text: "Team", url: "https://www.figma.com/blog/introducing-code-layers/" }
+    ]
   },
   {
     org: "Felicis",
