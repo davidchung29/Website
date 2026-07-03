@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { projectsDisplay } from '../data/displayData';
+---
+
+<BaseLayout title="David Chung - Projects" activePage="projects">
+  <section class="section" id="projects">
+    <div class="section-header">
+      <div class="view-selector grid-active">
+        <button class="view-btn" data-view="list" aria-label="List view">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+        <button class="view-btn active" data-view="grid" aria-label="Grid view">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="experience-list project-list">
+      {projectsDisplay.map((project) => (
+        <div
+          class="experience-item clickable-project"
+          data-project={project.projectKey}
+          data-github={project.githubUrl}
+          data-demo={project.demoUrl}
+          data-thumbnail={project.thumbnail}
+          data-oneliner={project.oneliner}
+          data-awards={project.awards}
+        >
+          <div class="project-header">
+            <div class="project-header-left">
+              <span class="experience-org">{project.name}</span>
+              <span class="experience-role">{project.awards}</span>
+            </div>
+            <div class="project-links">
+              {project.githubUrl && (
+                <a href={project.githubUrl} target="_blank" class="project-link">github</a>
+              )}
+              {project.demoUrl && project.demoUrl !== project.githubUrl && (
+                <a href={project.demoUrl} target="_blank" class="project-link">
+                  {project.demoUrl.includes('devpost') ? 'devpost' : 'website'}
+                </a>
+              )}
+            </div>
+          </div>
+          <div class="project-footer">
+            <span class="experience-desc">{project.desc}</span>
+            <span class="experience-date">{project.date}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<script is:inline src="/scripts/project-toggle.js"></script>

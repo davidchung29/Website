@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { workExperience, researchExperience } from '../data/displayData';
+---
+
+<BaseLayout title="David Chung - Experience" activePage="experience">
+  <section class="section bio-section">
+    <p class="bio-text">Studying Information Systems and Computer Science at Carnegie Mellon</p>
+  </section>
+
+  <section class="section" id="work">
+    <h2 class="section-title">WORK</h2>
+    <div class="experience-list">
+      {workExperience.map((exp) => (
+        <div class="experience-item clickable-work" data-company-url={exp.companyUrl}>
+          <img src={exp.logo} alt={exp.org} class:list={["experience-logo", exp.logoClass]} />
+          <div class="experience-content">
+            <div class="experience-header">
+              <div class="experience-header-left">
+                <div class="experience-org">{exp.org}</div>
+                <div class="experience-role">{exp.role}</div>
+              </div>
+              <div class="experience-date">{exp.date}</div>
+            </div>
+            <div class="experience-footer">
+              <div class="experience-desc">{exp.desc}</div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="section" id="research">
+    <h2 class="section-title">RESEARCH</h2>
+    <div class="experience-list">
+      {researchExperience.map((exp) => (
+        <div class="experience-item clickable-work" data-company-url={exp.companyUrl}>
+          <img src={exp.logo} alt={exp.org} class:list={["experience-logo", exp.logoClass]} />
+          <div class="experience-content">
+            <div class="experience-header">
+              <div class="experience-header-left">
+                <div class="experience-org">{exp.org}</div>
+                <div class="experience-role">{exp.role}</div>
+              </div>
+              <div class="experience-date">{exp.date}</div>
+            </div>
+            <div class="experience-footer">
+              <div class="experience-desc">{exp.desc}</div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
