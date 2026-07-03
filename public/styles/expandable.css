@@ -1,0 +1,119 @@
+/* Apple-style expandable experience items */
+
+.expandable-item {
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.experience-item-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  position: relative;
+}
+
+.expandable-item .experience-content {
+  flex: 1;
+}
+
+.expand-chevron {
+  margin-top: 8px;
+  flex-shrink: 0;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0.6;
+}
+
+.expandable-item.expanded .expand-chevron {
+  transform: rotate(180deg);
+}
+
+.expandable-item:hover .expand-chevron {
+  opacity: 1;
+}
+
+.expandable-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-top: 0;
+}
+
+.expandable-item.expanded .expandable-content {
+  margin-top: 16px;
+}
+
+.expandable-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-left: 60px; /* Align with content after logo */
+}
+
+.expandable-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: var(--bg-secondary, #f5f5f7);
+  border-radius: 12px;
+  text-decoration: none;
+  color: var(--text-primary, #1d1d1f);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 15px;
+  font-weight: 500;
+  border: 1px solid transparent;
+}
+
+.expandable-link:hover {
+  background: var(--bg-hover, #e8e8ed);
+  transform: translateX(4px);
+  border-color: var(--border-color, #d2d2d7);
+}
+
+.expandable-link:active {
+  transform: translateX(2px) scale(0.98);
+}
+
+.expandable-link-text {
+  flex: 1;
+}
+
+.expandable-link-arrow {
+  flex-shrink: 0;
+  opacity: 0.6;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.expandable-link:hover .expandable-link-arrow {
+  opacity: 1;
+  transform: translateX(4px);
+}
+
+/* Dark mode support */
+html[data-theme="dark"] .expandable-link {
+  background: rgba(255, 255, 255, 0.06);
+  color: #f5f5f7;
+  border-color: transparent;
+}
+
+html[data-theme="dark"] .expandable-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .expandable-links {
+    padding-left: 0;
+  }
+
+  .expandable-link {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+}
+
+/* Smooth transitions for items being pushed down */
+.experience-item {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
