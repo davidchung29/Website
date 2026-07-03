@@ -7,9 +7,9 @@ export const workExperience = [
     logo: "/assets/logos/figma.svg",
     logoClass: "figma-logo",
     role: "SWE Intern",
-    desc: "AI Product - Make Canvas team",
+    desc: "AI Product - Code Layers",
     date: "Summer 2026",
-    companyUrl: "https://www.figma.com"
+    companyUrl: "https://www.figma.com/blog/introducing-code-layers/"
   },
   {
     org: "Felicis",
@@ -18,7 +18,7 @@ export const workExperience = [
     role: "VC Fellow",
     desc: "1 of 13 fellows, worked with partners to support founders",
     date: "Spring 2026",
-    companyUrl: "https://www.felicis.com"
+    companyUrl: "https://www.felicis.com/fellows"
   },
   {
     org: "ValueMate (YC X25)",
