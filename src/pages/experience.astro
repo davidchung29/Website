@@ -37,18 +37,18 @@ import { workExperience, researchExperience } from '../data/displayData';
       {researchExperience.map((exp) => (
         exp.org === "CMU G-CLef Lab" ? (
           <div class="experience-item expandable-item" data-expandable="gclef">
-            <div class="experience-item-header">
-              <img src={exp.logo} alt={exp.org} class:list={["experience-logo", exp.logoClass]} />
-              <div class="experience-content">
-                <div class="experience-header">
-                  <div class="experience-header-left">
-                    <div class="experience-org">{exp.org}</div>
-                    <div class="experience-role">{exp.role}</div>
-                  </div>
-                  <div class="experience-date">{exp.date}</div>
+            <img src={exp.logo} alt={exp.org} class:list={["experience-logo", exp.logoClass]} />
+            <div class="experience-content">
+              <div class="experience-header">
+                <div class="experience-header-left">
+                  <div class="experience-org">{exp.org}</div>
+                  <div class="experience-role">{exp.role}</div>
                 </div>
-                <div class="experience-footer">
-                  <div class="experience-desc">{exp.desc}</div>
+                <div class="experience-date">{exp.date}</div>
+              </div>
+              <div class="experience-footer">
+                <div class="experience-desc">
+                  {exp.desc}
                   <div class="expandable-content">
                     <div class="expandable-links">
                       <a href="https://arxiv.org/abs/2607.01849" target="_blank" rel="noopener noreferrer" class="expandable-link">

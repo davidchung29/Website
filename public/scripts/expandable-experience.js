@@ -3,13 +3,17 @@ document.addEventListener('DOMContentLoaded', function() {
   const expandableItems = document.querySelectorAll('.expandable-item');
 
   expandableItems.forEach(item => {
-    const header = item.querySelector('.experience-item-header');
     const content = item.querySelector('.expandable-content');
 
-    if (!header || !content) return;
+    if (!content) return;
 
-    header.addEventListener('click', function(e) {
-      // Prevent default link behavior
+    item.addEventListener('click', function(e) {
+      // Don't toggle if clicking on a link
+      if (e.target.closest('.expandable-link')) {
+        return;
+      }
+
+      // Prevent default behavior
       e.preventDefault();
       e.stopPropagation();
 
@@ -40,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
 
-    // Prevent link clicks from bubbling to header
+    // Prevent link clicks from bubbling to item
     const links = content.querySelectorAll('.expandable-link');
     links.forEach(link => {
       link.addEventListener('click', function(e) {

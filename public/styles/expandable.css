@@ -5,17 +5,6 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.experience-item-header {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  position: relative;
-}
-
-.expandable-item .experience-content {
-  flex: 1;
-}
-
 .expandable-content {
   max-height: 0;
   overflow: hidden;
@@ -24,7 +13,7 @@
 }
 
 .expandable-item.expanded .expandable-content {
-  margin-top: 8px;
+  margin-top: 4px;
 }
 
 .expandable-links {
