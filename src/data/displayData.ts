@@ -48,7 +48,12 @@ export const researchExperience = [
     role: "Research Intern",
     desc: "Training language models to produce better music",
     date: "Spring 2026",
-    companyUrl: "https://gclef-cmu.org/"
+    companyUrl: "https://gclef-cmu.org/",
+    expandableLinks: [
+      { text: "Paper [Preprint]", url: "https://arxiv.org/abs/2607.01849" },
+      { text: "Website", url: "https://yewon-kim.com/decomposer/" },
+      { text: "Lab", url: "https://gclef-cmu.org/" }
+    ]
   },
   {
     org: "University of Pittsburgh Medical Center",

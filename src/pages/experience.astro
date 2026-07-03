@@ -35,8 +35,8 @@ import { workExperience, researchExperience } from '../data/displayData';
     <h2 class="section-title">RESEARCH</h2>
     <div class="experience-list">
       {researchExperience.map((exp) => (
-        exp.org === "CMU G-CLef Lab" ? (
-          <div class="experience-item expandable-item" data-expandable="gclef">
+        'expandableLinks' in exp && exp.expandableLinks ? (
+          <div class="experience-item expandable-item">
             <img src={exp.logo} alt={exp.org} class:list={["experience-logo", exp.logoClass]} />
             <div class="experience-content">
               <div class="experience-header">
@@ -51,30 +51,16 @@ import { workExperience, researchExperience } from '../data/displayData';
                   {exp.desc}
                   <div class="expandable-content">
                     <div class="expandable-links">
-                      <a href="https://arxiv.org/abs/2607.01849" target="_blank" rel="noopener noreferrer" class="expandable-link">
-                        <span class="expandable-link-text">Paper [Preprint]</span>
-                        <svg class="expandable-link-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                          <polyline points="15 3 21 3 21 9"></polyline>
-                          <line x1="10" y1="14" x2="21" y2="3"></line>
-                        </svg>
-                      </a>
-                      <a href="https://yewon-kim.com/decomposer/" target="_blank" rel="noopener noreferrer" class="expandable-link">
-                        <span class="expandable-link-text">Website</span>
-                        <svg class="expandable-link-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                          <polyline points="15 3 21 3 21 9"></polyline>
-                          <line x1="10" y1="14" x2="21" y2="3"></line>
-                        </svg>
-                      </a>
-                      <a href="https://gclef-cmu.org/" target="_blank" rel="noopener noreferrer" class="expandable-link">
-                        <span class="expandable-link-text">Lab</span>
-                        <svg class="expandable-link-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                          <polyline points="15 3 21 3 21 9"></polyline>
-                          <line x1="10" y1="14" x2="21" y2="3"></line>
-                        </svg>
-                      </a>
+                      {exp.expandableLinks.map((link) => (
+                        <a href={link.url} target="_blank" rel="noopener noreferrer" class="expandable-link">
+                          <span class="expandable-link-text">{link.text}</span>
+                          <svg class="expandable-link-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                            <polyline points="15 3 21 3 21 9"></polyline>
+                            <line x1="10" y1="14" x2="21" y2="3"></line>
+                          </svg>
+                        </a>
+                      ))}
                     </div>
                   </div>
                 </div>
