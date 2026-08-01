@@ -45,7 +45,7 @@
 }
 
 .chat-terminal-title {
-  font-family: 'SF Mono', 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
+  font-family: var(--font-mono);
   font-size: 12px;
   font-weight: 500;
   color: #999999;
@@ -68,7 +68,7 @@
   border-radius: 4px;
   transition: all 0.2s ease;
   line-height: 1;
-  font-family: 'SF Mono', 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
+  font-family: var(--font-mono);
 }
 
 .chat-terminal-close:hover {
@@ -87,7 +87,7 @@
   flex: 1;
   padding: 16px;
   overflow-y: auto;
-  font-family: 'SF Mono', 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
+  font-family: var(--font-mono);
   font-size: 13px;
   line-height: 1.6;
   color: #ffffff;
@@ -128,7 +128,7 @@
 .chat-prompt {
   color: #00ff41;
   font-weight: 600;
-  font-family: 'SF Mono', 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
+  font-family: var(--font-mono);
   font-size: 13px;
   letter-spacing: 0.05em;
   flex-shrink: 0;
@@ -139,7 +139,7 @@
   border: none;
   outline: none;
   background: transparent;
-  font-family: 'SF Mono', 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
+  font-family: var(--font-mono);
   font-size: 13px;
   color: #ffffff;
   letter-spacing: 0.02em;
@@ -183,7 +183,7 @@
   background: #1a1a1a;
   border-left: 2px solid #00ff41;
   border-radius: 2px;
-  font-family: 'SF Mono', 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
+  font-family: var(--font-mono);
   font-size: 11px;
   color: #00ff41;
   font-weight: 500;

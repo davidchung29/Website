@@ -16,22 +16,16 @@ export const workExperience = [
     ]
   },
   {
-    org: "Felicis",
-    logo: "/assets/logos/felicis.svg",
-    logoClass: "felicis-logo",
-    role: "VC Fellow",
-    desc: "1 of 13 fellows, worked with partners to support founders",
-    date: "Spring 2026",
-    companyUrl: "https://www.felicis.com/fellows"
-  },
-  {
     org: "ValueMate (YC X25)",
     logo: "/assets/logos/valuemate.svg",
     logoClass: "valuemate-logo",
     role: "AI Engineer Intern",
     desc: "Developed AI agents and infrastructure for real-estate appraisors",
     date: "Fall 2025",
-    companyUrl: "https://valuemate.ai/"
+    companyUrl: "https://valuemate.ai/",
+    expandableLinks: [
+      { text: "View ValueMate", url: "https://valuemate.ai/" }
+    ]
   },
   {
     org: "Amazon",
@@ -40,7 +34,10 @@ export const workExperience = [
     role: "SWE Intern",
     desc: "Built scalable backend systems for digital payments team",
     date: "Summer 2025",
-    companyUrl: "https://www.amazon.com"
+    companyUrl: "https://www.amazon.com",
+    expandableLinks: [
+      { text: "View Amazon", url: "https://www.amazon.com" }
+    ]
   }
 ];
 
@@ -66,7 +63,10 @@ export const researchExperience = [
     role: "Research Engineer",
     desc: "Developing Multimodal VLMs for Resuscitation in ICUs",
     date: "Spring 2026",
-    companyUrl: "https://www.upmc.com/"
+    companyUrl: "https://www.upmc.com/",
+    expandableLinks: [
+      { text: "Safar Symposium Abstract", url: "https://www.safar.pitt.edu/wp-content/uploads/2026/04/2026-TRD-ABSTRACT-BOOKLET-final-v2.pdf" }
+    ]
   },
   {
     org: "CMU TEEL Lab",
@@ -75,7 +75,10 @@ export const researchExperience = [
     role: "Research Intern",
     desc: "Automated learning objective mapping using AI agents",
     date: "Fall 2025",
-    companyUrl: "https://www.cmu.edu/teel/projects/ace-ai.html"
+    companyUrl: "https://www.cmu.edu/teel/projects/ace-ai.html",
+    expandableLinks: [
+      { text: "Lab", url: "https://www.cmu.edu/teel/" }
+    ]
   },
   {
     org: "UCR CONPAM Lab",
@@ -84,7 +87,25 @@ export const researchExperience = [
     role: "Research Intern",
     desc: "Eye-tracking to neurological attention span using computer vision",
     date: "Summer 2024",
-    companyUrl: "https://memory.ucr.edu/"
+    companyUrl: "https://memory.ucr.edu/",
+    expandableLinks: [
+      { text: "Lab", url: "https://memory.ucr.edu/" }
+    ]
+  }
+];
+
+export const otherExperience = [
+  {
+    org: "Felicis",
+    logo: "/assets/logos/felicis.svg",
+    logoClass: "felicis-logo",
+    role: "VC Fellow",
+    desc: "1 of 13 fellows, worked with partners to support founders",
+    date: "Spring 2026",
+    companyUrl: "https://www.felicis.com/fellows",
+    expandableLinks: [
+      { text: "About Fellowship", url: "https://www.felicis.com/fellows" }
+    ]
   }
 ];
 
