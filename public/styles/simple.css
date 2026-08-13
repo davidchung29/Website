@@ -567,6 +567,8 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  /* Anchor to the top so titles in tall thumbnails aren't cropped mid-line */
+  object-position: top center;
   display: block;
 }
 
