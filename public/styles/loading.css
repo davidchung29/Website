@@ -21,9 +21,9 @@
 
 .loading-bar-container {
   width: 300px;
-  height: 4px;
+  height: 6px;
   background: var(--bg-tertiary);
-  border-radius: 2px;
+  border-radius: 3px;
   overflow: hidden;
   position: relative;
 }
@@ -31,29 +31,22 @@
 .loading-bar {
   height: 100%;
   width: 0%;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    var(--text-primary) 50%,
-    transparent 100%
-  );
-  background-size: 200% 100%;
-  border-radius: 2px;
+  background: var(--text-primary);
+  border-radius: 3px;
   transition: width 0.3s ease;
-  animation: shimmer 1.5s infinite;
-  opacity: 0.6;
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
 }
 
 /* Ensure body doesn't scroll during loading */
 body.loading {
   overflow: hidden;
+}
+
+/* Repeat visits in the same session: no loading screen at all.
+   Set in <head> before first paint, so nothing flashes. */
+.skip-loading .loading-screen {
+  display: none;
+}
+
+.skip-loading body.loading {
+  overflow: visible;
 }

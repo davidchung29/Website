@@ -43,19 +43,19 @@
   --warm-gray: #999999;
   --warm-gray-light: #6B6B6B;
 
-  /* Dark mode colors */
-  --bg-primary: #0a0a0a;
-  --bg-secondary: #1a1a1a;
-  --bg-tertiary: rgba(255, 255, 255, 0.04);
-  --text-primary: #ffffff;
-  --text-secondary: #a0a0a0;
-  --text-tertiary: #b0b0b0;
-  --border-color: #2a2a2a;
+  /* Dark mode colors — warm charcoal, softened off pure black/white */
+  --bg-primary: #1c1a18;
+  --bg-secondary: #262320;
+  --bg-tertiary: rgba(255, 255, 255, 0.05);
+  --text-primary: #ededed;
+  --text-secondary: #a8a29b;
+  --text-tertiary: #b8b2ab;
+  --border-color: #35312d;
   --shadow-sm: rgba(0, 0, 0, 0.3);
   --shadow-md: rgba(0, 0, 0, 0.5);
-  --fab-bg: #ffffff;
-  --fab-hover: #e0e0e0;
-  --fab-text: #000000;
+  --fab-bg: #ededed;
+  --fab-hover: #d4cfc8;
+  --fab-text: #1c1a18;
 }
 
 body {
@@ -551,6 +551,9 @@ body {
   border-radius: 12px;
   overflow: hidden;
   background: var(--bg-secondary);
+  /* Slight shade so light thumbnails don't blend into the page */
+  border: 1px solid var(--border-color);
+  box-shadow: 0 1px 3px var(--shadow-sm);
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
               box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
@@ -909,6 +912,70 @@ body {
 .theme-toggle svg {
   width: 100%;
   height: 100%;
+}
+
+/* Warmth Slider — warm (left) to cool (right) */
+.warmth-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 64px;
+  height: 7px;
+  border-radius: 3.5px;
+  background: linear-gradient(
+    to right,
+    #e8a25c 0%,
+    #d9c9a8 35%,
+    #c9cdd4 65%,
+    #7fa8d4 100%
+  );
+  outline: none;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+  vertical-align: middle;
+  transition: opacity 0.25s ease;
+  opacity: 0.85;
+}
+
+.warmth-slider:hover {
+  opacity: 1;
+}
+
+.warmth-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--bg-primary);
+  border: 2px solid var(--text-primary);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.warmth-slider::-webkit-slider-thumb:hover {
+  /* Grow by exactly 1px: 12px -> 13px */
+  transform: scale(1.0833);
+}
+
+.warmth-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--bg-primary);
+  border: 2px solid var(--text-primary);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.warmth-slider::-moz-range-thumb:hover {
+  /* Grow by exactly 1px: 12px -> 13px */
+  transform: scale(1.0833);
+}
+
+.warmth-slider:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
 
 /* Floating Action Button */

@@ -7,7 +7,7 @@ export const workExperience = [
     logo: "/assets/logos/figma.svg",
     logoClass: "figma-logo",
     role: "SWE Intern",
-    desc: "AI Product - Code Layers",
+    desc: "ML/Evals for Editor and Product for Code Layers",
     date: "Summer 2026",
     companyUrl: "https://www.figma.com/blog/introducing-code-layers/",
     expandableLinks: [
@@ -43,11 +43,11 @@ export const workExperience = [
 
 export const researchExperience = [
   {
-    org: "CMU G-CLef Lab",
+    org: "CMU Generative Creativity Lab",
     logo: "/assets/logos/gclef.png",
     logoClass: "gclef-logo",
     role: "Research Intern",
-    desc: "Training language models to produce better music",
+    desc: "Generative model development for creative tasks",
     date: "Spring 2026",
     companyUrl: "https://gclef-cmu.org/",
     expandableLinks: [
@@ -65,19 +65,7 @@ export const researchExperience = [
     date: "Spring 2026",
     companyUrl: "https://www.upmc.com/",
     expandableLinks: [
-      { text: "Safar Symposium Abstract", url: "https://www.safar.pitt.edu/wp-content/uploads/2026/04/2026-TRD-ABSTRACT-BOOKLET-final-v2.pdf" }
-    ]
-  },
-  {
-    org: "CMU TEEL Lab",
-    logo: "/assets/logos/aceai.svg",
-    logoClass: "",
-    role: "Research Intern",
-    desc: "Automated learning objective mapping using AI agents",
-    date: "Fall 2025",
-    companyUrl: "https://www.cmu.edu/teel/projects/ace-ai.html",
-    expandableLinks: [
-      { text: "Lab", url: "https://www.cmu.edu/teel/" }
+      { text: "Abstract [Presented @ Safar Symposium]", url: "https://www.safar.pitt.edu/wp-content/uploads/2026/04/2026-TRD-ABSTRACT-BOOKLET-final-v2.pdf" }
     ]
   },
   {
@@ -110,6 +98,17 @@ export const otherExperience = [
 ];
 
 export const projectsDisplay = [
+  {
+    name: "Decomposer",
+    awards: "CMU Generative Creativity Lab",
+    desc: "Post-training framework for symbolic music decompilation, recovering editable Strudel programs from MIDI",
+    date: "Spring 2026",
+    thumbnail: "/assets/projects/decomposer/preview.png",
+    oneliner: "Post-training framework for symbolic music decompilation, recovering editable Strudel programs from MIDI",
+    githubUrl: "",
+    demoUrl: "https://yewon-kim.com/decomposer/",
+    projectKey: "Decomposer"
+  },
   {
     name: "VLM Sandbox",
     awards: "Safar Resuscitation Symposium",

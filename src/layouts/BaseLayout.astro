@@ -14,6 +14,62 @@ const { title, activePage } = Astro.props;
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title}</title>
   <link rel="stylesheet" href="/styles/main.css">
+  <script is:inline>
+    // Everything here runs before first paint, so navigating between pages
+    // never flashes the wrong theme, warmth, or loading screen.
+    (function () {
+      var html = document.documentElement;
+
+      try {
+        if (sessionStorage.getItem('hasLoaded')) {
+          html.classList.add('skip-loading');
+        }
+      } catch (e) {
+        // sessionStorage unavailable (private mode) — show the loading screen.
+      }
+
+      try {
+        // Theme first: warmth is interpolated from the active theme's palette.
+        if (localStorage.getItem('theme') === 'dark') {
+          html.setAttribute('data-theme', 'dark');
+        }
+
+        var warmth = parseInt(localStorage.getItem('warmth'), 10);
+        if (warmth) {
+          var P = {
+            light: {
+              warm: ['#faf3e8', '#f3ead9', '#e8dcc6'],
+              neutral: ['#ffffff', '#fafafa', '#f0f0f0'],
+              cool: ['#f2f6fb', '#e9eff7', '#dae3ef']
+            },
+            dark: {
+              warm: ['#241f19', '#2e2820', '#3d362c'],
+              neutral: ['#1c1a18', '#262320', '#35312d'],
+              cool: ['#16191f', '#1f242c', '#2d333d']
+            }
+          }[html.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'];
+
+          var t = Math.abs(warmth) / 100;
+          var target = warmth < 0 ? P.warm : P.cool;
+          var vars = ['--bg-primary', '--bg-secondary', '--border-color'];
+
+          for (var i = 0; i < 3; i++) {
+            var a = parseInt(P.neutral[i].slice(1), 16);
+            var b = parseInt(target[i].slice(1), 16);
+            var c = '#';
+            for (var s = 16; s >= 0; s -= 8) {
+              var ca = (a >> s) & 255;
+              var v = Math.round(ca + (((b >> s) & 255) - ca) * t);
+              c += (v < 16 ? '0' : '') + v.toString(16);
+            }
+            html.style.setProperty(vars[i], c);
+          }
+        }
+      } catch (e) {
+        // localStorage unavailable — fall back to the default palette.
+      }
+    })();
+  </script>
 </head>
 <body class="loading">
   <!-- Loading Screen -->
@@ -68,6 +124,18 @@ const { title, activePage } = Astro.props;
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
             </svg>
           </button>
+
+          <input
+            type="range"
+            class="warmth-slider"
+            id="warmthSlider"
+            min="-100"
+            max="100"
+            value="0"
+            step="1"
+            aria-label="Adjust color warmth"
+            title="Adjust warmth"
+          />
         </div>
       </div>
     </div>
@@ -121,6 +189,7 @@ const { title, activePage } = Astro.props;
 
   <script is:inline src="/scripts/loading.js"></script>
   <script is:inline src="/scripts/theme-toggle.js"></script>
+  <script is:inline src="/scripts/warmth-slider.js"></script>
   <script is:inline src="/scripts/fab.js"></script>
   <script is:inline src="/scripts/chat.js"></script>
   <script is:inline src="/scripts/work-links.js"></script>
