@@ -96,6 +96,13 @@ const { title, activePage } = Astro.props;
 
       <div class="footer">
         <div class="social-links">
+          <button class="social-link email-copy" id="emailCopy" data-email="dichung@andrew.cmu.edu" aria-label="Copy email address">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+            </svg>
+            <span class="email-copied" aria-hidden="true">Copied email</span>
+          </button>
           <a href="https://github.com/davidchung29" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="GitHub">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
@@ -187,11 +194,40 @@ const { title, activePage } = Astro.props;
     </div>
   </div>
 
+  <div class="bento-overlay" id="bentoOverlay" hidden>
+    <div class="bento-modal" role="dialog" aria-modal="true" aria-labelledby="bentoTitle" tabindex="-1">
+      <button class="bento-close" id="bentoClose" aria-label="Close">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <div class="bento-pager" id="bentoPager" role="tablist" aria-label="Views"></div>
+      <div class="bento-grid">
+        <section class="bento-panel bento-primary bento-panel--media">
+          <div class="bento-media-stack" id="bentoMedia"></div>
+        </section>
+        <section class="bento-panel bento-secondary">
+          <div class="bento-panel-inner">
+            <div class="bento-head">
+              <h2 class="bento-title" id="bentoTitle"></h2>
+              <p class="bento-subtitle" id="bentoSubtitle"></p>
+              <div class="bento-links" id="bentoLinks"></div>
+            </div>
+            <div class="bento-copy" id="bentoCopy"></div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
   <script is:inline src="/scripts/loading.js"></script>
   <script is:inline src="/scripts/theme-toggle.js"></script>
+  <script is:inline src="/scripts/email-copy.js"></script>
   <script is:inline src="/scripts/warmth-slider.js"></script>
   <script is:inline src="/scripts/fab.js"></script>
   <script is:inline src="/scripts/chat.js"></script>
   <script is:inline src="/scripts/work-links.js"></script>
+  <script is:inline src="/scripts/bento-modal.js"></script>
 </body>
 </html>

@@ -10,6 +10,32 @@ export const workExperience = [
     desc: "ML/Evals for Editor and Product for Code Layers",
     date: "Summer 2026",
     companyUrl: "https://www.figma.com/blog/introducing-code-layers/",
+    // Opens the bento modal instead of expanding inline
+    modal: true,
+    // Each entry is one scroll view inside the modal: media on the left,
+    // project copy on the right.
+    modalViews: [
+      {
+        media: {
+          type: "youtube",
+          // youtube.com/embed + start seconds; the watch URL cannot be framed.
+          // muted=1 is required — browsers block autoplay with sound.
+          // enablejsapi=1 lets a click be forwarded as a playback command,
+          // so the frame can stay non-interactive and the wheel stays ours.
+          src: "https://www.youtube.com/embed/2ZCc4k_IV5w?start=983&autoplay=1&mute=1&rel=0&enablejsapi=1"
+        },
+        heading: "Project 1",
+        description: "Worked on the Editor screen for Figma Make, including device frame support, updated information bar, and on canvas interactions in the design canvas. Ramped to 100% in prod, shipped in 2.5 weeks."
+      },
+      {
+        media: {
+          type: "tweet",
+          src: "https://x.com/figma/status/2082913429765968109"
+        },
+        heading: "Project 2",
+        description: "Built a repository classifier for web apps, allowing for faster agent turns for Direct Manipulation edits in Figma Make, dropped -11% p50 and -57% p95"
+      }
+    ],
     expandableLinks: [
       { text: "Keynote Demo", url: "https://www.youtube.com/live/2ZCc4k_IV5w?si=w_6-dS3iRNfnXWTF&t=983" },
       { text: "Team", url: "https://www.figma.com/blog/introducing-code-layers/" }
@@ -38,6 +64,19 @@ export const workExperience = [
     expandableLinks: [
       { text: "View Amazon", url: "https://www.amazon.com" }
     ]
+  }
+];
+
+export const educationExperience = [
+  {
+    org: "Carnegie Mellon University",
+    logo: "/assets/logos/cmu.svg",
+    logoClass: "cmu-logo",
+    role: "Computer Science and Information Systems",
+    desc: "Computer Science and Information Systems",
+    date: "2024-2028",
+    companyUrl: "https://www.cmu.edu/",
+    expandableLinks: []
   }
 ];
 

@@ -226,7 +226,7 @@ body.dragging-divider .preview-iframe {
 }
 
 .preview-fallback-button:hover {
-  transform: scale(1.05);
+  opacity: 0.85;
 }
 
 .preview-fallback-button svg {
@@ -340,12 +340,11 @@ body.dragging-divider .page {
 }
 
 .project-list .experience-item:hover {
-  transform: translateX(4px);
   background: rgba(0, 0, 0, 0.02);
 }
 
 .project-list .experience-item:active {
-  transform: translateX(2px) scale(0.98);
+  background: rgba(0, 0, 0, 0.04);
 }
 
 /* Animation states */

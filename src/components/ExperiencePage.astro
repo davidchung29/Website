@@ -1,15 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ExperienceSection from './ExperienceSection.astro';
-import { workExperience, researchExperience, otherExperience } from '../data/displayData';
+import { workExperience, educationExperience, researchExperience, otherExperience } from '../data/displayData';
 ---
 
 <BaseLayout title="David Chung - Experience" activePage="experience">
-  <section class="section bio-section">
-    <p class="bio-text">Studying Information Systems and Computer Science at Carnegie Mellon</p>
-  </section>
-
   <ExperienceSection title="WORK" id="work" entries={workExperience} />
+  <ExperienceSection title="EDUCATION" id="education" entries={educationExperience} />
   <ExperienceSection title="RESEARCH" id="research" entries={researchExperience} />
   <ExperienceSection title="OTHER" id="other" entries={otherExperience} />
 </BaseLayout>

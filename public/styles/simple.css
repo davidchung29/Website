@@ -30,6 +30,10 @@
   --fab-hover: #333333;
   --fab-text: #ffffff;
 
+  /* Bento: tiles sit a step lighter than the tinted ground behind them */
+  --bento-ground: #d5d5d7;
+  --bento-tile: #ededee;
+
   /* Font families */
   --font-display: 'Satoshi', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
@@ -56,6 +60,9 @@
   --fab-bg: #ededed;
   --fab-hover: #d4cfc8;
   --fab-text: #1c1a18;
+
+  --bento-ground: #141210;
+  --bento-tile: #262320;
 }
 
 body {
@@ -280,7 +287,7 @@ body {
 .experience-list {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 18px;
   position: relative;
 }
 
@@ -298,7 +305,6 @@ body {
 }
 
 .experience-item:hover {
-  transform: translateX(4px) scale(1.01);
   background: var(--bg-secondary);
   box-shadow: 0 2px 8px var(--shadow-sm);
 }
@@ -309,50 +315,55 @@ body {
 }
 
 .experience-logo {
-  width: 32px;
-  height: 32px;
+  /* Square logo sized just under the two-line text block, then centred against
+     it. Derived from line metrics rather than align-self:stretch, which would
+     make the square's width feed back into the row height and run away. */
+  --logo-size: calc((15px * 1.5 * 2) + 4px - 7px);
+  width: var(--logo-size);
+  height: var(--logo-size);
+  /* Pinned to the top, nudged down to where centring would place it against the
+     collapsed two-line block. align-self:center would re-centre — and so visibly
+     slide the logo down — whenever an item expands. */
+  align-self: flex-start;
+  margin-top: calc((((15px * 1.5 * 2) + 4px) - var(--logo-size)) / 2);
   flex-shrink: 0;
   object-fit: contain;
-  margin-top: 0px;
   opacity: 0.9;
   background: #ffffff;
-  padding: 5px;
-  border-radius: 7px;
+  /* Uniform inset on all sides so the glyph floats inside the box
+     instead of running to the edges. Derived from --logo-size rather than a
+     percentage, which would resolve against the parent row's width. */
+  padding: calc(var(--logo-size) * 0.18);
+  border-radius: 10px;
   border: 1px solid var(--border-color);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.figma-logo {
-  padding: 3px;
-}
-
-.felicis-logo {
-  padding: 1px;
-}
-
+/* Full-bleed square artwork: the image's own color IS the tile background, so
+   drop the inset and let it fill the box edge to edge. (Glyph logos like Figma
+   and Amazon keep the inset — they're marks on a transparent ground.) */
+.valuemate-logo,
+.upmc-logo,
 .ucr-logo {
-  padding: 0px;
-  position: relative;
-  top: 0.5px;
-  left: 1px;
-}
-
-.valuemate-logo {
-  padding: 0px;
-}
-
-.gclef-logo {
-  padding: 0px;
-}
-
-.upmc-logo {
-  padding: 0px;
+  padding: 0;
+  object-fit: cover;
+  border-radius: 10px;
+  /* The artwork supplies its own ground — no white plate or border behind it */
+  background: transparent;
+  border-color: transparent;
 }
 
 .experience-item:hover .experience-logo {
   opacity: 1;
-  border-color: var(--accent);
   background: #ffffff;
+}
+
+/* Keep full-bleed tiles flush on hover too */
+.experience-item:hover .valuemate-logo,
+.experience-item:hover .upmc-logo,
+.experience-item:hover .ucr-logo {
+  background: transparent;
+  border-color: transparent;
 }
 
 .experience-content {
@@ -378,18 +389,14 @@ body {
 
 .experience-org {
   font-family: var(--font-display);
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
   color: var(--text-primary);
-  line-height: 1.3;
+  line-height: 1.5;
   margin: 0;
 }
 
-.experience-org::after {
-  content: ',';
-  margin-left: 0px;
-}
 
 .experience-header .experience-role {
   font-size: 15px;
@@ -402,7 +409,7 @@ body {
 }
 
 .experience-header .experience-date {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--text-secondary);
   font-weight: 400;
   font-style: normal;
@@ -410,9 +417,8 @@ body {
   flex-shrink: 0;
   margin: 0;
   text-align: right;
-  line-height: 1.3;
-  letter-spacing: 0.01em;
-  text-transform: lowercase;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
 }
 
 .experience-footer {
@@ -424,7 +430,7 @@ body {
 }
 
 .experience-footer .experience-date {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--text-secondary);
   font-weight: 400;
   font-style: normal;
@@ -432,14 +438,14 @@ body {
   flex-shrink: 0;
   margin: 0;
   text-align: right;
-  letter-spacing: 0.01em;
-  text-transform: lowercase;
+  letter-spacing: -0.01em;
 }
 
 .experience-desc {
+  /* Holds the role: same size as the org, muted and lighter */
   font-size: 15px;
-  color: var(--text-tertiary);
-  line-height: 1.6;
+  color: var(--text-secondary);
+  line-height: 1.5;
   font-weight: 400;
   margin: 0;
   letter-spacing: -0.01em;
@@ -526,13 +532,12 @@ body {
 }
 
 .project-footer .experience-date {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--text-secondary);
   font-weight: 400;
   white-space: nowrap;
   flex-shrink: 0;
-  letter-spacing: 0.01em;
-  text-transform: lowercase;
+  letter-spacing: -0.01em;
 }
 
 /* Card Grid View for Projects */
@@ -559,7 +564,6 @@ body {
 }
 
 .project-list.card-view .experience-item:hover {
-  transform: translateY(-4px);
   box-shadow: 0 8px 24px var(--shadow-md);
 }
 
@@ -720,7 +724,9 @@ body {
 }
 
 .contrib-cell:hover {
-  transform: scale(1.2);
+  /* Outline instead of scale: highlights the cell without resizing it */
+  outline: 1px solid var(--text-secondary);
+  outline-offset: 1px;
   z-index: 100;
 }
 
@@ -880,12 +886,45 @@ body {
 
 .social-link:hover {
   color: var(--accent);
-  transform: scale(1.1);
 }
 
 .social-link svg {
   width: 100%;
   height: 100%;
+}
+
+/* Email copy button: a <button> among the <a> links, so strip button chrome */
+.email-copy {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+}
+
+.email-copied {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 5px 9px;
+  border-radius: 6px;
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  pointer-events: none;
+}
+
+.email-copy.copied .email-copied {
+  opacity: 1;
+  visibility: visible;
 }
 
 /* Theme Toggle Button */
@@ -906,7 +945,6 @@ body {
 
 .theme-toggle:hover {
   color: var(--accent);
-  transform: scale(1.1);
 }
 
 .theme-toggle svg {
@@ -954,8 +992,7 @@ body {
 }
 
 .warmth-slider::-webkit-slider-thumb:hover {
-  /* Grow by exactly 1px: 12px -> 13px */
-  transform: scale(1.0833);
+  border-color: var(--accent);
 }
 
 .warmth-slider::-moz-range-thumb {
@@ -969,8 +1006,7 @@ body {
 }
 
 .warmth-slider::-moz-range-thumb:hover {
-  /* Grow by exactly 1px: 12px -> 13px */
-  transform: scale(1.0833);
+  border-color: var(--accent);
 }
 
 .warmth-slider:focus-visible {
@@ -1002,7 +1038,6 @@ body {
 }
 
 .fab:hover {
-  transform: scale(1.1);
   background: var(--fab-hover);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
@@ -1098,13 +1133,10 @@ body {
     font-size: 16px;
   }
   
-  .experience-item:hover {
-    transform: translateX(2px);
-  }
-  
   .experience-logo {
-    width: 24px;
-    height: 24px;
+    /* Two 14px lines at mobile type sizes, less the same inset as desktop */
+    --logo-size: calc((14px * 1.5 * 2) + 4px - 6px);
+    margin-top: calc((((14px * 1.5 * 2) + 4px) - var(--logo-size)) / 2);
   }
 
   .experience-list {
@@ -1121,7 +1153,7 @@ body {
   }
 
   .experience-date {
-    font-size: 13px;
+    font-size: 14px;
   }
   
   .project-list .experience-item {
@@ -1168,5 +1200,478 @@ body {
 
   .project-list.card-view .project-card-oneliner {
     font-size: 13px;
+  }
+}
+
+/* ============================================
+   Bento modal
+   ============================================ */
+
+.bento-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  /* Backdrop fades a little faster than the sheet travels */
+  transition: opacity 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.bento-overlay[hidden] {
+  display: none;
+}
+
+.bento-overlay.open {
+  opacity: 1;
+}
+
+.bento-modal {
+  position: relative;
+  width: min(1218px, 100%);
+  height: min(620px, 100%);
+  border-radius: 34px;
+  background: var(--bento-ground);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+  /* Extra on the left for the vertical pager rail */
+  padding: 10px 10px 10px 28px;
+  /* Sheet rests below the viewport and rises into place on open.
+     100vh rather than 100% so it clears the screen regardless of sheet size. */
+  transform: translateY(100vh);
+  transition: transform 0.55s cubic-bezier(0.32, 0.72, 0, 1);
+  will-change: transform;
+}
+
+/* Focused on open so keyboard control works; it is not an interactive control
+   itself, so it should not draw a ring. */
+.bento-modal:focus {
+  outline: none;
+}
+
+.bento-overlay.open .bento-modal {
+  transform: translateY(0);
+}
+
+.bento-close {
+  position: absolute;
+  top: 26px;
+  right: 26px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  /* No plate at rest — the grey circle appears only on hover */
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.bento-close:hover {
+  color: var(--text-primary);
+  background: var(--bento-ground);
+}
+
+/* The modal focuses this button on open; suppress the default focus ring so a
+   mouse user never sees it. Keyboard focus keeps a visible ring below. */
+.bento-close:focus {
+  outline: none;
+}
+
+.bento-close:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.bento-grid {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+  /* Both tiles fill the modal height so the pair reads as one band */
+  align-items: stretch;
+}
+
+/* Slides stack in place and crossfade; only the active one is interactive. */
+.bento-slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity 0.8s cubic-bezier(0.32, 0.72, 0, 1),
+              transform 0.8s cubic-bezier(0.32, 0.72, 0, 1),
+              visibility 0s linear 0.8s;
+  pointer-events: none;
+}
+
+.bento-slide.is-active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition-delay: 0s;
+  pointer-events: auto;
+}
+
+/* Apple-style page indicator: a translucent, blurred capsule that picks up
+   whatever sits behind it rather than painting a flat plate. */
+.bento-pager {
+  position: absolute;
+  left: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 5px;
+  border-radius: 999px;
+  background: rgba(120, 120, 128, 0.16);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  /* Hairline top edge, the way Apple's materials catch light */
+  box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.5);
+  z-index: 2;
+}
+
+.bento-pager[hidden] {
+  display: none;
+}
+
+.bento-dot {
+  position: relative;
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  /* Solid colour at low opacity, so dots sit on the material rather than
+     tinting with it */
+  background: var(--text-primary);
+  opacity: 0.28;
+  cursor: pointer;
+  /* Apple's standard ease-out: fast departure, soft landing */
+  transition: opacity 0.4s cubic-bezier(0.32, 0.72, 0, 1),
+              transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.bento-dot:hover {
+  opacity: 0.55;
+}
+
+.bento-dot:active {
+  transform: scale(0.88);
+}
+
+/* A 6px target is too small to hit reliably — widen it without growing the dot */
+.bento-dot::after {
+  content: '';
+  position: absolute;
+  inset: -7px;
+}
+
+.bento-dot:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.bento-dot.is-active {
+  opacity: 1;
+}
+
+/* Hover should never outrank the current page */
+.bento-dot.is-active:hover {
+  opacity: 1;
+}
+
+/* Two equal panels sharing the modal width. Apple-bento style: tiles read as
+   solid blocks on a tinted ground — no strokes, depth comes from the contrast
+   between tile and modal background. */
+.bento-panel {
+  flex-basis: 0;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 28px;
+  background: var(--bento-tile);
+  border: none;
+}
+
+.bento-panel.bento-primary,
+.bento-panel.bento-secondary {
+  flex-grow: 1;
+}
+
+.bento-panel-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header sits at the top, above the copy slides that span the whole tile.
+   Shares the project text's column so both read off the same left edge. */
+.bento-head {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  width: 46ch;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* Media fills its tile edge to edge */
+.bento-panel-inner--flush {
+  padding: 0;
+  height: auto;
+  overflow: visible;
+}
+
+/* A media tile sizes to its content rather than stretching to the row height,
+   and goes dark so the video's own letterboxing reads as part of the tile. */
+/* Media tile holds the stacked slides plus the pager beneath them; transparent
+   so the player and the tweet card each supply their own ground. */
+.bento-panel--media {
+  position: relative;
+  background: #000;
+  /* Visible so the video's drop shadow isn't clipped by the tile */
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+}
+
+.bento-media-stack {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+/* Copy slides span the full tile so the project text centres on the modal, not
+   on the leftover space under the header. Absolute positioning resolves against
+   the padding box, so the slides re-apply the inner's inset to keep the project
+   text on the same left edge as the header. */
+.bento-copy {
+  position: absolute;
+  inset: 0;
+}
+
+.bento-copy .bento-slide {
+  padding: 0 32px;
+}
+
+/* A tweet is taller than a video, so its slide scrolls internally. The embed
+   brings its own card, so no tile ground behind it. */
+.bento-slide--tweet {
+  overflow-y: auto;
+  scrollbar-width: none;
+  justify-content: flex-start;
+}
+
+.bento-slide--tweet::-webkit-scrollbar {
+  display: none;
+}
+
+.bento-tweet {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* Fills the slide when the card is short, grows past it when tall */
+  min-height: 100%;
+  width: 100%;
+}
+
+.bento-tweet .twitter-tweet {
+  margin: 0 auto !important;
+}
+
+/* Embeds that scroll internally would otherwise swallow the wheel, so they are
+   not a hit-test target until pressed; leaving them hands scrolling back.
+   (Players with nothing to scroll, like YouTube, need none of this — the
+   browser already passes the wheel to the nearest scrollable ancestor.) */
+.bento-embed-frame {
+  pointer-events: none;
+}
+
+.bento-embed-frame.is-live {
+  pointer-events: auto;
+}
+
+
+.bento-tweet-fallback {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--text-primary);
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: var(--bento-ground);
+  transition: opacity 0.2s ease;
+}
+
+.bento-tweet-fallback:hover {
+  opacity: 0.75;
+}
+
+/* The video's aspect ratio sets the row height; the text tile stretches to
+   match it, so both tiles are exactly as tall as the media. */
+.bento-panel--media .bento-video-frame {
+  aspect-ratio: 16 / 9;
+  height: auto;
+  border-radius: 18px;
+  /* Apple-style elevation: tight contact shadow over a soft ambient one */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35),
+              0 16px 40px rgba(0, 0, 0, 0.45);
+}
+
+.bento-project {
+  /* The slide handles centring; this just holds the text */
+  width: 100%;
+}
+
+.bento-project-heading {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  margin: 0 0 8px;
+}
+
+.bento-project-desc {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0;
+  max-width: 46ch;
+}
+
+/* Centre the text column in the tile rather than letting the measure cap push
+   it left: equal gutters either side of the block. */
+.bento-copy .bento-slide {
+  align-items: center;
+}
+
+.bento-copy .bento-project {
+  width: 46ch;
+  max-width: 100%;
+}
+
+.bento-video {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bento-video[hidden] {
+  display: none;
+}
+
+/* Letterbox a 16:9 frame inside the tile without overflowing it.
+   The radius lives on this wrapper: an iframe's own border-radius won't clip
+   the embedded player's corners, so overflow:hidden does the masking. */
+/* The player IS the tile surface: it fills edge to edge and inherits the tile's
+   radius, so there is no floating rectangle sitting on a gray plate. */
+.bento-video-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+}
+
+/* Separate layer does the corner masking so no shadow gets cropped */
+.bento-video-clip {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.bento-video iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.bento-title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.bento-subtitle {
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin: 6px 0 0;
+}
+
+.bento-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 22px;
+}
+
+.bento-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--text-primary);
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: var(--bento-ground);
+  border: none;
+  transition: opacity 0.2s ease;
+}
+
+.bento-link:hover {
+  opacity: 0.75;
+}
+
+body.bento-open {
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .bento-overlay {
+    padding: 16px;
+  }
+
+  .bento-modal {
+    border-radius: 24px;
+    padding: 12px;
+  }
+
+  /* Stack vertically: a side-by-side split has no room on phones */
+  .bento-grid {
+    flex-direction: column;
+  }
+
+  .bento-panel-inner {
+    min-width: 0;
+    padding: 20px;
   }
 }

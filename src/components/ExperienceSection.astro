@@ -1,8 +1,9 @@
 ---
-import type { workExperience, researchExperience, otherExperience } from '../data/displayData';
+import type { workExperience, educationExperience, researchExperience, otherExperience } from '../data/displayData';
 
 type Entry =
   | (typeof workExperience)[number]
+  | (typeof educationExperience)[number]
   | (typeof researchExperience)[number]
   | (typeof otherExperience)[number];
 
@@ -19,20 +20,41 @@ const { title, id, entries } = Astro.props;
   <h2 class="section-title">{title}</h2>
   <div class="experience-list">
     {entries.map((exp) => (
-      'expandableLinks' in exp && exp.expandableLinks ? (
+      'modal' in exp && exp.modal ? (
+        <div
+          class="experience-item modal-item"
+          data-modal-org={exp.org}
+          data-modal-role={exp.role}
+          data-modal-date={exp.date}
+          data-modal-links={JSON.stringify(exp.expandableLinks ?? [])}
+          data-modal-views={JSON.stringify(('modalViews' in exp && exp.modalViews) || [])}
+        >
+          <img src={exp.logo} alt={exp.org} class:list={["experience-logo", exp.logoClass]} />
+          <div class="experience-content">
+            <div class="experience-header">
+              <div class="experience-header-left">
+                <div class="experience-org">{exp.org}</div>
+              </div>
+              <div class="experience-date">{exp.date}</div>
+            </div>
+            <div class="experience-footer">
+              <div class="experience-desc">{exp.role}</div>
+            </div>
+          </div>
+        </div>
+      ) : 'expandableLinks' in exp && exp.expandableLinks ? (
         <div class="experience-item expandable-item">
           <img src={exp.logo} alt={exp.org} class:list={["experience-logo", exp.logoClass]} />
           <div class="experience-content">
             <div class="experience-header">
               <div class="experience-header-left">
                 <div class="experience-org">{exp.org}</div>
-                <div class="experience-role">{exp.role}</div>
               </div>
               <div class="experience-date">{exp.date}</div>
             </div>
             <div class="experience-footer">
               <div class="experience-desc">
-                {exp.desc}
+                {exp.role}
                 <div class="expandable-content">
                   <div class="expandable-links">
                     {exp.expandableLinks.map((link) => (
@@ -58,12 +80,11 @@ const { title, id, entries } = Astro.props;
             <div class="experience-header">
               <div class="experience-header-left">
                 <div class="experience-org">{exp.org}</div>
-                <div class="experience-role">{exp.role}</div>
               </div>
               <div class="experience-date">{exp.date}</div>
             </div>
             <div class="experience-footer">
-              <div class="experience-desc">{exp.desc}</div>
+              <div class="experience-desc">{exp.role}</div>
             </div>
           </div>
         </div>
