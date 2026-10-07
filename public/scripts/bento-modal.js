@@ -12,6 +12,7 @@
   const titleEl = document.getElementById('bentoTitle');
   const subtitleEl = document.getElementById('bentoSubtitle');
   const linksEl = document.getElementById('bentoLinks');
+  const authorsEl = document.getElementById('bentoAuthors');
 
   const EXTERNAL_ICON =
     '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
@@ -47,106 +48,6 @@
     return twitterPromise;
   }
 
-  // A wheel over a cross-origin iframe is delivered to THAT document, so no
-  // listener here ever sees it. The browser's pass-through only helps when an
-  // ancestor is actually scrollable — this modal pages via a JS listener and
-  // has no scroll container, so the event simply dies.
-  //
-  // Making the iframe a non-hit-target keeps the wheel on our side. A press
-  // hands pointer events back so the player stays fully usable, and leaving the
-  // embed takes them away again.
-  function addShield(container) {
-    const frame = container.querySelector('iframe');
-    if (!frame) return null;
-
-    frame.classList.add('bento-embed-frame');
-
-    // YouTube accepts playback commands over postMessage, so gestures can be
-    // forwarded as commands and the frame never needs pointer events at all.
-    if (/youtube\.com\/embed/.test(frame.src)) {
-      let playing = /[?&]autoplay=1/.test(frame.src);
-      let muted = /[?&]mute=1/.test(frame.src);
-      let time = 0;
-
-      function send(func, args) {
-        frame.contentWindow.postMessage(JSON.stringify({
-          event: 'command',
-          func: func,
-          args: args || []
-        }), '*');
-      }
-
-      // The player reports its position back over the same channel, so seeking
-      // can be relative rather than guesswork.
-      window.addEventListener('message', function(e) {
-        if (!/youtube\.com$/.test(new URL(e.origin).hostname)) return;
-        try {
-          const data = JSON.parse(e.data);
-          if (data.info && typeof data.info.currentTime === 'number') {
-            time = data.info.currentTime;
-          }
-        } catch (err) {
-          /* not a player message */
-        }
-      });
-
-      // Ask the player to start reporting state
-      frame.addEventListener('load', function() {
-        send('addEventListener', ['onStateChange']);
-        frame.contentWindow.postMessage(
-          JSON.stringify({ event: 'listening' }), '*');
-      });
-
-      container.addEventListener('click', function() {
-        playing = !playing;
-        send(playing ? 'playVideo' : 'pauseVideo');
-      });
-
-      // Double-click toggles sound, the usual shortcut being unavailable
-      container.addEventListener('dblclick', function() {
-        muted = !muted;
-        send(muted ? 'mute' : 'unMute');
-      });
-
-      // Arrow keys scrub, as they would in the native player
-      container.setAttribute('tabindex', '0');
-      container.addEventListener('keydown', function(e) {
-        if (e.key === 'ArrowRight') {
-          e.preventDefault();
-          e.stopPropagation();
-          send('seekTo', [time + 5, true]);
-        } else if (e.key === 'ArrowLeft') {
-          e.preventDefault();
-          e.stopPropagation();
-          send('seekTo', [Math.max(0, time - 5), true]);
-        } else if (e.key === 'm' || e.key === 'M') {
-          muted = !muted;
-          send(muted ? 'mute' : 'unMute');
-        } else if (e.key === ' ') {
-          e.preventDefault();
-          e.stopPropagation();
-          playing = !playing;
-          send(playing ? 'playVideo' : 'pauseVideo');
-        }
-      });
-
-      container.style.cursor = 'pointer';
-      return frame;
-    }
-
-    // Embeds without such an API arm on press and release when the pointer
-    // leaves, so the first press is spent handing control over.
-    container.addEventListener('mousedown', function() {
-      frame.classList.add('is-live');
-    });
-
-    container.addEventListener('mouseleave', function() {
-      frame.classList.remove('is-live');
-    });
-
-    return frame;
-  }
-
   function buildYouTube(src, label) {
     const box = el('div', 'bento-video');
     const shell = el('div', 'bento-video-frame');
@@ -159,9 +60,64 @@
     frame.allowFullscreen = true;
     clip.appendChild(frame);
     shell.appendChild(clip);
-    addShield(shell);
     box.appendChild(shell);
     return box;
+  }
+
+  // A framed web page or PDF, filling the tile and scrolling internally.
+  function buildFrame(src, label, kind) {
+    const shell = el('div', 'bento-doc');
+
+    // Browsers without a built-in PDF viewer render an empty frame, so offer a
+    // link rather than a blank panel.
+    if (kind === 'pdf' && navigator.pdfViewerEnabled === false) {
+      const fallback = el('a', 'bento-doc-fallback');
+      fallback.href = src;
+      fallback.target = '_blank';
+      fallback.rel = 'noopener noreferrer';
+      fallback.innerHTML = '<span>Open the paper</span>' + EXTERNAL_ICON;
+      shell.appendChild(fallback);
+      return shell;
+    }
+
+    const frame = document.createElement('iframe');
+    frame.src = src;
+    frame.title = label + ' ' + kind;
+    frame.loading = 'lazy';
+    frame.referrerPolicy = 'no-referrer-when-downgrade';
+    shell.appendChild(frame);
+    return shell;
+  }
+
+  // Pre-rendered page images in a scroller we own. No iframe means no
+  // cross-origin boundary: scrolling scrolls the paper, clicks land normally,
+  // and paging only happens once the reader reaches an end.
+  function buildPaper(media, label) {
+    const shell = el('div', 'bento-paper');
+
+    for (let i = 1; i <= media.pages; i++) {
+      const img = document.createElement('img');
+      img.className = 'bento-paper-page';
+      img.src = media.path + String(i).padStart(2, '0') + '.png';
+      img.alt = label + ' paper, page ' + i + ' of ' + media.pages;
+      // Only the first page blocks paint; the rest stream in as needed
+      img.loading = i === 1 ? 'eager' : 'lazy';
+      img.decoding = 'async';
+      img.width = 850;
+      img.height = 1100;
+      shell.appendChild(img);
+    }
+
+    if (media.href) {
+      const link = el('a', 'bento-paper-link');
+      link.href = media.href;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.innerHTML = '<span>Open on arXiv</span>' + EXTERNAL_ICON;
+      shell.appendChild(link);
+    }
+
+    return shell;
   }
 
   function buildTweet(url) {
@@ -193,8 +149,6 @@
       });
     }).then(function(node) {
       if (node && fallback.parentNode === holder) holder.removeChild(fallback);
-      // The embed's iframe only exists once the widget has mounted
-      addShield(holder);
     }).catch(function() {
       /* keep the fallback link */
     });
@@ -209,6 +163,12 @@
     } else if (media && media.type === 'tweet') {
       slide.classList.add('bento-slide--tweet');
       slide.appendChild(buildTweet(media.src));
+    } else if (media && media.type === 'paper') {
+      slide.classList.add('bento-slide--paper');
+      slide.appendChild(buildPaper(media, label));
+    } else if (media && (media.type === 'page' || media.type === 'pdf')) {
+      slide.classList.add('bento-slide--doc');
+      slide.appendChild(buildFrame(media.src, label, media.type));
     }
     return slide;
   }
@@ -231,25 +191,6 @@
     return slide;
   }
 
-  // X renders its player in a cross-origin iframe, so it can only be started
-  // through the widget's own postMessage API — not by clicking into it.
-  function playTweetVideo(slide) {
-    const frame = slide.querySelector('iframe');
-    if (!frame || !frame.contentWindow) return;
-    try {
-      frame.contentWindow.postMessage(
-        JSON.stringify({ method: 'play' }),
-        'https://twitter.com'
-      );
-      frame.contentWindow.postMessage(
-        JSON.stringify({ method: 'play' }),
-        'https://platform.twitter.com'
-      );
-    } catch (err) {
-      /* embed declined; the viewer can still press play */
-    }
-  }
-
   function show(next) {
     if (next < 0 || next >= count || next === index) return;
     index = next;
@@ -264,11 +205,6 @@
       dot.classList.toggle('is-active', i === index);
     });
 
-    const active = mediaEl.querySelectorAll('.bento-slide')[index];
-    if (active && active.classList.contains('bento-slide--tweet')) {
-      // Wait out the crossfade so the player is visible when it starts
-      setTimeout(function() { playTweetVideo(active); }, 800);
-    }
   }
 
   function populate(item) {
@@ -280,6 +216,34 @@
     const role = item.dataset.modalRole || '';
     const date = item.dataset.modalDate || '';
     subtitleEl.textContent = [role, date].filter(Boolean).join(' · ');
+
+    // Author byline: linked where a profile exists, bold and unlinked where not
+    authorsEl.innerHTML = '';
+    let authors = [];
+    try {
+      authors = JSON.parse(item.dataset.modalAuthors || '[]');
+    } catch (err) {
+      authors = [];
+    }
+
+    authors.forEach(function(author, i) {
+      if (i > 0) authorsEl.appendChild(document.createTextNode(', '));
+
+      if (author.url) {
+        const a = el('a', 'bento-author');
+        a.href = author.url;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.textContent = author.name;
+        authorsEl.appendChild(a);
+      } else {
+        const strong = el('strong', 'bento-author bento-author--self');
+        strong.textContent = author.name;
+        authorsEl.appendChild(strong);
+      }
+    });
+
+    authorsEl.hidden = authors.length === 0;
 
     linksEl.innerHTML = '';
     let links = [];
@@ -320,12 +284,14 @@
 
       const dot = el('button', 'bento-dot');
       dot.type = 'button';
-      dot.setAttribute('aria-label', 'Go to view ' + (i + 1));
+      dot.setAttribute('aria-label', 'Next view');
       if (i === 0) dot.classList.add('is-active');
 
+      // Dots advance like the pill rather than targeting their own view, so
+      // clicking anywhere on the control moves to the next page.
       dot.addEventListener('click', function(e) {
         e.stopPropagation();
-        goTo(i);
+        step(1);
       });
 
       pagerEl.appendChild(dot);
@@ -390,6 +356,13 @@
     });
   });
 
+  // Clicking the pill itself advances a view and wraps at the end. Dots stop
+  // propagation, so this only fires on the capsule around them.
+  pagerEl.addEventListener('click', function(e) {
+    e.stopPropagation();
+    step(1);
+  });
+
   closeBtn.addEventListener('click', close);
 
   overlay.addEventListener('click', function(e) {
@@ -404,7 +377,8 @@
     if (Math.abs(e.deltaY) < 12) return;
 
     // Defer to a slide that still has room to scroll in this direction
-    const scroller = e.target.closest && e.target.closest('.bento-slide--tweet');
+    const scroller = e.target.closest &&
+      e.target.closest('.bento-slide--tweet, .bento-slide--paper');
     if (scroller && scroller.scrollHeight > scroller.clientHeight + 1) {
       const atTop = scroller.scrollTop <= 0;
       const atEnd =

@@ -28,6 +28,7 @@ const { title, id, entries } = Astro.props;
           data-modal-date={exp.date}
           data-modal-links={JSON.stringify(exp.expandableLinks ?? [])}
           data-modal-views={JSON.stringify(('modalViews' in exp && exp.modalViews) || [])}
+          data-modal-authors={JSON.stringify(('authors' in exp && exp.authors) || [])}
         >
           <img src={exp.logo} alt={exp.org} class:list={["experience-logo", exp.logoClass]} />
           <div class="experience-content">

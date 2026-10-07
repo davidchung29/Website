@@ -20,12 +20,10 @@ export const workExperience = [
           type: "youtube",
           // youtube.com/embed + start seconds; the watch URL cannot be framed.
           // muted=1 is required — browsers block autoplay with sound.
-          // enablejsapi=1 lets a click be forwarded as a playback command,
-          // so the frame can stay non-interactive and the wheel stays ours.
-          src: "https://www.youtube.com/embed/2ZCc4k_IV5w?start=983&autoplay=1&mute=1&rel=0&enablejsapi=1"
+          src: "https://www.youtube.com/embed/2ZCc4k_IV5w?start=983&autoplay=1&mute=1&rel=0"
         },
         heading: "Project 1",
-        description: "Worked on the Editor screen for Figma Make, including device frame support, updated information bar, and on canvas interactions in the design canvas. Ramped to 100% in prod, shipped in 2.5 weeks."
+        description: "Worked on the Editor screen for Figma Make, including device frame support, information bar, and on canvas interactions. Ramped to 100% in prod, shipped in 3 weeks."
       },
       {
         media: {
@@ -33,7 +31,7 @@ export const workExperience = [
           src: "https://x.com/figma/status/2082913429765968109"
         },
         heading: "Project 2",
-        description: "Built a repository classifier for web apps, allowing for faster agent turns for Direct Manipulation edits in Figma Make, dropped -11% p50 and -57% p95"
+        description: "Built an ML repository classifier for web apps, allowing for faster agent turns for Direct Manipulation edits in Figma Make, dropped -11% p50 and -57% p95. Ramped to 100%, 8 weeks from design to shipping."
       }
     ],
     expandableLinks: [
@@ -89,6 +87,34 @@ export const researchExperience = [
     desc: "Generative model development for creative tasks",
     date: "Spring 2026",
     companyUrl: "https://gclef-cmu.org/",
+    modal: true,
+    modalViews: [
+      {
+        media: { type: "page", src: "https://yewon-kim.com/decomposer/" },
+        heading: "Decomposer",
+        description: "Worked on post-compilation framework for decompiling music. Specifically in taking multi-track MIDI inputs and outputting Strudel, a JS-based music programming language. Produced higher faithfulness and frontier LLMs and higher readability than a heuristic converter"
+      },
+      {
+        // Self-hosted page images rather than a framed PDF: the pages are ours,
+        // so scrolling and clicks behave normally instead of being shielded.
+        media: {
+          type: "paper",
+          pages: 14,
+          path: "/assets/papers/decomposer/page-",
+          href: "https://arxiv.org/pdf/2607.01849"
+        },
+        heading: "Decomposer",
+        description: "Worked on post-compilation framework for decompiling music. Specifically in taking multi-track MIDI inputs and outputting Strudel, a JS-based music programming language. Produced higher faithfulness and frontier LLMs and higher readability than a heuristic converter"
+      }
+    ],
+    // Rendered above the links; the entry with no url is shown bold, unlinked
+    authors: [
+      { name: "Yewon Kim", url: "https://scholar.google.com/citations?user=JkSutBwAAAAJ&hl=en" },
+      { name: "Apurva Gandhi", url: "https://scholar.google.com/citations?user=elzCF8sAAAAJ&hl=en" },
+      { name: "David Chung" },
+      { name: "Graham Neubig", url: "https://scholar.google.com/citations?user=wlosgkoAAAAJ&hl=en" },
+      { name: "Chris Donahue", url: "https://scholar.google.com/citations?user=MgzHAPQAAAAJ&hl=en" }
+    ],
     expandableLinks: [
       { text: "Paper [Preprint]", url: "https://arxiv.org/abs/2607.01849" },
       { text: "Website", url: "https://yewon-kim.com/decomposer/" },

@@ -202,7 +202,7 @@ const { title, activePage } = Astro.props;
           <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
       </button>
-      <div class="bento-pager" id="bentoPager" role="tablist" aria-label="Views"></div>
+      <div class="bento-pager" id="bentoPager" aria-label="Next view"></div>
       <div class="bento-grid">
         <section class="bento-panel bento-primary bento-panel--media">
           <div class="bento-media-stack" id="bentoMedia"></div>
@@ -212,6 +212,7 @@ const { title, activePage } = Astro.props;
             <div class="bento-head">
               <h2 class="bento-title" id="bentoTitle"></h2>
               <p class="bento-subtitle" id="bentoSubtitle"></p>
+              <p class="bento-authors" id="bentoAuthors" hidden></p>
               <div class="bento-links" id="bentoLinks"></div>
             </div>
             <div class="bento-copy" id="bentoCopy"></div>

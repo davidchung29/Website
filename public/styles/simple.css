@@ -1344,6 +1344,27 @@ body {
   /* Hairline top edge, the way Apple's materials catch light */
   box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.5);
   z-index: 2;
+  cursor: pointer;
+  /* Scale composes with the centring translate, so the pill grows about its
+     own middle instead of jumping. */
+  transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1),
+              background 0.32s cubic-bezier(0.32, 0.72, 0, 1),
+              box-shadow 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* The whole control swells on approach, the way Apple's Dock and page
+   indicators respond before you commit to a press. */
+.bento-pager:hover {
+  transform: translateY(-50%) scale(1.18);
+  background: rgba(120, 120, 128, 0.22);
+  box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.6),
+              0 4px 16px rgba(0, 0, 0, 0.18);
+}
+
+/* Settles slightly on press — the tactile half of the gesture */
+.bento-pager:active {
+  transform: translateY(-50%) scale(1.1);
+  transition-duration: 0.12s;
 }
 
 .bento-pager[hidden] {
@@ -1369,6 +1390,7 @@ body {
 
 .bento-dot:hover {
   opacity: 0.55;
+  transform: scale(1.25);
 }
 
 .bento-dot:active {
@@ -1391,9 +1413,10 @@ body {
   opacity: 1;
 }
 
-/* Hover should never outrank the current page */
+/* Hover should never outrank the current page, but still feel responsive */
 .bento-dot.is-active:hover {
   opacity: 1;
+  transform: scale(1.25);
 }
 
 /* Two equal panels sharing the modal width. Apple-bento style: tiles read as
@@ -1442,6 +1465,14 @@ body {
 
 /* A media tile sizes to its content rather than stretching to the row height,
    and goes dark so the video's own letterboxing reads as part of the tile. */
+/* A media stack holding documents fills the tile rather than hugging a 16:9
+   player, so framed pages get the full height to scroll in. */
+.bento-panel--media:has(.bento-slide--doc),
+.bento-panel--media:has(.bento-slide--paper) {
+  align-self: stretch;
+  height: 100%;
+}
+
 /* Media tile holds the stacked slides plus the pager beneath them; transparent
    so the player and the tweet card each supply their own ground. */
 .bento-panel--media {
@@ -1472,6 +1503,117 @@ body {
   padding: 0 32px;
 }
 
+/* Paper pages: ours, so they scroll natively. Paging only takes over once the
+   reader hits the top or bottom of the stack. Inset on black so the pages read
+   as a document floating on the tile rather than filling it. */
+.bento-slide--paper {
+  padding: 22px 70px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  border-radius: 28px;
+  background: #000;
+  justify-content: flex-start;
+}
+
+.bento-slide--paper::-webkit-scrollbar {
+  width: 8px;
+}
+
+.bento-slide--paper::-webkit-scrollbar-thumb {
+  background: rgba(120, 120, 128, 0.35);
+  border-radius: 999px;
+}
+
+.bento-paper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+}
+
+.bento-paper-page {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 6px;
+  background: #fff;
+  /* Lifts off the black ground the way the video and site tiles do */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4),
+              0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
+.bento-paper-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 4px auto 8px;
+  padding: 9px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  color: var(--text-primary);
+  text-decoration: none;
+  background: var(--bento-ground);
+  transition: opacity 0.2s ease;
+}
+
+.bento-paper-link:hover {
+  opacity: 0.75;
+}
+
+/* A framed page sits inset on black, scaled down so more of the layout fits. */
+.bento-slide--doc {
+  padding: 22px 34px;
+  background: #000;
+  border-radius: 28px;
+}
+
+.bento-doc {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35),
+              0 16px 40px rgba(0, 0, 0, 0.45);
+}
+
+/* Render at a 1100px desktop viewport, then scale it to fit the tile. The site
+   keeps its full-width layout instead of collapsing to a mobile breakpoint,
+   and everything reads smaller.
+   The height is chosen so the scaled frame lands just inside the tile: the
+   embed is a poster with nothing to scroll, so a wheel over it pages the modal
+   rather than being swallowed. Changing these numbers can reintroduce an inner
+   scrollbar — keep scaled height ≤ tile height. */
+.bento-doc iframe {
+  width: 1100px;
+  height: 1180px;
+  border: 0;
+  display: block;
+  transform: scale(0.47);
+  transform-origin: 0 0;
+}
+
+/* Shown only where the browser cannot render a PDF inline */
+.bento-doc-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-size: 15px;
+  color: var(--text-primary);
+  text-decoration: none;
+  background: var(--bento-tile);
+  transition: opacity 0.2s ease;
+}
+
+.bento-doc-fallback:hover {
+  opacity: 0.75;
+}
+
 /* A tweet is taller than a video, so its slide scrolls internally. The embed
    brings its own card, so no tile ground behind it. */
 .bento-slide--tweet {
@@ -1499,17 +1641,6 @@ body {
   margin: 0 auto !important;
 }
 
-/* Embeds that scroll internally would otherwise swallow the wheel, so they are
-   not a hit-test target until pressed; leaving them hands scrolling back.
-   (Players with nothing to scroll, like YouTube, need none of this — the
-   browser already passes the wheel to the nearest scrollable ancestor.) */
-.bento-embed-frame {
-  pointer-events: none;
-}
-
-.bento-embed-frame.is-live {
-  pointer-events: auto;
-}
 
 
 .bento-tweet-fallback {
@@ -1626,29 +1757,68 @@ body {
   margin: 6px 0 0;
 }
 
+/* Author byline above the links */
+.bento-authors {
+  margin: 14px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.bento-authors[hidden] {
+  display: none;
+}
+
+.bento-author {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a.bento-author:hover {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* The unlinked author — bold, and in full contrast so it reads as the subject */
+.bento-author--self {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
 .bento-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 14px;
-  margin-top: 22px;
+  /* Row gap keeps wrapped links from colliding without chip padding */
+  gap: 8px 20px;
+  margin-top: 18px;
 }
 
+/* Tighter when a byline sits directly above */
+.bento-authors:not([hidden]) + .bento-links {
+  margin-top: 12px;
+}
+
+/* Plain linked text, not chips: no fill, no padding — the underline on hover
+   carries the affordance. */
 .bento-link {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   font-size: 14px;
-  color: var(--text-primary);
+  color: var(--text-secondary);
   text-decoration: none;
-  padding: 8px 14px;
-  border-radius: 10px;
-  background: var(--bento-ground);
+  padding: 0;
+  background: none;
   border: none;
-  transition: opacity 0.2s ease;
+  transition: color 0.2s ease;
 }
 
 .bento-link:hover {
-  opacity: 0.75;
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 body.bento-open {
