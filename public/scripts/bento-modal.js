@@ -1,5 +1,6 @@
 // Bento modal: opens from experience rows flagged with data-modal-org.
-// The org header is persistent; scrolling crossfades the media and project copy.
+// The org header is persistent. Media slides horizontally through the projects;
+// the right panel lists every project at once and underlines the current one.
 (function() {
   const overlay = document.getElementById('bentoOverlay');
   if (!overlay) return;
@@ -8,7 +9,8 @@
   const closeBtn = document.getElementById('bentoClose');
   const mediaEl = document.getElementById('bentoMedia');
   const copyEl = document.getElementById('bentoCopy');
-  const pagerEl = document.getElementById('bentoPager');
+  const prevBtn = document.getElementById('bentoPrev');
+  const nextBtn = document.getElementById('bentoNext');
   const titleEl = document.getElementById('bentoTitle');
   const subtitleEl = document.getElementById('bentoSubtitle');
   const linksEl = document.getElementById('bentoLinks');
@@ -173,8 +175,9 @@
     return slide;
   }
 
+  // One project block in the right-hand list. Every project is rendered at once
+  // so the panel never scrolls; only the heading underline tracks the media.
   function buildCopy(view) {
-    const slide = el('div', 'bento-slide');
     const project = el('div', 'bento-project');
 
     const heading = el('h3', 'bento-project-heading');
@@ -187,30 +190,41 @@
       project.appendChild(desc);
     }
 
-    slide.appendChild(project);
-    return slide;
+    return project;
   }
 
   function show(next) {
     if (next < 0 || next >= count || next === index) return;
     index = next;
+    render();
+  }
 
-    [mediaEl, copyEl].forEach(function(host) {
-      host.querySelectorAll('.bento-slide').forEach(function(slide, i) {
-        slide.classList.toggle('is-active', i === index);
-      });
+  // Media rides a horizontal track; the copy list just marks the current entry.
+  function render() {
+    // Percentages resolve against the track's own width, which is count frames
+    // wide — so one frame is 100/count of it, not a flat 100%.
+    const shift = count ? (-index * 100) / count : 0;
+    mediaEl.style.transform = 'translate3d(' + shift + '%, 0, 0)';
+
+    mediaEl.querySelectorAll('.bento-slide').forEach(function(slide, i) {
+      slide.classList.toggle('is-active', i === index);
     });
 
-    pagerEl.querySelectorAll('.bento-dot').forEach(function(dot, i) {
-      dot.classList.toggle('is-active', i === index);
+    copyEl.querySelectorAll('.bento-project').forEach(function(project, i) {
+      project.classList.toggle('is-active', i === index);
     });
 
+    // Non-wrapping at the ends, the way Apple's carousels dim an unavailable arrow
+    const many = count > 1;
+    prevBtn.hidden = !many;
+    nextBtn.hidden = !many;
+    prevBtn.disabled = index === 0;
+    nextBtn.disabled = index === count - 1;
   }
 
   function populate(item) {
     mediaEl.innerHTML = '';
     copyEl.innerHTML = '';
-    pagerEl.innerHTML = '';
 
     titleEl.textContent = item.dataset.modalOrg || '';
     const role = item.dataset.modalRole || '';
@@ -272,32 +286,26 @@
     count = views.length;
     index = 0;
 
+    // The track is as wide as the view count so each slide occupies one frame
+    mediaEl.style.width = (count * 100) + '%';
+    mediaEl.style.setProperty('--bento-count', String(count || 1));
+    // Re-entry starts at the first view, so skip the slide animation this time
+    mediaEl.classList.add('is-instant');
+
     views.forEach(function(view, i) {
-      const media = buildMedia(view.media, label);
+      mediaEl.appendChild(buildMedia(view.media, label));
+
+      // Clicking a project jumps the media straight to it
       const copy = buildCopy(view);
-      if (i === 0) {
-        media.classList.add('is-active');
-        copy.classList.add('is-active');
-      }
-      mediaEl.appendChild(media);
+      copy.addEventListener('click', function() { goTo(i); });
       copyEl.appendChild(copy);
-
-      const dot = el('button', 'bento-dot');
-      dot.type = 'button';
-      dot.setAttribute('aria-label', 'Next view');
-      if (i === 0) dot.classList.add('is-active');
-
-      // Dots advance like the pill rather than targeting their own view, so
-      // clicking anywhere on the control moves to the next page.
-      dot.addEventListener('click', function(e) {
-        e.stopPropagation();
-        step(1);
-      });
-
-      pagerEl.appendChild(dot);
     });
 
-    pagerEl.hidden = count < 2;
+    render();
+    // Next frame, once the reset transform has landed, restore the transition
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() { mediaEl.classList.remove('is-instant'); });
+    });
   }
 
   function goTo(next) {
@@ -306,14 +314,15 @@
 
     locked = true;
     show(next);
-    // Matches the crossfade duration so one gesture advances one view
-    setTimeout(function() { locked = false; }, 800);
+    // Matches the slide duration so one gesture advances one view
+    setTimeout(function() { locked = false; }, 600);
   }
 
-  // Scrolling wraps: past the last view returns to the first, and vice versa.
+  // Clamped rather than wrapping: the arrows disable at the ends, so a gesture
+  // past the last view should hold there instead of snapping back to the first.
   function step(delta) {
     if (!count) return;
-    goTo(((index + delta) % count + count) % count);
+    goTo(Math.max(0, Math.min(count - 1, index + delta)));
   }
 
   function open(item) {
@@ -356,9 +365,12 @@
     });
   });
 
-  // Clicking the pill itself advances a view and wraps at the end. Dots stop
-  // propagation, so this only fires on the capsule around them.
-  pagerEl.addEventListener('click', function(e) {
+  prevBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    step(-1);
+  });
+
+  nextBtn.addEventListener('click', function(e) {
     e.stopPropagation();
     step(1);
   });
@@ -369,48 +381,41 @@
     if (!modal.contains(e.target)) close();
   });
 
-  // Wheel advances views. Bound to the window because a cross-origin embed
-  // swallows the event before it reaches the modal — with the cursor over the
-  // tweet, a modal-scoped listener never fires at all.
+  // Horizontal wheel/trackpad intent pages the carousel. Bound to the window
+  // because a cross-origin embed swallows the event before it reaches the modal
+  // — with the cursor over the tweet, a modal-scoped listener never fires.
+  // Vertical deltas are left alone so the paper and tweet slides still scroll.
   window.addEventListener('wheel', function(e) {
     if (overlay.hidden || count < 2) return;
-    if (Math.abs(e.deltaY) < 12) return;
-
-    // Defer to a slide that still has room to scroll in this direction
-    const scroller = e.target.closest &&
-      e.target.closest('.bento-slide--tweet, .bento-slide--paper');
-    if (scroller && scroller.scrollHeight > scroller.clientHeight + 1) {
-      const atTop = scroller.scrollTop <= 0;
-      const atEnd =
-        scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 1;
-      const wantsDown = e.deltaY > 0;
-      if ((wantsDown && !atEnd) || (!wantsDown && !atTop)) return;
-    }
+    // Only a decisively sideways gesture navigates
+    if (Math.abs(e.deltaX) < 12 || Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
 
     if (e.cancelable) e.preventDefault();
-    step(e.deltaY > 0 ? 1 : -1);
+    step(e.deltaX > 0 ? 1 : -1);
   }, { passive: false });
 
-  let touchStartY = null;
+  // Horizontal swipe pages; a mostly-vertical swipe is left to the slide.
+  let touchStart = null;
   modal.addEventListener('touchstart', function(e) {
-    touchStartY = e.touches[0].clientY;
+    touchStart = { x: e.touches[0].clientX, y: e.touches[0].clientY };
   }, { passive: true });
 
   modal.addEventListener('touchend', function(e) {
-    if (touchStartY === null) return;
-    const dy = touchStartY - e.changedTouches[0].clientY;
-    if (Math.abs(dy) > 40) step(dy > 0 ? 1 : -1);
-    touchStartY = null;
+    if (touchStart === null) return;
+    const dx = touchStart.x - e.changedTouches[0].clientX;
+    const dy = touchStart.y - e.changedTouches[0].clientY;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) step(dx > 0 ? 1 : -1);
+    touchStart = null;
   }, { passive: true });
 
   document.addEventListener('keydown', function(e) {
     if (overlay.hidden) return;
     if (e.key === 'Escape') {
       close();
-    } else if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+    } else if (e.key === 'ArrowRight' || e.key === 'PageDown') {
       e.preventDefault();
       step(1);
-    } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
       e.preventDefault();
       step(-1);
     }

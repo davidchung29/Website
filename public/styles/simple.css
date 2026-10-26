@@ -34,6 +34,8 @@
   --bento-ground: #d5d5d7;
   --bento-tile: #ededee;
 
+  --logo-plate: #ffffff;
+
   /* Font families */
   --font-display: 'Satoshi', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
@@ -63,6 +65,9 @@
 
   --bento-ground: #141210;
   --bento-tile: #262320;
+
+  /* --logo-plate is deliberately not overridden here: the logo plates keep
+     their light-mode white in dark mode so the glyphs stay legible. */
 }
 
 body {
@@ -329,7 +334,7 @@ body {
   flex-shrink: 0;
   object-fit: contain;
   opacity: 0.9;
-  background: #ffffff;
+  background: var(--logo-plate);
   /* Uniform inset on all sides so the glyph floats inside the box
      instead of running to the edges. Derived from --logo-size rather than a
      percentage, which would resolve against the parent row's width. */
@@ -355,7 +360,7 @@ body {
 
 .experience-item:hover .experience-logo {
   opacity: 1;
-  background: #ffffff;
+  background: var(--logo-plate);
 }
 
 /* Keep full-bleed tiles flush on hover too */
@@ -952,68 +957,6 @@ body {
   height: 100%;
 }
 
-/* Warmth Slider — warm (left) to cool (right) */
-.warmth-slider {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 64px;
-  height: 7px;
-  border-radius: 3.5px;
-  background: linear-gradient(
-    to right,
-    #e8a25c 0%,
-    #d9c9a8 35%,
-    #c9cdd4 65%,
-    #7fa8d4 100%
-  );
-  outline: none;
-  cursor: pointer;
-  margin: 0;
-  padding: 0;
-  vertical-align: middle;
-  transition: opacity 0.25s ease;
-  opacity: 0.85;
-}
-
-.warmth-slider:hover {
-  opacity: 1;
-}
-
-.warmth-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--bg-primary);
-  border: 2px solid var(--text-primary);
-  cursor: pointer;
-  transition: transform 0.15s ease;
-}
-
-.warmth-slider::-webkit-slider-thumb:hover {
-  border-color: var(--accent);
-}
-
-.warmth-slider::-moz-range-thumb {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--bg-primary);
-  border: 2px solid var(--text-primary);
-  cursor: pointer;
-  transition: transform 0.15s ease;
-}
-
-.warmth-slider::-moz-range-thumb:hover {
-  border-color: var(--accent);
-}
-
-.warmth-slider:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
-}
-
 /* Floating Action Button */
 .fab {
   position: fixed;
@@ -1238,8 +1181,9 @@ body {
   border-radius: 34px;
   background: var(--bento-ground);
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
-  /* Extra on the left for the vertical pager rail */
-  padding: 10px 10px 10px 28px;
+  /* Even inset all round — the carousel arrows sit inside the media tile, so
+     there is no longer a pager rail to leave room for on the left. */
+  padding: 10px;
   /* Sheet rests below the viewport and rises into place on open.
      100vh rather than 100% so it clears the screen regardless of sheet size. */
   transform: translateY(100vh);
@@ -1301,122 +1245,101 @@ body {
   align-items: stretch;
 }
 
-/* Slides stack in place and crossfade; only the active one is interactive. */
+/* Slides sit side by side on a track that slides horizontally. Each takes one
+   frame's width — the track is `count * 100%` wide, so a slide is `100 / count`
+   of it. Only the on-screen slide is interactive, so an off-screen iframe can't
+   swallow a click. */
 .bento-slide {
-  position: absolute;
-  inset: 0;
+  flex: 0 0 auto;
+  width: calc(100% / var(--bento-count, 1));
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(8px);
-  transition: opacity 0.8s cubic-bezier(0.32, 0.72, 0, 1),
-              transform 0.8s cubic-bezier(0.32, 0.72, 0, 1),
-              visibility 0s linear 0.8s;
+  /* Fades slightly on the way past, so the move reads as depth not a jump */
+  opacity: 0.4;
+  transition: opacity 0.6s cubic-bezier(0.32, 0.72, 0, 1);
   pointer-events: none;
 }
 
 .bento-slide.is-active {
   opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-  transition-delay: 0s;
   pointer-events: auto;
 }
 
-/* Apple-style page indicator: a translucent, blurred capsule that picks up
+/* Apple-style carousel arrows: circular translucent material that picks up
    whatever sits behind it rather than painting a flat plate. */
-.bento-pager {
+.bento-arrow {
   position: absolute;
-  left: 6px;
   top: 50%;
-  transform: translateY(-50%);
+  z-index: 3;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding: 8px 5px;
-  border-radius: 999px;
-  background: rgba(120, 120, 128, 0.16);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  /* Hairline top edge, the way Apple's materials catch light */
-  box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.5);
-  z-index: 2;
-  cursor: pointer;
-  /* Scale composes with the centring translate, so the pill grows about its
-     own middle instead of jumping. */
-  transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1),
-              background 0.32s cubic-bezier(0.32, 0.72, 0, 1),
-              box-shadow 0.32s cubic-bezier(0.32, 0.72, 0, 1);
-}
-
-/* The whole control swells on approach, the way Apple's Dock and page
-   indicators respond before you commit to a press. */
-.bento-pager:hover {
-  transform: translateY(-50%) scale(1.18);
-  background: rgba(120, 120, 128, 0.22);
-  box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.6),
-              0 4px 16px rgba(0, 0, 0, 0.18);
-}
-
-/* Settles slightly on press — the tactile half of the gesture */
-.bento-pager:active {
-  transform: translateY(-50%) scale(1.1);
-  transition-duration: 0.12s;
-}
-
-.bento-pager[hidden] {
-  display: none;
-}
-
-.bento-dot {
-  position: relative;
-  width: 7px;
-  height: 7px;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
   padding: 0;
   border: none;
   border-radius: 50%;
-  /* Solid colour at low opacity, so dots sit on the material rather than
-     tinting with it */
-  background: var(--text-primary);
-  opacity: 0.28;
+  color: #fff;
+  background: rgba(120, 120, 128, 0.32);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  /* Hairline top edge, the way Apple's materials catch light */
+  box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.4),
+              0 2px 10px rgba(0, 0, 0, 0.25);
   cursor: pointer;
-  /* Apple's standard ease-out: fast departure, soft landing */
-  transition: opacity 0.4s cubic-bezier(0.32, 0.72, 0, 1),
-              transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+  /* Scale composes with the centring translate, so the button grows about its
+     own middle instead of jumping. */
+  transform: translateY(-50%);
+  transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1),
+              background 0.32s cubic-bezier(0.32, 0.72, 0, 1),
+              opacity 0.32s cubic-bezier(0.32, 0.72, 0, 1),
+              box-shadow 0.32s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
-.bento-dot:hover {
-  opacity: 0.55;
-  transform: scale(1.25);
+.bento-arrow--prev {
+  left: 12px;
 }
 
-.bento-dot:active {
-  transform: scale(0.88);
+.bento-arrow--next {
+  right: 12px;
 }
 
-/* A 6px target is too small to hit reliably — widen it without growing the dot */
-.bento-dot::after {
-  content: '';
-  position: absolute;
-  inset: -7px;
+/* Swells on approach, the way Apple's Dock and carousel controls respond
+   before you commit to a press. */
+.bento-arrow:hover:not(:disabled) {
+  background: rgba(120, 120, 128, 0.46);
+  transform: translateY(-50%) scale(1.12);
+  box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.5),
+              0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
-.bento-dot:focus-visible {
-  outline: 2px solid var(--accent);
+/* Settles slightly on press — the tactile half of the gesture */
+.bento-arrow:active:not(:disabled) {
+  transform: translateY(-50%) scale(1.02);
+  transition-duration: 0.12s;
+}
+
+/* Dimmed and inert at the ends rather than removed, so the tile's edges don't
+   reflow as you page through. */
+.bento-arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.bento-arrow:focus-visible {
+  outline: 2px solid #fff;
   outline-offset: 2px;
 }
 
-.bento-dot.is-active {
-  opacity: 1;
+.bento-arrow[hidden] {
+  display: none;
 }
 
-/* Hover should never outrank the current page, but still feel responsive */
-.bento-dot.is-active:hover {
-  opacity: 1;
-  transform: scale(1.25);
+/* A paper slide scrolls under the arrows, so lift them clear of its scrollbar */
+.bento-panel--media:has(.bento-slide--paper) .bento-arrow--next {
+  right: 20px;
 }
 
 /* Two equal panels sharing the modal width. Apple-bento style: tiles read as
@@ -1478,29 +1401,47 @@ body {
 .bento-panel--media {
   position: relative;
   background: #000;
-  /* Visible so the video's drop shadow isn't clipped by the tile */
-  overflow: visible;
+  /* The horizontal track must be clipped to the tile, or off-screen slides
+     spill across the modal. (This used to be visible, for the video's drop
+     shadow; the carousel takes precedence and the tile is black anyway.) */
+  overflow: hidden;
   display: flex;
   flex-direction: column;
 }
 
+/* The sliding track. Width is set in JS to count * 100%; the panel clips it. */
 .bento-media-stack {
   position: relative;
   flex: 1 1 auto;
   min-height: 0;
+  display: flex;
+  align-items: stretch;
+  will-change: transform;
+  transition: transform 0.6s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
-/* Copy slides span the full tile so the project text centres on the modal, not
-   on the leftover space under the header. Absolute positioning resolves against
-   the padding box, so the slides re-apply the inner's inset to keep the project
-   text on the same left edge as the header. */
+/* Opening a modal resets the track to the first slide — that reset must not
+   animate, or every open starts with a visible rewind. */
+.bento-media-stack.is-instant {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bento-media-stack {
+    transition: none;
+  }
+}
+
+/* Every project is listed at once, in the flow beneath the header, so the panel
+   itself never scrolls — only the heading underline tracks the media. */
 .bento-copy {
-  position: absolute;
-  inset: 0;
-}
-
-.bento-copy .bento-slide {
-  padding: 0 32px;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 26px;
 }
 
 /* Paper pages: ours, so they scroll natively. Paging only takes over once the
@@ -1671,9 +1612,23 @@ body {
               0 16px 40px rgba(0, 0, 0, 0.45);
 }
 
+/* Clicking a project jumps the media to it, so the whole block is a target.
+   Inactive entries recede rather than hide — the list stays readable as a whole
+   while the current project reads as selected. */
 .bento-project {
-  /* The slide handles centring; this just holds the text */
   width: 100%;
+  cursor: pointer;
+  opacity: 0.45;
+  transition: opacity 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.bento-project:hover {
+  opacity: 0.75;
+}
+
+.bento-project.is-active,
+.bento-project.is-active:hover {
+  opacity: 1;
 }
 
 .bento-project-heading {
@@ -1683,6 +1638,34 @@ body {
   letter-spacing: -0.01em;
   color: var(--text-primary);
   margin: 0 0 8px;
+  /* The rule is a pseudo-element rather than text-decoration, so it can grow in
+     from the left; inline-block keeps it to the text's width, not the column's. */
+  position: relative;
+  display: inline-block;
+}
+
+.bento-project-heading::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 1.5px;
+  border-radius: 1px;
+  background: var(--text-primary);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.bento-project.is-active .bento-project-heading::after {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bento-project-heading::after {
+    transition: none;
+  }
 }
 
 .bento-project-desc {
@@ -1693,12 +1676,7 @@ body {
   max-width: 46ch;
 }
 
-/* Centre the text column in the tile rather than letting the measure cap push
-   it left: equal gutters either side of the block. */
-.bento-copy .bento-slide {
-  align-items: center;
-}
-
+/* Hold the same measure as the header so both read off one left edge */
 .bento-copy .bento-project {
   width: 46ch;
   max-width: 100%;
@@ -1838,10 +1816,40 @@ body.bento-open {
   /* Stack vertically: a side-by-side split has no room on phones */
   .bento-grid {
     flex-direction: column;
+    /* Stacked tiles scroll as a column rather than being squeezed to fit */
+    overflow-y: auto;
+    align-items: stretch;
   }
 
   .bento-panel-inner {
     min-width: 0;
     padding: 20px;
+    /* The copy is in normal flow, so the inner must grow to fit the header plus
+       every project instead of being clamped to the tile's height. */
+    height: auto;
+  }
+
+  /* Media keeps a usable frame; the copy tile sizes to its text. Capped so the
+     video can't claim the whole sheet and push the project list off-screen. */
+  .bento-panel.bento-primary {
+    flex: 0 0 auto;
+    height: 210px;
+  }
+
+  /* A document or paper slide needs more room to be legible at all */
+  .bento-panel--media:has(.bento-slide--doc),
+  .bento-panel--media:has(.bento-slide--paper) {
+    height: 320px;
+  }
+
+  .bento-panel.bento-secondary {
+    flex: 0 0 auto;
+  }
+
+  /* Top-aligned on mobile: centring the list leaves it floating under the header */
+  .bento-copy {
+    justify-content: flex-start;
+    gap: 20px;
+    margin-top: 20px;
   }
 }
