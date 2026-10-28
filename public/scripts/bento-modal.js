@@ -11,6 +11,8 @@
   const copyEl = document.getElementById('bentoCopy');
   const prevBtn = document.getElementById('bentoPrev');
   const nextBtn = document.getElementById('bentoNext');
+  const pagerEl = document.getElementById('bentoPager');
+  const controlsEl = document.getElementById('bentoControls');
   const titleEl = document.getElementById('bentoTitle');
   const subtitleEl = document.getElementById('bentoSubtitle');
   const linksEl = document.getElementById('bentoLinks');
@@ -214,10 +216,14 @@
       project.classList.toggle('is-active', i === index);
     });
 
-    // Non-wrapping at the ends, the way Apple's carousels dim an unavailable arrow
-    const many = count > 1;
-    prevBtn.hidden = !many;
-    nextBtn.hidden = !many;
+    pagerEl.querySelectorAll('.bento-dot').forEach(function(dot, i) {
+      dot.classList.toggle('is-active', i === index);
+      dot.setAttribute('aria-selected', i === index ? 'true' : 'false');
+    });
+
+    // Non-wrapping at the ends, the way Apple's carousels dim an unavailable
+    // arrow. The arrows stay in place rather than hiding: the bar is centred on
+    // the pager, so removing one would shift the whole row off-centre.
     prevBtn.disabled = index === 0;
     nextBtn.disabled = index === count - 1;
   }
@@ -225,6 +231,7 @@
   function populate(item) {
     mediaEl.innerHTML = '';
     copyEl.innerHTML = '';
+    pagerEl.innerHTML = '';
 
     titleEl.textContent = item.dataset.modalOrg || '';
     const role = item.dataset.modalRole || '';
@@ -299,8 +306,23 @@
       const copy = buildCopy(view);
       copy.addEventListener('click', function() { goTo(i); });
       copyEl.appendChild(copy);
+
+      // Each dot targets its own view rather than just advancing, so the
+      // indicator doubles as a control — matching the arrows either side.
+      const dot = el('button', 'bento-dot');
+      dot.type = 'button';
+      dot.setAttribute('role', 'tab');
+      dot.setAttribute('aria-label', view.heading || 'Project ' + (i + 1));
+      dot.addEventListener('click', function(e) {
+        e.stopPropagation();
+        goTo(i);
+      });
+      pagerEl.appendChild(dot);
     });
 
+    // A single-view modal has nothing to page, so the whole bar goes away and
+    // the media reclaims that height.
+    controlsEl.hidden = count < 2;
     render();
     // Next frame, once the reset transform has landed, restore the transition
     requestAnimationFrame(function() {

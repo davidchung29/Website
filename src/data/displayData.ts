@@ -164,17 +164,6 @@ export const otherExperience = [
 
 export const projectsDisplay = [
   {
-    name: "Decomposer",
-    awards: "CMU Generative Creativity Lab",
-    desc: "Post-training framework for symbolic music decompilation, recovering editable Strudel programs from MIDI",
-    date: "Spring 2026",
-    thumbnail: "/assets/projects/decomposer/demo.gif",
-    oneliner: "Post-training framework for symbolic music decompilation, recovering editable Strudel programs from MIDI",
-    githubUrl: "",
-    demoUrl: "https://yewon-kim.com/decomposer/",
-    projectKey: "Decomposer"
-  },
-  {
     name: "VLM Sandbox",
     awards: "Safar Resuscitation Symposium",
     desc: "Multi-view VLM pipeline scoring CPR quality from GoPro using pose tracking, SAM 3D-Body, and VLM coaching",

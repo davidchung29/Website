@@ -323,7 +323,7 @@ body {
   /* Square logo sized just under the two-line text block, then centred against
      it. Derived from line metrics rather than align-self:stretch, which would
      make the square's width feed back into the row height and run away. */
-  --logo-size: calc((15px * 1.5 * 2) + 4px - 7px);
+  --logo-size: calc((15px * 1.5 * 2) + 4px - 6px);
   width: var(--logo-size);
   height: var(--logo-size);
   /* Pinned to the top, nudged down to where centring would place it against the
@@ -1078,7 +1078,7 @@ body {
   
   .experience-logo {
     /* Two 14px lines at mobile type sizes, less the same inset as desktop */
-    --logo-size: calc((14px * 1.5 * 2) + 4px - 6px);
+    --logo-size: calc((14px * 1.5 * 2) + 4px - 5px);
     margin-top: calc((((14px * 1.5 * 2) + 4px) - var(--logo-size)) / 2);
   }
 
@@ -1267,17 +1267,33 @@ body {
   pointer-events: auto;
 }
 
-/* Apple-style carousel arrows: circular translucent material that picks up
-   whatever sits behind it rather than painting a flat plate. */
-.bento-arrow {
-  position: absolute;
-  top: 50%;
-  z-index: 3;
+/* Control bar: its own row beneath the media, so the arrows and dots never
+   cover the content they page through. Height is reserved by the track, so
+   nothing reflows when a control disables at the ends. */
+.bento-controls {
+  flex: 0 0 var(--bento-controls-h);
+  height: var(--bento-controls-h);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
+  /* The gap sets the rhythm; the dots sit centred between the two arrows */
+  gap: 14px;
+}
+
+.bento-controls[hidden] {
+  display: none;
+}
+
+/* Apple-style carousel arrows: circular translucent material that picks up
+   whatever sits behind it rather than painting a flat plate. */
+.bento-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Square, so the circle stays a circle as the row flexes */
+  flex: 0 0 var(--bento-control-size);
+  width: var(--bento-control-size);
+  height: var(--bento-control-size);
   padding: 0;
   border: none;
   border-radius: 50%;
@@ -1289,35 +1305,24 @@ body {
   box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.4),
               0 2px 10px rgba(0, 0, 0, 0.25);
   cursor: pointer;
-  /* Scale composes with the centring translate, so the button grows about its
-     own middle instead of jumping. */
-  transform: translateY(-50%);
   transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1),
               background 0.32s cubic-bezier(0.32, 0.72, 0, 1),
               opacity 0.32s cubic-bezier(0.32, 0.72, 0, 1),
               box-shadow 0.32s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
-.bento-arrow--prev {
-  left: 12px;
-}
-
-.bento-arrow--next {
-  right: 12px;
-}
-
 /* Swells on approach, the way Apple's Dock and carousel controls respond
    before you commit to a press. */
 .bento-arrow:hover:not(:disabled) {
   background: rgba(120, 120, 128, 0.46);
-  transform: translateY(-50%) scale(1.12);
+  transform: scale(1.12);
   box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.5),
               0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 /* Settles slightly on press — the tactile half of the gesture */
 .bento-arrow:active:not(:disabled) {
-  transform: translateY(-50%) scale(1.02);
+  transform: scale(1.02);
   transition-duration: 0.12s;
 }
 
@@ -1337,9 +1342,79 @@ body {
   display: none;
 }
 
-/* A paper slide scrolls under the arrows, so lift them clear of its scrollbar */
-.bento-panel--media:has(.bento-slide--paper) .bento-arrow--next {
-  right: 20px;
+/* Page indicator between the arrows: the same blurred material, and the same
+   height as an arrow, so the three controls read as one set on one baseline. */
+.bento-pager {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  /* Matches the arrows' diameter; the horizontal pad makes it a capsule */
+  height: var(--bento-control-size);
+  padding: 0 11px;
+  border-radius: 999px;
+  background: rgba(120, 120, 128, 0.32);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  /* Hairline top edge, the way Apple's materials catch light */
+  box-shadow: inset 0 0.5px 0 rgba(255, 255, 255, 0.4),
+              0 2px 10px rgba(0, 0, 0, 0.25);
+}
+
+.bento-pager[hidden] {
+  display: none;
+}
+
+/* Dots are always white here: they sit on the black media tile, not the page */
+.bento-dot {
+  position: relative;
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: #fff;
+  opacity: 0.4;
+  cursor: pointer;
+  /* Apple's standard ease-out: fast departure, soft landing */
+  transition: opacity 0.4s cubic-bezier(0.32, 0.72, 0, 1),
+              transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.bento-dot:hover {
+  opacity: 0.7;
+  transform: scale(1.25);
+}
+
+.bento-dot:active {
+  transform: scale(0.88);
+}
+
+/* A 7px target is too small to hit reliably — widen it without growing the dot */
+.bento-dot::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+}
+
+.bento-dot:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+.bento-dot.is-active {
+  opacity: 1;
+}
+
+/* Hover should never outrank the current page, but still feel responsive */
+.bento-dot.is-active:hover {
+  opacity: 1;
+  transform: scale(1.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bento-dot {
+    transition: none;
+  }
 }
 
 /* Two equal panels sharing the modal width. Apple-bento style: tiles read as
@@ -1386,27 +1461,56 @@ body {
   overflow: visible;
 }
 
-/* A media tile sizes to its content rather than stretching to the row height,
-   and goes dark so the video's own letterboxing reads as part of the tile. */
-/* A media stack holding documents fills the tile rather than hugging a 16:9
-   player, so framed pages get the full height to scroll in. */
-.bento-panel--media:has(.bento-slide--doc),
-.bento-panel--media:has(.bento-slide--paper) {
+/* Media tile: fills the row so the pair reads as one band of equal blocks, and
+   its black ground supplies any letterboxing around a 16:9 player. Holds the
+   slide viewport with the control bar as a reserved row beneath it.
+   The media centres in the leftover height, so the band of ground above the
+   slide matches the band below it and the bar reads as the tile's own base. */
+.bento-panel--media {
+  /* Control geometry lives here so the bar, the arrows and the pager capsule
+     all derive from one pair of numbers. 34px matches the close button's
+     optical weight; the 56px band is that diameter plus an even 11px of air
+     above and below, echoing the tile's own 12px inset. */
+  --bento-control-size: 34px;
+  --bento-controls-h: 56px;
   align-self: stretch;
   height: 100%;
-}
-
-/* Media tile holds the stacked slides plus the pager beneath them; transparent
-   so the player and the tweet card each supply their own ground. */
-.bento-panel--media {
   position: relative;
   background: #000;
-  /* The horizontal track must be clipped to the tile, or off-screen slides
-     spill across the modal. (This used to be visible, for the video's drop
-     shadow; the carousel takes precedence and the tile is black anyway.) */
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  /* Even inset all round; the control bar supplies the bottom band itself */
+  padding: 12px 12px 0;
+}
+
+/* With nothing to page, the bar is removed and the inset closes up evenly */
+.bento-panel--media:has(.bento-controls[hidden]) {
+  padding-bottom: 12px;
+}
+
+/* Slides fill the track rather than sizing to content: flex items are
+   equal-height by default, so a tall tweet would otherwise set the height for
+   the video slide too. Each scrolls within the frame instead. */
+.bento-panel--media:not(:has(.bento-slide--doc, .bento-slide--paper))
+.bento-slide {
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* Clips the sliding track. Rounded a little tighter than the tile so the inner
+   radius stays concentric with the outer one across the 12px inset.
+   Centred in the leftover height rather than filling it, so a 16:9 player's
+   letterboxing is split evenly above and below instead of pooling on top. */
+.bento-media-viewport {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 /* The sliding track. Width is set in JS to count * 100%; the panel clips it. */
@@ -1448,10 +1552,11 @@ body {
    reader hits the top or bottom of the stack. Inset on black so the pages read
    as a document floating on the tile rather than filling it. */
 .bento-slide--paper {
-  padding: 22px 70px;
+  /* The viewport supplies the tile inset now, so this only needs the gutter
+     that keeps the page from touching the scrollbar. */
+  padding: 10px 48px;
   overflow-y: auto;
   scrollbar-width: thin;
-  border-radius: 28px;
   background: #000;
   justify-content: flex-start;
 }
@@ -1504,9 +1609,9 @@ body {
 
 /* A framed page sits inset on black, scaled down so more of the layout fits. */
 .bento-slide--doc {
-  padding: 22px 34px;
+  /* Matches the paper slide's gutter so both documents sit on one rhythm */
+  padding: 10px 24px;
   background: #000;
-  border-radius: 28px;
 }
 
 .bento-doc {
@@ -1604,6 +1709,8 @@ body {
 /* The video's aspect ratio sets the row height; the text tile stretches to
    match it, so both tiles are exactly as tall as the media. */
 .bento-panel--media .bento-video-frame {
+  /* Keeps the player's shape while the tile fills the row; the slide centres
+     it, so the leftover black reads as the video's own letterboxing. */
   aspect-ratio: 16 / 9;
   height: auto;
   border-radius: 18px;
@@ -1830,16 +1937,23 @@ body.bento-open {
   }
 
   /* Media keeps a usable frame; the copy tile sizes to its text. Capped so the
-     video can't claim the whole sheet and push the project list off-screen. */
+     video can't claim the whole sheet and push the project list off-screen.
+     The media's share stays as it was — the control band is added on top rather
+     than taken out of it, so the slide doesn't shrink to make room. */
   .bento-panel.bento-primary {
     flex: 0 0 auto;
-    height: 210px;
+    height: calc(210px + var(--bento-controls-h));
   }
 
   /* A document or paper slide needs more room to be legible at all */
   .bento-panel--media:has(.bento-slide--doc),
   .bento-panel--media:has(.bento-slide--paper) {
-    height: 320px;
+    height: calc(320px + var(--bento-controls-h));
+  }
+
+  /* A touch target wants a little more room than a cursor does */
+  .bento-controls {
+    gap: 16px;
   }
 
   .bento-panel.bento-secondary {
