@@ -1660,16 +1660,15 @@ body {
   opacity: 0.75;
 }
 
-/* A tweet is taller than a video, so its slide scrolls internally. The embed
-   brings its own card, so no tile ground behind it. */
+/* The embed brings its own card, so there is no tile ground behind it. The
+   card is scaled to fit rather than scrolled: X fixes the widget's height from
+   its content, so a card a few pixels taller than the frame would otherwise
+   have its bottom edge clipped. --bento-tweet-scale is set in JS from the
+   measured card height. */
 .bento-slide--tweet {
-  overflow-y: auto;
-  scrollbar-width: none;
-  justify-content: flex-start;
-}
-
-.bento-slide--tweet::-webkit-scrollbar {
-  display: none;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
 }
 
 .bento-tweet {
@@ -1678,13 +1677,59 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* Fills the slide when the card is short, grows past it when tall */
-  min-height: 100%;
   width: 100%;
+  /* Shrunk about its own centre so an oversized card fits the frame whole.
+     Defaults to 1 — JS only lowers it when the card overflows. */
+  transform: scale(var(--bento-tweet-scale, 1));
+  transform-origin: center center;
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 .bento-tweet .twitter-tweet {
   margin: 0 auto !important;
+}
+
+/* A fixed-size embed (LinkedIn) centred and scaled to fit the frame whole.
+   The slide centres it; the holder reserves the scaled footprint so the card
+   sits in the middle rather than overflowing from the top-left. */
+.bento-slide--post {
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+  /* Gives the fit calc a box to measure against, so the scale tracks the frame
+     at any viewport without a resize listener. */
+  container-type: size;
+}
+
+.bento-post {
+  position: relative;
+  /* Shrink to whichever axis runs out first, never past 1:1 */
+  --bento-post-fit: min(
+    1,
+    (100cqh - 16px) / var(--bento-post-h),
+    (100cqw - 16px) / var(--bento-post-w)
+  );
+  width: calc(var(--bento-post-w) * var(--bento-post-fit));
+  height: calc(var(--bento-post-h) * var(--bento-post-fit));
+  flex: 0 0 auto;
+}
+
+.bento-post iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--bento-post-w);
+  height: var(--bento-post-h);
+  border: 0;
+  border-radius: 10px;
+  transform: scale(var(--bento-post-fit));
+  transform-origin: 0 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bento-tweet {
+    transition: none;
+  }
 }
 
 
@@ -1719,17 +1764,23 @@ body {
               0 16px 40px rgba(0, 0, 0, 0.45);
 }
 
-/* Clicking a project jumps the media to it, so the whole block is a target.
-   Inactive entries recede rather than hide — the list stays readable as a whole
-   while the current project reads as selected. */
+/* A lone block describes the whole modal, so it reads plainly: full strength,
+   no pointer, no hover. Only a list of distinct projects behaves as a selector. */
 .bento-project {
   width: 100%;
-  cursor: pointer;
-  opacity: 0.45;
+  opacity: 1;
   transition: opacity 0.5s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
-.bento-project:hover {
+/* Clicking a project jumps the media to it, so the whole block is a target.
+   Inactive entries recede rather than hide — the list stays readable as a whole
+   while the current project reads as selected. */
+.bento-project.is-selectable {
+  cursor: pointer;
+  opacity: 0.45;
+}
+
+.bento-project.is-selectable:hover {
   opacity: 0.75;
 }
 

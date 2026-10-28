@@ -28,6 +28,9 @@
   let index = 0;
   let count = 0;
   let locked = false;
+  // Views carrying copy. Fewer than the slide count when several views describe
+  // the same project, in which case the one block is not a per-slide selector.
+  let copyIndexes = [];
 
   function el(tag, className) {
     const node = document.createElement(tag);
@@ -69,7 +72,7 @@
   }
 
   // A framed web page or PDF, filling the tile and scrolling internally.
-  function buildFrame(src, label, kind) {
+  function buildFrame(src, label, kind, media) {
     const shell = el('div', 'bento-doc');
 
     // Browsers without a built-in PDF viewer render an empty frame, so offer a
@@ -80,6 +83,20 @@
       fallback.target = '_blank';
       fallback.rel = 'noopener noreferrer';
       fallback.innerHTML = '<span>Open the paper</span>' + EXTERNAL_ICON;
+      shell.appendChild(fallback);
+      return shell;
+    }
+
+    // Sites that send frame-ancestors or X-Frame-Options cannot be embedded at
+    // all — the browser renders a blank panel and there is no way around it, so
+    // such a page declares noFrame and gets a link card instead.
+    if (media && media.noFrame) {
+      const fallback = el('a', 'bento-doc-fallback');
+      fallback.href = src;
+      fallback.target = '_blank';
+      fallback.rel = 'noopener noreferrer';
+      fallback.innerHTML =
+        '<span>' + (media.linkText || 'Open the page') + '</span>' + EXTERNAL_ICON;
       shell.appendChild(fallback);
       return shell;
     }
@@ -153,9 +170,59 @@
       });
     }).then(function(node) {
       if (node && fallback.parentNode === holder) holder.removeChild(fallback);
+      fitTweet(holder);
     }).catch(function() {
       /* keep the fallback link */
     });
+
+    return holder;
+  }
+
+  // X sizes the card from its own content, so it can come back taller than the
+  // frame and lose its bottom edge. Scale it down to fit rather than clip.
+  // Only ever shrinks: a card smaller than the frame is left at its true size.
+  function fitTweet(holder) {
+    const slide = holder.closest('.bento-slide');
+    if (!slide) return;
+
+    // Measure unscaled, or the previous scale would compound into the next one
+    holder.style.setProperty('--bento-tweet-scale', '1');
+
+    // Two frames: one for the widget's iframe to lay out, one for that layout
+    // to land in the holder's measured height.
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        const available = slide.clientHeight;
+        const actual = holder.scrollHeight;
+        if (!available || !actual) return;
+
+        // A hair under the frame so the card's edge isn't flush with it
+        const scale = Math.min(1, (available - 8) / actual);
+        holder.style.setProperty('--bento-tweet-scale', String(scale));
+      });
+    });
+  }
+
+  // LinkedIn serves a fixed-size iframe rather than a responsive card, so the
+  // post is rendered at its native size and scaled to fit the frame — the same
+  // treatment the tweet gets, but with the dimensions known up front.
+  function buildLinkedIn(media, label) {
+    const holder = el('div', 'bento-post');
+
+    const frame = document.createElement('iframe');
+    frame.src = media.src;
+    frame.title = label + ' post';
+    frame.width = String(media.width || 504);
+    frame.height = String(media.height || 627);
+    frame.loading = 'lazy';
+    frame.allowFullscreen = true;
+    frame.setAttribute('frameborder', '0');
+    holder.appendChild(frame);
+
+    // The embed's own dimensions drive the fit, so CSS can size it without
+    // waiting on a measurement that cross-origin content would withhold.
+    holder.style.setProperty('--bento-post-w', (media.width || 504) + 'px');
+    holder.style.setProperty('--bento-post-h', (media.height || 627) + 'px');
 
     return holder;
   }
@@ -167,12 +234,15 @@
     } else if (media && media.type === 'tweet') {
       slide.classList.add('bento-slide--tweet');
       slide.appendChild(buildTweet(media.src));
+    } else if (media && media.type === 'linkedin') {
+      slide.classList.add('bento-slide--post');
+      slide.appendChild(buildLinkedIn(media, label));
     } else if (media && media.type === 'paper') {
       slide.classList.add('bento-slide--paper');
       slide.appendChild(buildPaper(media, label));
     } else if (media && (media.type === 'page' || media.type === 'pdf')) {
       slide.classList.add('bento-slide--doc');
-      slide.appendChild(buildFrame(media.src, label, media.type));
+      slide.appendChild(buildFrame(media.src, label, media.type, media));
     }
     return slide;
   }
@@ -212,8 +282,14 @@
       slide.classList.toggle('is-active', i === index);
     });
 
+    // With one shared block there is nothing to track, so it stays plain.
+    // Otherwise the active block is the last one at or before this slide.
+    const activeCopy = copyIndexes.length > 1
+      ? copyIndexes.filter(function(i) { return i <= index; }).length - 1
+      : -1;
+
     copyEl.querySelectorAll('.bento-project').forEach(function(project, i) {
-      project.classList.toggle('is-active', i === index);
+      project.classList.toggle('is-active', i === activeCopy);
     });
 
     pagerEl.querySelectorAll('.bento-dot').forEach(function(dot, i) {
@@ -299,20 +375,35 @@
     // Re-entry starts at the first view, so skip the slide animation this time
     mediaEl.classList.add('is-instant');
 
+    // A view with no copy of its own is another angle on the previous project,
+    // so it reuses that block rather than repeating it.
+    copyIndexes = [];
+    views.forEach(function(view, i) {
+      if (view.heading || view.description) copyIndexes.push(i);
+    });
+    // When every slide shares one block, that block describes the whole modal
+    // and is not a selector: no highlight, no click target.
+    const copyIsSelector = copyIndexes.length > 1;
+
     views.forEach(function(view, i) {
       mediaEl.appendChild(buildMedia(view.media, label));
 
-      // Clicking a project jumps the media straight to it
-      const copy = buildCopy(view);
-      copy.addEventListener('click', function() { goTo(i); });
-      copyEl.appendChild(copy);
+      if (view.heading || view.description) {
+        const copy = buildCopy(view);
+        if (copyIsSelector) {
+          // Clicking a project jumps the media straight to it
+          copy.classList.add('is-selectable');
+          copy.addEventListener('click', function() { goTo(i); });
+        }
+        copyEl.appendChild(copy);
+      }
 
       // Each dot targets its own view rather than just advancing, so the
       // indicator doubles as a control — matching the arrows either side.
       const dot = el('button', 'bento-dot');
       dot.type = 'button';
       dot.setAttribute('role', 'tab');
-      dot.setAttribute('aria-label', view.heading || 'Project ' + (i + 1));
+      dot.setAttribute('aria-label', view.heading || 'View ' + (i + 1));
       dot.addEventListener('click', function(e) {
         e.stopPropagation();
         goTo(i);
@@ -401,6 +492,16 @@
 
   overlay.addEventListener('click', function(e) {
     if (!modal.contains(e.target)) close();
+  });
+
+  // The frame's height changes with the window, so the card is re-fitted to it
+  let resizeTimer = null;
+  window.addEventListener('resize', function() {
+    if (overlay.hidden) return;
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() {
+      mediaEl.querySelectorAll('.bento-tweet').forEach(fitTweet);
+    }, 150);
   });
 
   // Horizontal wheel/trackpad intent pages the carousel. Bound to the window

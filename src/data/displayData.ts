@@ -102,9 +102,9 @@ export const researchExperience = [
           pages: 14,
           path: "/assets/papers/decomposer/page-",
           href: "https://arxiv.org/pdf/2607.01849"
-        },
-        heading: "Decomposer",
-        description: "Worked on post-compilation framework for decompiling music. Specifically in taking multi-track MIDI inputs and outputting Strudel, a JS-based music programming language. Produced higher faithfulness and frontier LLMs and higher readability than a heuristic converter"
+        }
+        // No heading or description: both views are the same project, so the
+        // copy panel shows one block covering the site and the paper alike.
       }
     ],
     // Rendered above the links; the entry with no url is shown bold, unlinked
@@ -156,6 +156,24 @@ export const otherExperience = [
     desc: "1 of 13 fellows, worked with partners to support founders",
     date: "Spring 2026",
     companyUrl: "https://www.felicis.com/fellows",
+    modal: true,
+    modalViews: [
+      {
+        // LinkedIn's embed is a fixed-size iframe, scaled to fit the tile
+        media: {
+          type: "linkedin",
+          src: "https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7416524531491713042?collapsed=1",
+          width: 504,
+          height: 627
+        },
+        heading: "Felicis Fellowship",
+        description: "1 of 13 fellows selected. Worked alongside partners to source and support early-stage founders."
+      }
+      // No felicis.com/fellows view: the site sends
+      // `frame-ancestors 'self'`, so a browser refuses to embed it and the
+      // slide would render blank. The header's "About Fellowship" link already
+      // points there.
+    ],
     expandableLinks: [
       { text: "About Fellowship", url: "https://www.felicis.com/fellows" }
     ]
