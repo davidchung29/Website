@@ -5,6 +5,12 @@ export interface Props {
 }
 
 const { title, activePage } = Astro.props;
+
+// Names what the phone layout leaves out, so the loading notice can be specific
+// about what a desktop visit adds rather than nagging generically.
+const desktopOnly = activePage === 'projects'
+  ? 'project demos'
+  : 'project demos, papers, and posts';
 ---
 
 <!DOCTYPE html>
@@ -41,6 +47,8 @@ const { title, activePage } = Astro.props;
 <body class="loading">
   <!-- Loading Screen -->
   <div class="loading-screen" id="loadingScreen">
+    <!-- Shown only on phones, where the modals drop their media panel -->
+    <p class="loading-note">View on desktop for {desktopOnly}</p>
     <div class="loading-bar-container">
       <div class="loading-bar" id="loadingBar"></div>
     </div>

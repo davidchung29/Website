@@ -1449,8 +1449,9 @@ body {
   position: relative;
   z-index: 1;
   flex: 0 0 auto;
-  width: 46ch;
-  max-width: 100%;
+  /* Same capped measure as the project column, so the two share a left edge at
+     any panel width instead of drifting apart once the cap stops applying. */
+  width: min(46ch, 100%);
   margin: 0 auto;
 }
 
@@ -1536,16 +1537,24 @@ body {
   }
 }
 
-/* Every project is listed at once, in the flow beneath the header, so the panel
-   itself never scrolls — only the heading underline tracks the media. */
+/* Every project is listed at once, so the panel itself never scrolls — only the
+   heading underline tracks the media.
+   Centred on the tile rather than on the leftover space under the header: the
+   header is pulled out of the flow for this purpose (it keeps its own place at
+   the top), so the copy resolves against the panel's full height and the text
+   sits on the tile's true middle. */
 .bento-copy {
-  flex: 1 1 auto;
-  min-height: 0;
+  position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 26px;
+  /* An absolute box resolves `inset` against the padding box, so it starts
+     inside the inner's 32px rather than after it. Re-applying that inset keeps
+     the project column on the same left edge and measure as the header. */
+  padding: 32px;
 }
 
 /* Paper pages: ours, so they scroll natively. Paging only takes over once the
@@ -1831,13 +1840,17 @@ body {
   line-height: 1.6;
   color: var(--text-secondary);
   margin: 0;
-  max-width: 46ch;
+  /* The project column already caps the measure; a second cap here would just
+     narrow the text inside its own block and break the shared left edge. */
 }
 
-/* Hold the same measure as the header so both read off one left edge */
+/* Hold the same measure as the header so both read off one left edge. The 46ch
+   is a cap, not a fixed width: a narrower panel shrinks the column and the text
+   wraps inside it rather than overflowing, and the auto margins keep whatever
+   width results centred against the tile's padding. */
 .bento-copy .bento-project {
-  width: 46ch;
-  max-width: 100%;
+  width: min(46ch, 100%);
+  margin-inline: auto;
 }
 
 .bento-video {
@@ -1971,50 +1984,55 @@ body.bento-open {
     padding: 12px;
   }
 
-  /* Stack vertically: a side-by-side split has no room on phones */
+  /* A phone has no room for a side-by-side split, and the embeds inside the
+     media tile (video, post cards, framed documents) are all built for a
+     desktop frame — scaled into a phone-width tile they are unreadable. So the
+     media is dropped entirely here and the modal is the copy alone. */
   .bento-grid {
     flex-direction: column;
-    /* Stacked tiles scroll as a column rather than being squeezed to fit */
     overflow-y: auto;
     align-items: stretch;
+  }
+
+  .bento-panel--media {
+    display: none;
   }
 
   .bento-panel-inner {
     min-width: 0;
     padding: 20px;
-    /* The copy is in normal flow, so the inner must grow to fit the header plus
-       every project instead of being clamped to the tile's height. */
+    /* Grows to fit the header plus every project rather than being clamped to
+       the tile's height. */
     height: auto;
   }
 
-  /* Media keeps a usable frame; the copy tile sizes to its text. Capped so the
-     video can't claim the whole sheet and push the project list off-screen.
-     The media's share stays as it was — the control band is added on top rather
-     than taken out of it, so the slide doesn't shrink to make room. */
-  .bento-panel.bento-primary {
-    flex: 0 0 auto;
-    height: calc(210px + var(--bento-controls-h));
-  }
-
-  /* A document or paper slide needs more room to be legible at all */
-  .bento-panel--media:has(.bento-slide--doc),
-  .bento-panel--media:has(.bento-slide--paper) {
-    height: calc(320px + var(--bento-controls-h));
-  }
-
-  /* A touch target wants a little more room than a cursor does */
-  .bento-controls {
-    gap: 16px;
-  }
-
   .bento-panel.bento-secondary {
-    flex: 0 0 auto;
+    flex: 1 1 auto;
   }
 
-  /* Top-aligned on mobile: centring the list leaves it floating under the header */
+  /* With no media beside it, the copy returns to normal flow under the header:
+     there is nothing left to centre against, and absolute positioning would
+     overlap the header once the sheet sizes to its content. */
   .bento-copy {
+    position: static;
     justify-content: flex-start;
     gap: 20px;
     margin-top: 20px;
   }
+
+  /* With the media gone there is nothing to select, so every project reads at
+     full strength and none of it is a control: no dimming, no underline, no
+     pointer, and taps pass through as plain text. */
+  .bento-project,
+  .bento-project.is-selectable,
+  .bento-project.is-selectable:hover {
+    opacity: 1;
+    cursor: auto;
+    pointer-events: none;
+  }
+
+  .bento-project .bento-project-heading::after {
+    display: none;
+  }
+
 }

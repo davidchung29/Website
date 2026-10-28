@@ -166,7 +166,7 @@ export const otherExperience = [
           width: 504,
           height: 627
         },
-        heading: "Felicis Fellowship",
+        heading: "VC Fellows 2026",
         description: "1 of 13 fellows selected. Worked alongside partners to source and support early-stage founders."
       }
       // No felicis.com/fellows view: the site sends
