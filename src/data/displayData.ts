@@ -70,8 +70,8 @@ export const educationExperience = [
     org: "Carnegie Mellon University",
     logo: "/assets/logos/cmu.svg",
     logoClass: "cmu-logo",
-    role: "Computer Science and Information Systems",
-    desc: "Computer Science and Information Systems",
+    role: "B.S. in Computer Science and Information Systems",
+    desc: "B.S. in Computer Science and Information Systems",
     date: "2024-2028",
     companyUrl: "https://www.cmu.edu/",
     expandableLinks: []

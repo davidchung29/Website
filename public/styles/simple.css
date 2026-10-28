@@ -1435,6 +1435,11 @@ body {
 }
 
 .bento-panel-inner {
+  /* The gap the copy must always keep below the header. The copy is absolutely
+     centred, so without a floor the gap is whatever centring leaves over —
+     which ranged from 21px to 111px across the modals depending on how much
+     copy each one carries. */
+  --bento-copy-gap: 28px;
   position: relative;
   width: 100%;
   height: 100%;
@@ -1544,17 +1549,20 @@ body {
    the top), so the copy resolves against the panel's full height and the text
    sits on the tile's true middle. */
 .bento-copy {
-  position: absolute;
-  inset: 0;
+  /* Anchored a fixed distance below the header rather than centred: the gap is
+     the thing that has to stay put, and any centring — whether on the tile or
+     on the space left over — makes that gap a remainder that swings with how
+     much copy the modal carries.
+     `min-height: 0` lets the box shrink below its content so a long list
+     overflows visibly rather than pushing the header off the tile. */
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-top: var(--bento-copy-gap);
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   gap: 26px;
-  /* An absolute box resolves `inset` against the padding box, so it starts
-     inside the inner's 32px rather than after it. Re-applying that inset keeps
-     the project column on the same left edge and measure as the header. */
-  padding: 32px;
 }
 
 /* Paper pages: ours, so they scroll natively. Paging only takes over once the
@@ -2004,20 +2012,17 @@ body.bento-open {
     /* Grows to fit the header plus every project rather than being clamped to
        the tile's height. */
     height: auto;
+    /* Same anchoring as desktop, just tighter: a phone's narrower column makes
+       each block taller, so the rhythm closes up to keep more on screen. */
+    --bento-copy-gap: 20px;
   }
 
   .bento-panel.bento-secondary {
     flex: 1 1 auto;
   }
 
-  /* With no media beside it, the copy returns to normal flow under the header:
-     there is nothing left to centre against, and absolute positioning would
-     overlap the header once the sheet sizes to its content. */
   .bento-copy {
-    position: static;
-    justify-content: flex-start;
     gap: 20px;
-    margin-top: 20px;
   }
 
   /* With the media gone there is nothing to select, so every project reads at
