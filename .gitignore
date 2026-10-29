@@ -8,6 +8,8 @@ node_modules/
 
 # Build output
 dist/
+# Astro's generated types and dev-server state, rewritten on every run
+.astro/
 
 # IDE
 .vscode/
