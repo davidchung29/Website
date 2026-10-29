@@ -32,8 +32,5 @@
       sunIcon.style.display = 'none';
       moonIcon.style.display = 'block';
     }
-
-    // Let the warmth slider re-tint for the new theme.
-    window.dispatchEvent(new Event('themechange'));
   });
 })();
